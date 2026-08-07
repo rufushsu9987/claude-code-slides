@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## 0.2.1 - 2026-08-07
+
+- Load the plugin directly from the repository marketplace root instead of recursively resolving the same Git repository.
+- Add complete marketplace fallback metadata so Codex can display and search for **Claude Code Slides** before installation.
+- Document marketplace refresh, inspection, and direct CLI installation commands.
+
 ## 0.2.0 - 2026-08-07
 
 - Convert the package to a native Codex plugin with `.codex-plugin/plugin.json`.
