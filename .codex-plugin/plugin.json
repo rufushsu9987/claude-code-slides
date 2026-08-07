@@ -1,6 +1,6 @@
 {
   "name": "claude-code-slides",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create, review, and rehearse polished HTML, Marp, and PowerPoint presentations in a Claude Code-inspired warm terminal-editorial style from Codex.",
   "author": {
     "name": "Rufus Hsu",
