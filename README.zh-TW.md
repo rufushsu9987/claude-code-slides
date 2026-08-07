@@ -25,17 +25,15 @@
 
 ## 安裝到 Codex
 
-先加入 Repository Marketplace：
+加入或更新 Repository Marketplace，接著安裝 Plugin：
 
 ```bash
 codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
+codex plugin marketplace upgrade rufus-slides
+codex plugin add claude-code-slides@rufus-slides
 ```
 
-啟動 Codex，開啟 Plugin Browser，安裝 **Claude Code Slides**：
-
-```text
-/plugins
-```
+也可以啟動 Codex、開啟 `/plugins`，選擇 **Rufus Slides**，再安裝 **Claude Code Slides**。
 
 安裝後開啟新的 Codex Session，再直接呼叫 Skill：
 
@@ -44,6 +42,26 @@ $create-deck 根據 docs/architecture.md，為雲端工程師製作 12 分鐘繁
 ```
 
 也可以只描述需求，讓 Codex 根據 Skill 的 `description` 自動選擇適合的工作流程。
+
+### Marketplace 顯示 no matches
+
+Marketplace 若是在新版 Manifest 推送前加入，Codex 可能仍使用舊 Snapshot。請先更新並檢查可用 Plugin：
+
+```bash
+codex plugin marketplace upgrade rufus-slides
+codex plugin list --marketplace rufus-slides --available --json
+codex plugin add claude-code-slides@rufus-slides
+```
+
+若仍然讀到舊 Snapshot，重新建立 Marketplace：
+
+```bash
+codex plugin marketplace remove rufus-slides
+codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
+codex plugin add claude-code-slides@rufus-slides
+```
+
+安裝或更新後請重新啟動 Codex，並建立新的 Session。
 
 ## 直接從 Repository 開發或測試
 
