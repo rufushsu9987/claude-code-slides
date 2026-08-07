@@ -6,10 +6,48 @@
   "plugins": [
     {
       "name": "claude-code-slides",
+      "version": "0.2.1",
+      "description": "Create, review, and rehearse polished HTML, Marp, and PowerPoint presentations with Claude Code-inspired warm terminal-editorial styling in Codex.",
+      "author": {
+        "name": "Rufus Hsu",
+        "url": "https://github.com/rufushsu9987"
+      },
+      "homepage": "https://github.com/rufushsu9987/claude-code-slides#readme",
+      "repository": "https://github.com/rufushsu9987/claude-code-slides",
+      "license": "MIT",
+      "keywords": [
+        "codex",
+        "presentation",
+        "presentations",
+        "slides",
+        "powerpoint",
+        "pptx",
+        "marp",
+        "html",
+        "speaker-notes",
+        "claude-code-style"
+      ],
+      "interface": {
+        "displayName": "Claude Code Slides",
+        "shortDescription": "Claude Code-inspired presentation workflows for Codex",
+        "longDescription": "Turn briefs, documents, URLs, and repositories into story-driven HTML, Marp, or editable PowerPoint decks. Includes narrative planning, visual direction, speaker notes, and deterministic quality checks.",
+        "developerName": "Rufus Hsu",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "websiteURL": "https://github.com/rufushsu9987/claude-code-slides",
+        "defaultPrompt": [
+          "Use Claude Code Slides to create a technical presentation from this repository.",
+          "Review this presentation and fix the highest-impact delivery issues.",
+          "Add speaker notes for a 12-minute engineering presentation."
+        ],
+        "brandColor": "#D97757"
+      },
       "source": {
-        "source": "url",
-        "url": "https://github.com/rufushsu9987/claude-code-slides.git",
-        "ref": "main"
+        "source": "local",
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",
