@@ -27,7 +27,7 @@ source material
   → speaker notes and Q&A
 ```
 
-The portable core follows Agent Plugins 1.0.0 and Agent Skills conventions. Native adapters preserve the best installation and invocation experience in Codex and Claude Code.
+The portable core follows [Agent Plugins 1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and Agent Skills conventions. Native adapters preserve the best installation and invocation experience in Codex and Claude Code.
 
 ## Seven professional templates
 
