@@ -19,6 +19,8 @@ const expectedSkills = [
   'visual-director',
 ];
 
+const expectedClaudeAgents = ['deck-architect', 'deck-reviewer', 'visual-director'];
+
 async function readJson(relativePath) {
   try {
     return JSON.parse(await readFile(path.join(root, relativePath), 'utf8'));
@@ -56,16 +58,21 @@ async function fileExists(relativePath) {
   }
 }
 
-const plugin = await readJson('.codex-plugin/plugin.json');
-const marketplace = await readJson('.agents/plugins/marketplace.json');
+const codexPlugin = await readJson('.codex-plugin/plugin.json');
+const codexMarketplace = await readJson('.agents/plugins/marketplace.json');
+const claudePlugin = await readJson('.claude-plugin/plugin.json');
+const claudeMarketplace = await readJson('.claude-plugin/marketplace.json');
 const packageJson = await readJson('package.json');
 const packageLock = await readJson('package-lock.json');
 
 const required = [
   '.codex-plugin/plugin.json',
   '.agents/plugins/marketplace.json',
+  '.claude-plugin/plugin.json',
+  '.claude-plugin/marketplace.json',
   ...expectedSkills.map((name) => `skills/${name}/SKILL.md`),
   ...expectedSkills.map((name) => `.agents/skills/${name}/SKILL.md`),
+  ...expectedClaudeAgents.map((name) => `agents/${name}.md`),
   'references/style-system.md',
   'references/storytelling.md',
   'references/output-formats.md',
@@ -82,6 +89,8 @@ const required = [
   'templates/pptx/package.json',
   'examples/ai-platform/index.html',
   'docs/images/hero.svg',
+  'AGENTS.md',
+  'CLAUDE.md',
   'README.md',
   'README.zh-TW.md',
   'LICENSE',
@@ -91,72 +100,137 @@ for (const relativePath of required) {
   if (!(await fileExists(relativePath))) errors.push(`missing ${relativePath}`);
 }
 
-if (plugin) {
+function validatePluginName(plugin, label) {
+  if (!plugin) return;
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(plugin.name || '')) {
-    errors.push('plugin.name must be kebab-case');
+    errors.push(`${label}.name must be kebab-case`);
   }
-  if (!plugin.description) errors.push('plugin.description is required');
+  if (!plugin.description) errors.push(`${label}.description is required`);
   if (!/^\d+\.\d+\.\d+$/.test(plugin.version || '')) {
-    errors.push('plugin.version must use semantic versioning');
-  }
-  if (plugin.skills !== './skills/') {
-    errors.push('plugin.skills must point to ./skills/');
-  }
-  if (!plugin.interface?.displayName || !plugin.interface?.shortDescription) {
-    errors.push('plugin.interface display metadata is required');
+    errors.push(`${label}.version must use semantic versioning`);
   }
 }
 
-if (marketplace) {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(marketplace.name || '')) {
-    errors.push('marketplace.name must be kebab-case');
+validatePluginName(codexPlugin, 'Codex plugin');
+validatePluginName(claudePlugin, 'Claude Code plugin');
+
+if (codexPlugin) {
+  if (codexPlugin.skills !== './skills/') {
+    errors.push('Codex plugin.skills must point to ./skills/');
   }
-  if (!marketplace.interface?.displayName) {
-    errors.push('marketplace.interface.displayName is required');
-  }
-  if (!Array.isArray(marketplace.plugins) || marketplace.plugins.length === 0) {
-    errors.push('marketplace.plugins must contain at least one entry');
+  if (!codexPlugin.interface?.displayName || !codexPlugin.interface?.shortDescription) {
+    errors.push('Codex plugin interface display metadata is required');
   }
 }
 
-if (plugin && marketplace && packageJson && packageLock) {
-  const entry = marketplace.plugins?.find((candidate) => candidate.name === plugin.name);
-  if (!entry) errors.push('marketplace does not list the plugin');
-  if (entry?.source?.source !== 'local' || entry?.source?.path !== './') {
-    errors.push('marketplace source must resolve the plugin from the marketplace root');
+if (claudePlugin) {
+  if (claudePlugin.skills !== './skills/') {
+    errors.push('Claude Code plugin.skills must point to ./skills/');
   }
-  if (entry?.version !== plugin.version) {
-    errors.push('marketplace fallback version must match plugin.json');
+  if (claudePlugin.agents !== './agents/') {
+    errors.push('Claude Code plugin.agents must point to ./agents/');
   }
-  if (!entry?.description || !entry?.interface?.displayName) {
-    errors.push('marketplace entry must include searchable fallback metadata');
+  if (!claudePlugin.displayName) {
+    errors.push('Claude Code plugin.displayName is required');
   }
-  if (entry?.interface?.displayName !== plugin.interface?.displayName) {
-    errors.push('marketplace and plugin display names must match');
+}
+
+if (codexMarketplace) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(codexMarketplace.name || '')) {
+    errors.push('Codex marketplace.name must be kebab-case');
   }
-  if (!Array.isArray(entry?.keywords) || !entry.keywords.includes('slides')) {
-    errors.push('marketplace entry must include discovery keywords');
+  if (!codexMarketplace.interface?.displayName) {
+    errors.push('Codex marketplace.interface.displayName is required');
   }
-  if (entry?.policy?.installation !== 'AVAILABLE') {
-    errors.push('marketplace installation policy must be AVAILABLE');
+  if (!Array.isArray(codexMarketplace.plugins) || codexMarketplace.plugins.length === 0) {
+    errors.push('Codex marketplace.plugins must contain at least one entry');
   }
-  if (!entry?.policy?.authentication) {
-    errors.push('marketplace authentication policy is required');
+}
+
+if (claudeMarketplace) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(claudeMarketplace.name || '')) {
+    errors.push('Claude Code marketplace.name must be kebab-case');
   }
-  if (entry?.category !== 'Productivity') {
-    errors.push('marketplace category must be Productivity');
+  if (!claudeMarketplace.owner?.name) {
+    errors.push('Claude Code marketplace.owner.name is required');
   }
-  if (packageJson.version !== plugin.version || packageLock.version !== plugin.version) {
-    errors.push('package and Codex manifest versions must match');
+  if (!Array.isArray(claudeMarketplace.plugins) || claudeMarketplace.plugins.length === 0) {
+    errors.push('Claude Code marketplace.plugins must contain at least one entry');
   }
-  if (packageLock.packages?.['']?.version !== plugin.version) {
-    errors.push('package-lock root package version must match');
+}
+
+if (
+  codexPlugin &&
+  codexMarketplace &&
+  claudePlugin &&
+  claudeMarketplace &&
+  packageJson &&
+  packageLock
+) {
+  const codexEntry = codexMarketplace.plugins?.find(
+    (candidate) => candidate.name === codexPlugin.name,
+  );
+  const claudeEntry = claudeMarketplace.plugins?.find(
+    (candidate) => candidate.name === claudePlugin.name,
+  );
+
+  if (!codexEntry) errors.push('Codex marketplace does not list the plugin');
+  if (!claudeEntry) errors.push('Claude Code marketplace does not list the plugin');
+
+  if (codexEntry?.source?.source !== 'local' || codexEntry?.source?.path !== './') {
+    errors.push('Codex marketplace source must resolve the plugin from the marketplace root');
   }
+  if (claudeEntry?.source !== './') {
+    errors.push('Claude Code marketplace source must resolve the plugin from the marketplace root');
+  }
+
+  const versions = [
+    codexPlugin.version,
+    claudePlugin.version,
+    codexEntry?.version,
+    claudeEntry?.version,
+    claudeMarketplace.version,
+    packageJson.version,
+    packageLock.version,
+    packageLock.packages?.['']?.version,
+  ];
+  if (versions.some((value) => value !== codexPlugin.version)) {
+    errors.push('Codex, Claude Code, package, lockfile, and marketplace versions must match');
+  }
+
+  if (!codexEntry?.description || !codexEntry?.interface?.displayName) {
+    errors.push('Codex marketplace entry must include searchable fallback metadata');
+  }
+  if (!claudeEntry?.description || !claudeEntry?.displayName) {
+    errors.push('Claude Code marketplace entry must include display metadata');
+  }
+  if (codexEntry?.interface?.displayName !== codexPlugin.interface?.displayName) {
+    errors.push('Codex marketplace and plugin display names must match');
+  }
+  if (claudeEntry?.displayName !== claudePlugin.displayName) {
+    errors.push('Claude Code marketplace and plugin display names must match');
+  }
+  if (!Array.isArray(codexEntry?.keywords) || !codexEntry.keywords.includes('slides')) {
+    errors.push('Codex marketplace entry must include discovery keywords');
+  }
+  if (!Array.isArray(claudeEntry?.keywords) || !claudeEntry.keywords.includes('slides')) {
+    errors.push('Claude Code marketplace entry must include discovery keywords');
+  }
+  if (codexEntry?.policy?.installation !== 'AVAILABLE') {
+    errors.push('Codex marketplace installation policy must be AVAILABLE');
+  }
+  if (!codexEntry?.policy?.authentication) {
+    errors.push('Codex marketplace authentication policy is required');
+  }
+  if (codexEntry?.category !== 'Productivity') {
+    errors.push('Codex marketplace category must be Productivity');
+  }
+
   if (packageJson.bin?.['codex-slides'] !== './bin/codex-slides.mjs') {
     errors.push('package.json must expose the codex-slides CLI');
   }
   if (packageJson.bin?.['claude-slides'] !== './bin/claude-slides.mjs') {
-    errors.push('package.json must preserve the claude-slides compatibility alias');
+    errors.push('package.json must expose the claude-slides CLI');
   }
   if (!String(packageJson.engines?.node || '').includes('18')) {
     warnings.push('package.json should document Node.js 18+ compatibility');
@@ -180,14 +254,12 @@ for (const name of expectedSkills) {
 
   for (const forbidden of [
     '$ARGUMENTS',
-    'CLAUDE_PLUGIN_ROOT',
-    'claude-code-slides:',
     'argument-hint:',
     'effort:',
     'user-invocable:',
   ]) {
     if (content.includes(forbidden)) {
-      errors.push(`${relativePath}: contains Claude-specific token ${forbidden}`);
+      errors.push(`${relativePath}: contains host-specific frontmatter or runtime token ${forbidden}`);
     }
   }
 
@@ -206,15 +278,21 @@ for (const name of expectedSkills) {
   }
 }
 
-for (const forbiddenPath of [
-  '.claude-plugin/plugin.json',
-  '.claude-plugin/marketplace.json',
-  'agents/deck-architect.md',
-  'agents/visual-director.md',
-  'agents/deck-reviewer.md',
-]) {
-  if (await fileExists(forbiddenPath)) {
-    errors.push(`${forbiddenPath} is a legacy Claude Code component and must be removed`);
+for (const name of expectedClaudeAgents) {
+  const relativePath = `agents/${name}.md`;
+  if (!(await fileExists(relativePath))) continue;
+  const content = await readFile(path.join(root, relativePath), 'utf8');
+  const metadata = parseFrontmatter(content, relativePath);
+  if (!metadata) continue;
+
+  if (metadata.name !== name) {
+    errors.push(`${relativePath}: name must match filename (${name})`);
+  }
+  if (!metadata.description || !metadata.model) {
+    errors.push(`${relativePath}: description and model are required`);
+  }
+  if (!content.includes('${CLAUDE_PLUGIN_ROOT}')) {
+    errors.push(`${relativePath}: must use CLAUDE_PLUGIN_ROOT for cached plugin paths`);
   }
 }
 
@@ -228,14 +306,17 @@ if (await fileExists('README.md')) {
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   for (const skill of ['create-deck', 'review-deck', 'speaker-notes']) {
     if (!readme.includes(`$${skill}`)) {
-      errors.push(`README.md must document $${skill}`);
+      errors.push(`README.md must document Codex skill $${skill}`);
+    }
+    if (!readme.includes(`/claude-code-slides:${skill}`)) {
+      errors.push(`README.md must document Claude Code skill /claude-code-slides:${skill}`);
     }
   }
   if (!readme.includes('codex plugin marketplace add')) {
     errors.push('README.md must document Codex marketplace installation');
   }
-  if (!readme.includes('codex plugin marketplace upgrade rufus-slides')) {
-    errors.push('README.md must document marketplace refresh');
+  if (!readme.includes('claude plugin marketplace add')) {
+    errors.push('README.md must document Claude Code marketplace installation');
   }
 }
 
@@ -243,8 +324,10 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Validated ${plugin?.interface?.displayName || plugin?.name} ${plugin?.version}.`);
-  console.log(`Found ${expectedSkills.length} Codex skills and ${expectedSkills.length} repo-scoped forwarders.`);
+  console.log(`Validated dual-platform Claude Code Slides ${codexPlugin?.version}.`);
+  console.log(
+    `Found ${expectedSkills.length} shared skills, ${expectedSkills.length} Codex forwarders, and ${expectedClaudeAgents.length} Claude Code agents.`,
+  );
 }
 
 for (const warning of warnings) console.warn(`WARN  ${warning}`);

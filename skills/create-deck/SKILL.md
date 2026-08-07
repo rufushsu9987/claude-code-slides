@@ -9,11 +9,12 @@ Create the presentation requested in the current user message. Treat it as a del
 
 ## Resolve the plugin root
 
-Use the absolute path of this `SKILL.md` as the anchor. The plugin root is two directories above it:
+This skill is shared by Codex and Claude Code.
 
-```text
-<plugin-root>/skills/create-deck/SKILL.md
-```
+- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
+- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/create-deck/SKILL.md`.
+
+Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
 
 Read these references before implementation:
 
@@ -27,7 +28,7 @@ Run the bundled CLI with:
 node "<plugin-root>/bin/codex-slides.mjs" <command>
 ```
 
-Never assume that `codex-slides` is globally installed.
+Claude Code also adds the plugin's `bin/` directory to Bash `PATH`, so `claude-slides` is available there; the explicit Node path remains the portable default.
 
 ## 1. Choose the delivery format
 
@@ -63,9 +64,12 @@ Ask only for a missing constraint that materially changes the output. Otherwise 
 
 ## 4. Plan before implementation
 
-For non-trivial decks, use the `$deck-architect` and `$visual-director` skills as focused planning passes when they are available. If Codex cannot load them, perform the same roles inline.
+For non-trivial decks, use the bundled planning roles when available:
 
-Synthesize one concise outline. Every page must have one job and one memorable takeaway. A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it rather than forcing it.
+- **Codex**: invoke `$deck-architect` and `$visual-director`.
+- **Claude Code**: delegate to the `claude-code-slides:deck-architect` and `claude-code-slides:visual-director` subagents, or invoke the namespaced skills.
+
+If the host cannot load them, perform the same roles inline. Synthesize one concise outline. Every page must have one job and one memorable takeaway. A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it rather than forcing it.
 
 ## 5. Scaffold the output
 
@@ -118,7 +122,12 @@ Run:
 node "<plugin-root>/bin/codex-slides.mjs" check <deck-path>
 ```
 
-Then use `$deck-reviewer` for an independent review when available. Fix high-confidence Critical and Major findings and re-run validation.
+Then use the bundled independent review role:
+
+- **Codex**: `$deck-reviewer`
+- **Claude Code**: `claude-code-slides:deck-reviewer`
+
+Fix high-confidence Critical and Major findings and re-run validation.
 
 Also verify the format-specific output:
 

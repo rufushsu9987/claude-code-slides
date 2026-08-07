@@ -9,7 +9,14 @@ Review the deck identified by the current user request. When the user asks for f
 
 ## Resolve the plugin root
 
-Use this `SKILL.md` path as the anchor. The plugin root is two directories above it. Read:
+This skill is shared by Codex and Claude Code.
+
+- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
+- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/review-deck/SKILL.md`.
+
+Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
+
+Read:
 
 - `<plugin-root>/references/review-checklist.md`
 - `<plugin-root>/references/style-system.md`
@@ -21,14 +28,14 @@ Run deterministic checks with:
 node "<plugin-root>/bin/codex-slides.mjs" check <deck-path> --json
 ```
 
-Do not assume a globally installed CLI.
-
 ## Workflow
 
 1. Detect the format and locate source files, generated output, notes, and local assets.
 2. Read the three references above.
 3. Run the bundled validator when the format is supported.
-4. Use `$deck-reviewer` as an independent review pass when available.
+4. Run an independent review pass:
+   - **Codex**: `$deck-reviewer`
+   - **Claude Code**: delegate to `claude-code-slides:deck-reviewer`
 5. Inspect every page and synthesize findings without repeating automated warnings.
 6. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
 7. Re-run validation and preview or generate the deliverable when possible.

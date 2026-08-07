@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "claude-code-slides",
+  "displayName": "Claude Code Slides",
+  "version": "0.3.0",
+  "description": "Create, review, and rehearse story-driven HTML, Marp, and editable PowerPoint presentations with shared workflows for Claude Code and Codex.",
+  "author": {
+    "name": "Rufus Hsu",
+    "url": "https://github.com/rufushsu9987"
+  },
+  "homepage": "https://github.com/rufushsu9987/claude-code-slides#readme",
+  "repository": "https://github.com/rufushsu9987/claude-code-slides",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "codex",
+    "presentations",
+    "slides",
+    "powerpoint",
+    "marp",
+    "html",
+    "speaker-notes",
+    "design"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/"
+}

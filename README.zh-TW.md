@@ -1,25 +1,27 @@
-# Claude Code Slides for Codex
+# Claude Code Slides — Codex + Claude Code
 
 [![CI](https://github.com/rufushsu9987/claude-code-slides/actions/workflows/ci.yml/badge.svg)](https://github.com/rufushsu9987/claude-code-slides/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-211f1b.svg)](./LICENSE)
 
-這是一個 **Codex 簡報 Plugin**，可以把主題、需求文件、URL 或 Repository 內容轉成故事線清楚、視覺一致、可直接播放或交付的簡報。
+這是一個同時支援 **Codex 與 Claude Code** 的簡報 Plugin，可把主題、需求文件、URL 或 Repository 內容轉成故事線清楚、視覺一致、可直接播放或交付的 HTML、Marp 與可編輯 PowerPoint 簡報。
 
-名稱代表內建的視覺方向：暖米白、炭黑文字、節制的陶土橘、Editorial 標題與功能性的 Terminal 細節。這是獨立社群專案，與 Anthropic、OpenAI 均無官方關聯或背書。
+內建視覺方向採暖米白、炭黑文字、節制的陶土橘、Editorial 標題與功能性的 Terminal 細節。這是獨立社群專案，與 Anthropic、OpenAI 均無官方關聯或背書。
 
 ![Claude Code 風格簡報範例](./docs/images/hero.svg)
 
-## 主要能力
+## 一套工作流程，支援兩個 Agent 平台
 
-| Skill | 用途 |
-| --- | --- |
-| `$create-deck` | 建立完整 HTML、Marp 或可編輯 PowerPoint 簡報 |
-| `$review-deck` | 檢查或修正故事線、密度、資訊層級、無障礙、資產與匯出品質 |
-| `$speaker-notes` | 加入時間分配、自然講稿、轉場、Demo 提示、限制與可能問答 |
-| `$claude-code-style` | 套用暖色 Terminal Editorial 視覺系統 |
-| `$deck-architect` | 規劃受眾旅程、核心論點、證據與頁面順序 |
-| `$visual-director` | 規劃版面、架構圖、資料視覺化與視覺一致性 |
-| `$deck-reviewer` | 執行交付前的獨立審查 |
+核心工作流程只維護在根目錄 `skills/` 一份，Codex 與 Claude Code 分別透過原生 Plugin 機制載入。
+
+| 能力 | Codex | Claude Code |
+| --- | --- | --- |
+| 建立簡報 | `$create-deck` | `/claude-code-slides:create-deck` |
+| 審查與修正 | `$review-deck` | `/claude-code-slides:review-deck` |
+| 產生講稿 | `$speaker-notes` | `/claude-code-slides:speaker-notes` |
+| 套用視覺風格 | `$claude-code-style` | `/claude-code-slides:claude-code-style` |
+| 故事線規劃 | `$deck-architect` | Skill 或 `deck-architect` Subagent |
+| 視覺指導 | `$visual-director` | Skill 或 `visual-director` Subagent |
+| 獨立審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
 
 另外包含零依賴 Node.js CLI，用於建立模板與執行可重複的確定性檢查。
 
@@ -33,19 +35,15 @@ codex plugin marketplace upgrade rufus-slides
 codex plugin add claude-code-slides@rufus-slides
 ```
 
-也可以啟動 Codex、開啟 `/plugins`，選擇 **Rufus Slides**，再安裝 **Claude Code Slides**。
-
-安裝後開啟新的 Codex Session，再直接呼叫 Skill：
+也可以啟動 Codex、開啟 `/plugins`，選擇 **Rufus Slides**，再安裝 **Claude Code Slides**。安裝後請開啟新的 Codex Session。
 
 ```text
 $create-deck 根據 docs/architecture.md，為雲端工程師製作 12 分鐘繁體中文架構審查簡報，使用 HTML。
 ```
 
-也可以只描述需求，讓 Codex 根據 Skill 的 `description` 自動選擇適合的工作流程。
+### Codex Marketplace 顯示 no matches
 
-### Marketplace 顯示 no matches
-
-Marketplace 若是在新版 Manifest 推送前加入，Codex 可能仍使用舊 Snapshot。請先更新並檢查可用 Plugin：
+先更新並檢查本機 Marketplace Snapshot：
 
 ```bash
 codex plugin marketplace upgrade rufus-slides
@@ -53,7 +51,7 @@ codex plugin list --marketplace rufus-slides --available --json
 codex plugin add claude-code-slides@rufus-slides
 ```
 
-若仍然讀到舊 Snapshot，重新建立 Marketplace：
+若仍讀到舊 Snapshot：
 
 ```bash
 codex plugin marketplace remove rufus-slides
@@ -61,7 +59,37 @@ codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
 codex plugin add claude-code-slides@rufus-slides
 ```
 
-安裝或更新後請重新啟動 Codex，並建立新的 Session。
+## 安裝到 Claude Code
+
+加入 Marketplace 並安裝 Plugin：
+
+```bash
+claude plugin marketplace add rufushsu9987/claude-code-slides
+claude plugin install claude-code-slides@rufus-slides
+```
+
+也可以直接在 Claude Code 內執行：
+
+```text
+/plugin marketplace add rufushsu9987/claude-code-slides
+/plugin install claude-code-slides@rufus-slides
+/reload-plugins
+```
+
+呼叫 Namespaced Skill：
+
+```text
+/claude-code-slides:create-deck 根據 docs/architecture.md，為雲端工程師製作 12 分鐘繁體中文架構審查簡報，使用 HTML。
+```
+
+Claude Code 也會在 `/agents` 自動發現三個 Subagents，並可將故事線規劃、視覺指導與交付前審查交給它們。
+
+更新既有安裝：
+
+```bash
+claude plugin marketplace update rufus-slides
+claude plugin update claude-code-slides@rufus-slides
+```
 
 ## 直接從 Repository 開發或測試
 
@@ -70,10 +98,23 @@ git clone https://github.com/rufushsu9987/claude-code-slides.git
 cd claude-code-slides
 npm ci
 npm run check
-codex
 ```
 
-Repository 已提供 `.agents/skills/` Forwarder。只要從此 Repository 內啟動 Codex，七個 Skills 就會自動被掃描；可用 `/skills` 查看。
+Codex Repository 模式：
+
+```bash
+codex
+# 使用 /skills 查看
+```
+
+Claude Code 本機 Plugin 模式：
+
+```bash
+claude plugin validate .
+claude --plugin-dir .
+```
+
+Codex 會讀取 `.agents/skills/`；Claude Code 會載入 `.claude-plugin/`、根目錄 `skills/`、`agents/` 與 `bin/`。
 
 ## 支援格式
 
@@ -87,19 +128,29 @@ Repository 已提供 `.agents/skills/` Forwarder。只要從此 Repository 內�
 
 ## 使用範例
 
+Codex：
+
 ```text
 $create-deck 把此 Repository 製作成 10 頁企業架構審查簡報，聽眾是雲端工程師，使用繁體中文與 HTML。
 
 $review-deck 檢查 slides/enterprise-ai-platform，修正 Critical 與 Major 問題，保留現有品牌規範。
 
 $speaker-notes 加入 15 分鐘繁體中文講稿、Demo 提示與可能問答。
+```
 
-$visual-director 為這份資安架構簡報規劃 Claude Code 風格視覺，但不要複製官方產品介面。
+Claude Code：
+
+```text
+/claude-code-slides:create-deck 把此 Repository 製作成 10 頁企業架構審查簡報，使用繁體中文與 HTML。
+
+/claude-code-slides:review-deck 檢查 slides/enterprise-ai-platform，修正 Critical 與 Major 問題。
+
+/claude-code-slides:speaker-notes 加入 15 分鐘繁體中文講稿、Demo 提示與可能問答。
 ```
 
 ## CLI
 
-Skills 會透過 Plugin Root 的絕對路徑呼叫 CLI，因此不需要全域安裝。手動使用：
+Skills 會透過 Plugin Root 的絕對路徑呼叫 CLI，因此不需要全域安裝。
 
 ```bash
 node bin/codex-slides.mjs init "企業 AI 平台" --format html
@@ -109,14 +160,14 @@ node bin/codex-slides.mjs check examples/ai-platform
 node bin/codex-slides.mjs doctor
 ```
 
-執行 `npm link` 後可縮短為：
+執行 `npm link` 後，兩個別名都可使用：
 
 ```bash
 codex-slides init "企業 AI 平台" --format html
-codex-slides check examples/ai-platform --json
+claude-slides check examples/ai-platform --json
 ```
 
-舊的 `claude-slides` 指令仍保留為相容別名。
+`doctor` 會檢查 Node.js、Codex CLI、Claude Code CLI 與 `npx`。
 
 ## HTML 播放快捷鍵
 
@@ -137,26 +188,29 @@ HTML 以 1920 × 1080 畫布等比例縮放，使用 URL Hash 保留目前頁面
 ```bash
 npm run check
 node bin/codex-slides.mjs check examples/ai-platform
+claude plugin validate .
 ```
 
 檢查項目包含：
 
+- Codex、Claude Code、Package 與 Marketplace 版本同步
+- 共用 Skill Metadata、Codex Forwarder 與 Claude Code Subagent
 - 遺漏投影片、資產、必要檔案或未替換模板 Token
-- 重複 HTML ID、缺少有效 Alt Text
-- 缺少標題、Speaker Notes、列印規則、Reduced Motion、鍵盤操作或 URL 狀態
-- Marp Frontmatter、Theme 或資產路徑錯誤
-- PptxGenJS 缺少寬螢幕版型、輸出、投影片建立或 Package Dependency
-- Codex Plugin、Marketplace、Skill Metadata 或殘留 Claude 專屬 Runtime Token
+- 重複 HTML ID、Alt Text、鍵盤操作、URL Hash、列印規則與 Reduced Motion
+- Marp Frontmatter、Theme 與資產路徑
+- PptxGenJS 寬螢幕版型、輸出、Dependency 與可編輯性
 
 ## 專案結構
 
 ```text
 .codex-plugin/        Codex Plugin Manifest
-.agents/plugins/      Repository Marketplace
-.agents/skills/       Repository-scoped Skill Forwarder
-skills/               Codex 工作流程與視覺指引
+.agents/plugins/      Codex Repository Marketplace
+.agents/skills/       Codex Repository-scoped Skill Forwarder
+.claude-plugin/       Claude Code Plugin Manifest 與 Marketplace
+skills/               雙平台共用工作流程
+agents/               Claude Code Subagents
 references/           故事線、風格、格式與審查規範
-bin/ + lib/           codex-slides CLI
+bin/ + lib/           codex-slides 與 claude-slides CLI
 templates/            HTML、Marp、PptxGenJS 模板
 examples/             可執行範例
 scripts/ + test/      驗證與 Regression Tests
@@ -169,7 +223,7 @@ scripts/ + test/      驗證與 Regression Tests
 - Editorial Serif 標題、易讀 Sans 內文、精準 Mono 標籤
 - Terminal 元素只用於呈現工作流程、程式碼或證據
 - 直接標示、有效幾何與充足留白
-- 不使用 Anthropic Logo、複製官方介面或暗示官方關聯
+- 不使用 Anthropic 或 OpenAI Logo、複製官方介面或暗示官方關聯
 
 使用者提供的企業 Brand System 永遠優先。
 

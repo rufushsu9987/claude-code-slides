@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "rufus-slides",
+  "owner": {
+    "name": "Rufus Hsu",
+    "url": "https://github.com/rufushsu9987"
+  },
+  "description": "Cross-platform presentation workflows for Claude Code and Codex.",
+  "version": "0.3.0",
+  "plugins": [
+    {
+      "name": "claude-code-slides",
+      "displayName": "Claude Code Slides",
+      "source": "./",
+      "description": "Create, review, and rehearse polished HTML, Marp, and editable PowerPoint presentations with a warm terminal-editorial visual system.",
+      "version": "0.3.0",
+      "author": {
+        "name": "Rufus Hsu",
+        "url": "https://github.com/rufushsu9987"
+      },
+      "homepage": "https://github.com/rufushsu9987/claude-code-slides#readme",
+      "repository": "https://github.com/rufushsu9987/claude-code-slides",
+      "license": "MIT",
+      "keywords": [
+        "claude-code",
+        "codex",
+        "slides",
+        "presentation",
+        "powerpoint",
+        "marp",
+        "html",
+        "speaker-notes",
+        "design"
+      ],
+      "category": "productivity",
+      "tags": [
+        "slides",
+        "presentation",
+        "powerpoint",
+        "marp",
+        "html",
+        "design"
+      ]
+    }
+  ]
+}

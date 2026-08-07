@@ -2,11 +2,20 @@
 
 All notable changes to this project are documented here.
 
+## 0.3.0 - 2026-08-07
+
+- Add native Claude Code plugin and marketplace manifests alongside Codex.
+- Restore Claude Code namespaced skills and three presentation subagents.
+- Keep one shared `skills/` workflow source for both platforms.
+- Add dual-platform version, manifest, marketplace, and agent validation.
+- Update CLI diagnostics to detect both `codex` and `claude`.
+- Document installation, updates, local development, and troubleshooting for both hosts.
+
 ## 0.2.1 - 2026-08-07
 
-- Load the plugin directly from the repository marketplace root instead of recursively resolving the same Git repository.
-- Add complete marketplace fallback metadata so Codex can display and search for **Claude Code Slides** before installation.
-- Document marketplace refresh, inspection, and direct CLI installation commands.
+- Fix Codex marketplace discovery by loading the plugin from the downloaded marketplace root.
+- Add searchable fallback metadata for Codex plugin listings.
+- Document marketplace refresh and stale snapshot recovery.
 
 ## 0.2.0 - 2026-08-07
 

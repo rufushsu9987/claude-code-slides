@@ -1,9 +1,9 @@
 {
   "name": "claude-code-slides",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Codex plugin and local CLI for creating polished Claude Code-inspired HTML, Marp, and PowerPoint presentations.",
+  "description": "Dual Codex and Claude Code plugin plus local CLI for creating polished HTML, Marp, and PowerPoint presentations.",
   "bin": {
     "codex-slides": "./bin/codex-slides.mjs",
     "claude-slides": "./bin/claude-slides.mjs"
@@ -30,6 +30,8 @@
   "keywords": [
     "codex",
     "openai",
+    "claude-code",
+    "anthropic",
     "agent-skill",
     "plugin",
     "presentations",

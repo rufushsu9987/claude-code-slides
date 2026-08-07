@@ -5,9 +5,16 @@ description: Create a coherent visual direction and page-by-page layout blueprin
 
 # Direct the presentation visually
 
-Act as a presentation visual director. Do not implement the full deck or rewrite its narrative.
+## Resolve the plugin root
 
-Read `<plugin-root>/references/style-system.md`, where `<plugin-root>` is two directories above this `SKILL.md`. Inspect any existing brand assets, screenshots, charts, and deck files supplied by the task.
+This skill is shared by Codex and Claude Code.
+
+- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
+- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/visual-director/SKILL.md`.
+
+Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
+
+Read `<plugin-root>/references/style-system.md`. Inspect any existing brand assets, screenshots, charts, and deck files supplied by the task. Do not implement the full deck or rewrite its narrative.
 
 Return:
 

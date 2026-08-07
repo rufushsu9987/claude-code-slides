@@ -6,23 +6,42 @@ async function json(path) {
   return JSON.parse(await readFile(path, 'utf8'));
 }
 
-test('release versions stay synchronized', async () => {
-  const [plugin, marketplace, packageJson, packageLock] = await Promise.all([
+test('release versions stay synchronized across both plugin systems', async () => {
+  const [
+    codexPlugin,
+    codexMarketplace,
+    claudePlugin,
+    claudeMarketplace,
+    packageJson,
+    packageLock,
+  ] = await Promise.all([
     json('.codex-plugin/plugin.json'),
     json('.agents/plugins/marketplace.json'),
+    json('.claude-plugin/plugin.json'),
+    json('.claude-plugin/marketplace.json'),
     json('package.json'),
     json('package-lock.json'),
   ]);
 
-  const marketplacePlugin = marketplace.plugins.find((entry) => entry.name === plugin.name);
-  assert.ok(marketplacePlugin);
-  assert.equal(plugin.version, marketplacePlugin.version);
-  assert.equal(plugin.version, packageJson.version);
-  assert.equal(plugin.version, packageLock.version);
-  assert.equal(plugin.version, packageLock.packages[''].version);
+  const codexEntry = codexMarketplace.plugins.find((entry) => entry.name === codexPlugin.name);
+  const claudeEntry = claudeMarketplace.plugins.find((entry) => entry.name === claudePlugin.name);
+  assert.ok(codexEntry);
+  assert.ok(claudeEntry);
+
+  const versions = [
+    codexPlugin.version,
+    claudePlugin.version,
+    codexEntry.version,
+    claudeEntry.version,
+    claudeMarketplace.version,
+    packageJson.version,
+    packageLock.version,
+    packageLock.packages[''].version,
+  ];
+  assert.equal(new Set(versions).size, 1);
 });
 
-test('marketplace loads the root plugin with searchable fallback metadata', async () => {
+test('Codex marketplace loads the root plugin with searchable fallback metadata', async () => {
   const marketplace = await json('.agents/plugins/marketplace.json');
   const plugin = await json('.codex-plugin/plugin.json');
   const entry = marketplace.plugins[0];
@@ -38,9 +57,28 @@ test('marketplace loads the root plugin with searchable fallback metadata', asyn
   assert.equal(entry.keywords.includes('slides'), true);
 });
 
-test('Codex manifest exposes the skills bundle', async () => {
+test('Claude Code marketplace loads the root plugin', async () => {
+  const marketplace = await json('.claude-plugin/marketplace.json');
+  const plugin = await json('.claude-plugin/plugin.json');
+  const entry = marketplace.plugins[0];
+
+  assert.equal(entry.source, './');
+  assert.equal(entry.displayName, plugin.displayName);
+  assert.equal(entry.version, plugin.version);
+  assert.equal(entry.keywords.includes('slides'), true);
+});
+
+test('Codex manifest exposes the shared skills bundle', async () => {
   const plugin = await json('.codex-plugin/plugin.json');
   assert.equal(plugin.name, 'claude-code-slides');
   assert.equal(plugin.skills, './skills/');
   assert.equal(plugin.interface.displayName, 'Claude Code Slides');
+});
+
+test('Claude Code manifest exposes shared skills and native subagents', async () => {
+  const plugin = await json('.claude-plugin/plugin.json');
+  assert.equal(plugin.name, 'claude-code-slides');
+  assert.equal(plugin.skills, './skills/');
+  assert.equal(plugin.agents, './agents/');
+  assert.equal(plugin.displayName, 'Claude Code Slides');
 });

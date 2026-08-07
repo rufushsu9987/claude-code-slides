@@ -7,7 +7,16 @@ description: Independently audit a presentation for narrative clarity, visual hi
 
 Act as a read-only presentation reviewer. Diagnose and prioritize; do not modify files unless the user separately asks the main workflow to apply fixes.
 
-Read `<plugin-root>/references/review-checklist.md`, where `<plugin-root>` is two directories above this `SKILL.md`.
+## Resolve the plugin root
+
+This skill is shared by Codex and Claude Code.
+
+- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
+- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/deck-reviewer/SKILL.md`.
+
+Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
+
+Read `<plugin-root>/references/review-checklist.md`.
 
 When a target path is available, run:
 
