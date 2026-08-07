@@ -1,6 +1,6 @@
 ---
 name: create-deck
-description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use for slides, presentations, pitch decks, technical talks, architecture reviews, status reports, training decks, or source-to-slides conversion. Supports HTML, Marp, PPTX, and existing slide frameworks.
+description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use for slides, presentations, pitch decks, technical talks, architecture reviews, status reports, training decks, or source-to-slides conversion. Supports HTML, Marp, PPTX, named professional templates, and existing slide frameworks.
 ---
 
 # Create a presentation deck
@@ -29,7 +29,32 @@ Honor an explicit format. Otherwise infer it from the intended use:
 
 Do not ask the user to choose when the request already implies a sensible default. State the assumption briefly and proceed.
 
-## 2. Inspect the source material
+## 2. Choose a template
+
+Honor an explicit template name. Otherwise select the closest match to the audience and communication goal.
+
+List the installed presets when needed:
+
+```bash
+node scripts/slides-cli.mjs templates
+node scripts/slides-cli.mjs templates --format pptx --json
+```
+
+Recommended selection:
+
+| Template | Best use |
+| --- | --- |
+| `terminal-editorial` | Technical talks, architecture reviews, AI and developer tooling |
+| `executive-brief` | Leadership updates, strategy proposals, quarterly reviews |
+| `cloud-architecture` | Infrastructure, platform engineering, security boundaries |
+| `data-story` | Analytics, research findings, metrics, evidence-led narratives |
+| `product-launch` | Product demos, launches, roadmaps, feature narratives |
+| `dark-terminal` | Live demos, code walkthroughs, engineering deep dives |
+| `incident-review` | Postmortems, impact timelines, root cause, remediation |
+
+A supplied brand system or existing company template always takes precedence over a bundled preset.
+
+## 3. Inspect the source material
 
 - Read every local file, URL, document, image, or code path the request depends on.
 - For repository-based technical decks, identify the actual architecture, dependencies, data flows, trust boundaries, deployment model, operations, costs, and risks.
@@ -37,7 +62,7 @@ Do not ask the user to choose when the request already implies a sensible defaul
 - Label uncertain claims as assumptions.
 - Never copy confidential material into a deck unless the intended audience is authorized to receive it.
 
-## 3. Lock the communication objective
+## 4. Lock the communication objective
 
 Infer or establish:
 
@@ -50,35 +75,35 @@ Infer or establish:
 
 Ask only for a missing constraint that materially changes the output. Otherwise make a reasonable assumption and continue.
 
-## 4. Plan before implementation
+## 5. Plan before implementation
 
 For non-trivial decks, use the sibling `deck-architect` and `visual-director` skills when available. Otherwise perform those planning roles inline.
 
 Synthesize one concise outline. Every page must have one job and one memorable takeaway. A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it to the content rather than forcing it.
 
-## 5. Scaffold the output
+## 6. Scaffold the output
 
 Run the bundled helper from the user's workspace:
 
 ```bash
-node scripts/slides-cli.mjs init "Deck title" --format html
-node scripts/slides-cli.mjs init "Deck title" --format marp
-node scripts/slides-cli.mjs init "Deck title" --format pptx
+node scripts/slides-cli.mjs init "Deck title" --format html --template terminal-editorial
+node scripts/slides-cli.mjs init "Deck title" --format marp --template data-story
+node scripts/slides-cli.mjs init "Deck title" --format pptx --template executive-brief
 ```
 
-The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention.
+The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention. The generated `template.json` records the selected preset, palette, typography, pattern, and output format.
 
 | Format | Minimum deliverable |
 | --- | --- |
-| HTML | `index.html`, `theme.css`, `slides.js`, `README.md` |
-| Marp | `deck.md`, `theme.css`, `README.md` |
-| PPTX | `deck.mjs`, `package.json`, `README.md`; generate the `.pptx` when dependency installation is permitted |
+| HTML | `index.html`, `theme.css`, `slides.js`, `template.json`, `README.md` |
+| Marp | `deck.md`, `theme.css`, `template.json`, `README.md` |
+| PPTX | `deck.mjs`, `package.json`, `template.json`, `README.md`; generate the `.pptx` when dependency installation is permitted |
 
 Keep assets inside the deck directory.
 
-## 6. Author the deck
+## 7. Author the deck
 
-Apply the bundled warm terminal-editorial system unless the user supplies a brand or requests another direction.
+Use the selected template as a visual starting point, not as a reason to force every page into the same layout.
 
 Content rules:
 
@@ -99,7 +124,7 @@ Technical-deck rules:
 - Cover security, operability, cost, performance, maintainability, and tradeoffs when relevant.
 - Keep code samples short and projection-safe.
 
-## 7. Validate and improve
+## 8. Validate and improve
 
 Run:
 
@@ -115,11 +140,11 @@ Verify the format-specific output:
 - Marp: frontmatter; separators; theme loading; asset paths; HTML/PDF export.
 - PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename.
 
-## 8. Hand off
+## 9. Hand off
 
 Report:
 
-- deck path and format
+- deck path, format, and selected template
 - slide count
 - preview or export command
 - unresolved assumptions, missing assets, or validation limitations
