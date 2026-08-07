@@ -204,8 +204,28 @@ if (claudePlugin) {
   if (claudePlugin.skills !== './skills/') {
     errors.push('Claude Code plugin.skills must point to ./skills/');
   }
-  if (claudePlugin.agents !== './agents/') {
-    errors.push('Claude Code plugin.agents must point to ./agents/');
+  if (claudePlugin.agents !== undefined) {
+    const agentPaths = Array.isArray(claudePlugin.agents)
+      ? claudePlugin.agents
+      : [claudePlugin.agents];
+    const invalidAgentPath = agentPaths.some(
+      (agentPath) =>
+        typeof agentPath !== 'string' ||
+        !agentPath.startsWith('./') ||
+        !agentPath.endsWith('.md'),
+    );
+
+    if (invalidAgentPath) {
+      errors.push(
+        'Claude Code plugin.agents must be omitted for agents/ auto-discovery or list ./.../*.md files',
+      );
+    } else {
+      for (const agentPath of agentPaths) {
+        if (!(await fileExists(agentPath))) {
+          errors.push(`Claude Code plugin.agents references missing ${agentPath}`);
+        }
+      }
+    }
   }
   if (!claudePlugin.displayName) {
     errors.push('Claude Code plugin.displayName is required');

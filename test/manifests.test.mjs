@@ -113,6 +113,7 @@ test('native manifests expose the shared portable skills bundle', async () => {
 
   assert.equal(claude.name, 'claude-code-slides');
   assert.equal(claude.skills, './skills/');
-  assert.equal(claude.agents, './agents/');
+  // Claude Code auto-discovers agents/*.md; the manifest must not use a directory path.
+  assert.equal(claude.agents, undefined);
   assert.equal(claude.displayName, 'Claude Code Slides');
 });
