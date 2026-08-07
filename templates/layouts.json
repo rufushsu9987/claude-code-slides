@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "name": "claude-editorial-layout-system",
+  "displayName": "Claude Editorial Layout System",
+  "description": "A content-aware layout system that preserves one visual language while varying composition, density, and eye path across a deck.",
+  "rules": {
+    "minimumUniqueForTenSlides": 8,
+    "maximumConsecutiveSame": 1,
+    "maximumCardShare": 0.2,
+    "rhythmChangeEvery": 4,
+    "architectureDeckSequence": [
+      "editorial-cover",
+      "hero-statement",
+      "before-after",
+      "layered-architecture",
+      "flow-architecture",
+      "code-walkthrough",
+      "metric-spotlight",
+      "risk-matrix",
+      "timeline",
+      "closing-manifesto"
+    ]
+  },
+  "starterSequence": [
+    "editorial-cover",
+    "hero-statement",
+    "before-after",
+    "layered-architecture",
+    "flow-architecture",
+    "metric-spotlight",
+    "evidence-claim",
+    "code-walkthrough",
+    "comparison-matrix",
+    "timeline",
+    "risk-matrix",
+    "closing-manifesto"
+  ],
+  "archetypes": [
+    {
+      "name": "editorial-cover",
+      "family": "opening",
+      "description": "Large editorial title, one audience promise, and restrained metadata.",
+      "bestFor": ["cover", "section opening"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "hero-statement",
+      "family": "statement",
+      "description": "One decisive claim with a compact proof rail or supporting number.",
+      "bestFor": ["thesis", "tension", "big idea"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "asymmetric-editorial",
+      "family": "statement",
+      "description": "Offset copy and visual weight for a strong change of rhythm without adding decoration.",
+      "bestFor": ["context", "provocation", "chapter transition"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "split-narrative",
+      "family": "explanation",
+      "description": "Claim and explanation on one side, evidence or visual on the other.",
+      "bestFor": ["explanation", "demo setup", "concept plus evidence"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "metric-spotlight",
+      "family": "evidence",
+      "description": "One dominant number supported by two smaller contextual measures.",
+      "bestFor": ["KPI", "outcome", "scale"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "evidence-claim",
+      "family": "evidence",
+      "description": "A chart, screenshot, quotation, or source artifact anchored next to the conclusion it proves.",
+      "bestFor": ["research", "benchmark", "customer evidence"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "layered-architecture",
+      "family": "system",
+      "description": "Stacked system layers with ownership, trust, or operational boundaries.",
+      "bestFor": ["platform architecture", "control plane", "layer model"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "flow-architecture",
+      "family": "system",
+      "description": "Directional nodes with direct labels for protocols, data, decisions, and ownership.",
+      "bestFor": ["data flow", "request path", "agent workflow"],
+      "cardBased": true,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "before-after",
+      "family": "comparison",
+      "description": "Matched current and target states with one explicit delta between them.",
+      "bestFor": ["migration", "transformation", "current versus target"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "comparison-matrix",
+      "family": "comparison",
+      "description": "Options evaluated on a shared axis with a clearly justified recommendation.",
+      "bestFor": ["technology selection", "build versus buy", "trade-off review"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "timeline",
+      "family": "sequence",
+      "description": "Three to six milestones on a shared spine with the current phase made explicit.",
+      "bestFor": ["roadmap", "migration", "incident chronology"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "process-steps",
+      "family": "sequence",
+      "description": "Ordered stages where each step changes responsibility, state, or evidence.",
+      "bestFor": ["delivery process", "CI/CD", "operating model"],
+      "cardBased": true,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "code-walkthrough",
+      "family": "demonstration",
+      "description": "Short projection-safe code or commands paired with the outcome they demonstrate.",
+      "bestFor": ["CLI demo", "API example", "implementation detail"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "risk-matrix",
+      "family": "risk",
+      "description": "Probability and impact combined with named mitigations and owners.",
+      "bestFor": ["risk review", "security", "delivery readiness"],
+      "cardBased": true,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "decision",
+      "family": "decision",
+      "description": "A small set of choices, the recommendation, and the consequence of waiting.",
+      "bestFor": ["approval", "funding", "architecture decision"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "closing-manifesto",
+      "family": "closing",
+      "description": "A memorable final line and one concrete next action, usually with a strong rhythm break.",
+      "bestFor": ["close", "call to action", "decision request"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    }
+  ]
+}

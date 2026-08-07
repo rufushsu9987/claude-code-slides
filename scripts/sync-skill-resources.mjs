@@ -26,6 +26,15 @@ const mappings = [
     ],
   },
   {
+    source: 'references/layout-system.md',
+    destinations: [
+      'skills/create-deck/references/layout-system.md',
+      'skills/review-deck/references/layout-system.md',
+      'skills/visual-director/references/layout-system.md',
+      'skills/deck-reviewer/references/layout-system.md',
+    ],
+  },
+  {
     source: 'references/output-formats.md',
     destinations: [
       'skills/create-deck/references/output-formats.md',

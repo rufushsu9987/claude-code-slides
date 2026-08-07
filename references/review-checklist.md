@@ -19,6 +19,17 @@
 - [ ] Tables, code, and diagrams can be understood at presentation distance.
 - [ ] Current state, target state, proposal, and measured result are not conflated.
 
+## Layout diversity
+
+- [ ] Every page has an explicit communication role and a matching layout archetype.
+- [ ] A deck of 10 or more slides uses at least eight distinct archetypes when the content supports them.
+- [ ] The exact layout archetype is not repeated on consecutive slides.
+- [ ] The same visual family does not dominate more than two of any three consecutive slides.
+- [ ] Card-grid and node-card pages remain at or below roughly 20% of the deck.
+- [ ] A visible rhythm change occurs every three to four slides through scale, density, background, or dominant visual.
+- [ ] Editorial claims, evidence, architecture, sequence, risk, and decision pages are interleaved rather than grouped into repetitive blocks.
+- [ ] Repeated layouts represent genuinely repeated semantic tasks, not convenience.
+
 ## Visual design
 
 - [ ] Palette, type scale, grid, and spacing rhythm are consistent.
@@ -43,7 +54,8 @@
 - [ ] Local files and asset paths resolve.
 - [ ] The deck previews with the documented command.
 - [ ] HTML slide position survives refresh, print produces one page per slide, and notes work.
-- [ ] Marp frontmatter, separators, theme, and export commands are valid.
-- [ ] PPTX uses 16:9, generates deterministically, remains editable, and avoids clipped text.
+- [ ] HTML slides use meaningful `data-layout` markers when the workflow supports them.
+- [ ] Marp frontmatter, separators, theme, layout classes, and export commands are valid.
+- [ ] PPTX uses 16:9, generates deterministically, remains editable, records its layout sequence, and avoids clipped text.
 - [ ] No placeholder copy, TODO markers, or unresolved template tokens remain.
 - [ ] Speaker notes align with page titles and order.

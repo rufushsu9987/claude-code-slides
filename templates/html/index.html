@@ -10,7 +10,7 @@
   <body>
     <div class="deck-shell">
       <main id="deck" class="deck" aria-label="{{TITLE}} presentation" aria-live="polite">
-        <section class="slide slide--cover" data-title="Cover">
+        <section class="slide slide--cover" data-title="Cover" data-layout="editorial-cover">
           <div class="topline">
             <span class="prompt-mark" aria-hidden="true">&gt;</span>
             <span>CLAUDE CODE SLIDES</span>
@@ -23,46 +23,117 @@
           </div>
 
           <div class="cover-meta">
-            <span>Prepared with Claude Code</span>
+            <span>{{TEMPLATE_NAME}} · 12 layout starters</span>
             <span aria-hidden="true">→</span>
           </div>
 
           <aside class="notes">Open with the audience problem, not with a table of contents.</aside>
         </section>
 
-        <section class="slide" data-title="Thesis">
+        <section class="slide" data-title="Thesis" data-layout="hero-statement">
           <header class="slide-header">
-            <p class="eyebrow">01 / THE SHIFT</p>
-            <span class="status"><span class="status-dot"></span>LIVE</span>
+            <p class="eyebrow">01 / THESIS</p>
+            <span class="mono-label">CLAIM + PROOF</span>
           </header>
 
-          <div class="thesis-layout">
+          <div class="hero-layout">
             <div>
-              <h2>The best slide makes one idea impossible to miss.</h2>
-              <p class="body-copy">Use this page for the central change, tension, or insight that frames the rest of the story.</p>
+              <h2>The layout should change when the communication job changes.</h2>
+              <p class="body-copy">Keep the visual language stable while varying composition, density, and eye path.</p>
             </div>
-            <div class="metric-block" aria-label="One idea per slide">
-              <strong>1</strong>
-              <span>idea per slide</span>
+            <div class="proof-rail" aria-label="Layout diversity proof points">
+              <div class="proof-item"><strong>16</strong><span>available archetypes</span></div>
+              <div class="proof-item"><strong>8+</strong><span>unique layouts in a 10-page deck</span></div>
+              <div class="proof-item"><strong>0</strong><span>consecutive repeats</span></div>
             </div>
           </div>
 
           <footer class="slide-footer"><span>{{SLUG}}</span><span>02</span></footer>
-          <aside class="notes">Pause after the headline. Let the audience read it before adding context.</aside>
+          <aside class="notes">State the governing principle before showing examples. The theme stays consistent; the layout follows meaning.</aside>
         </section>
 
-        <section class="slide" data-title="System map">
+        <section class="slide" data-title="Before and after" data-layout="before-after">
           <header class="slide-header">
-            <p class="eyebrow">02 / SYSTEM MAP</p>
+            <p class="eyebrow">02 / TRANSFORMATION</p>
+            <span class="mono-label">CURRENT → TARGET</span>
+          </header>
+
+          <div class="slide-title-row">
+            <h2>Move from repeated cards to content-aware composition.</h2>
+            <p>Use matched criteria so the audience sees the actual change instead of two unrelated lists.</p>
+          </div>
+
+          <div class="before-after" role="img" aria-label="Before and after comparison of repetitive layouts and content-aware layouts">
+            <article class="state-panel">
+              <span class="state-label">Before</span>
+              <h3>One structure for every page</h3>
+              <ul class="state-list">
+                <li>Repeated left–right split</li>
+                <li>Card grid for unrelated content</li>
+                <li>Visual rhythm stays flat</li>
+              </ul>
+            </article>
+            <div class="delta-arrow" aria-hidden="true">→</div>
+            <article class="state-panel state-panel--target">
+              <span class="state-label">Target</span>
+              <h3>Layout selected by slide role</h3>
+              <ul class="state-list">
+                <li>Architecture uses layers or flows</li>
+                <li>Evidence gets visual priority</li>
+                <li>Decisions end with a clear ask</li>
+              </ul>
+            </article>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>03</span></footer>
+          <aside class="notes">Explain the delta using the same criteria on both sides. Do not turn this into two unrelated feature lists.</aside>
+        </section>
+
+        <section class="slide" data-title="Layered architecture" data-layout="layered-architecture">
+          <header class="slide-header">
+            <p class="eyebrow">03 / LAYERED ARCHITECTURE</p>
+            <span class="mono-label">OWNERSHIP · TRUST · OPERATIONS</span>
+          </header>
+
+          <div class="architecture-layout">
+            <div class="architecture-copy">
+              <h2>Use layers when responsibility changes by boundary.</h2>
+              <p class="body-copy">Label who owns each layer, what it exposes, and where policy is enforced.</p>
+              <div class="boundary-note"><span aria-hidden="true">↳</span> A boundary must explain a responsibility, not just draw a box.</div>
+            </div>
+
+            <div class="architecture-stack" role="img" aria-label="Four-layer platform architecture">
+              <div class="architecture-layer architecture-layer--accent">
+                <span class="layer-index">01</span><strong>Experience</strong><span class="layer-meta">Product teams</span>
+              </div>
+              <div class="architecture-layer">
+                <span class="layer-index">02</span><strong>Application services</strong><span class="layer-meta">APIs · workflows</span>
+              </div>
+              <div class="architecture-layer">
+                <span class="layer-index">03</span><strong>Platform controls</strong><span class="layer-meta">Identity · policy · observability</span>
+              </div>
+              <div class="architecture-layer">
+                <span class="layer-index">04</span><strong>Infrastructure</strong><span class="layer-meta">Compute · network · data</span>
+              </div>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>04</span></footer>
+          <aside class="notes">Walk from the audience-facing layer down to the operating foundation. Name the owner and control at each boundary.</aside>
+        </section>
+
+        <section class="slide" data-title="Flow architecture" data-layout="flow-architecture">
+          <header class="slide-header">
+            <p class="eyebrow">04 / FLOW ARCHITECTURE</p>
             <span class="mono-label">INPUT → DECISION → OUTCOME</span>
           </header>
 
           <div class="slide-title-row">
-            <h2>Show the path, the owner, and the boundary.</h2>
-            <p>Direct labels beat legends. Every arrow should explain what moves and why.</p>
+            <h2>Show what moves, who owns it, and why the next step exists.</h2>
+            <p>Direct labels beat legends. Every arrow should name data, protocol, identity, or decision.</p>
           </div>
 
-          <div class="flow" role="img" aria-label="Three-step flow from source material to audience outcome">
+          <div class="flow" role="img" aria-label="Three-step flow from source material to audience action">
             <article class="flow-node">
               <span class="node-index">01</span>
               <h3>Source</h3>
@@ -72,7 +143,7 @@
             <article class="flow-node flow-node--accent">
               <span class="node-index">02</span>
               <h3>Argument</h3>
-              <p>One coherent narrative with explicit tradeoffs.</p>
+              <p>One coherent narrative with explicit trade-offs.</p>
             </article>
             <span class="flow-arrow" aria-hidden="true">→</span>
             <article class="flow-node">
@@ -82,21 +153,72 @@
             </article>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>03</span></footer>
-          <aside class="notes">Replace the generic flow with the real architecture or decision model.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>05</span></footer>
+          <aside class="notes">Replace the generic flow with the real request path, data flow, or decision model.</aside>
         </section>
 
-        <section class="slide" data-title="Terminal">
+        <section class="slide" data-title="Metric spotlight" data-layout="metric-spotlight">
           <header class="slide-header">
-            <p class="eyebrow">03 / BUILD</p>
-            <span class="mono-label">NO CONTEXT SWITCHING</span>
+            <p class="eyebrow">05 / OUTCOME</p>
+            <span class="mono-label">ONE NUMBER DOMINATES</span>
+          </header>
+
+          <div class="metric-stage">
+            <div class="metric-primary">
+              <span class="metric-kicker">LAYOUT DIVERSITY</span>
+              <strong>80%</strong>
+              <p>of a 10-slide deck should use a distinct composition before any layout repeats.</p>
+            </div>
+            <div class="metric-secondary">
+              <div class="metric-line"><strong>≤20%</strong><span>card-based pages</span></div>
+              <div class="metric-line"><strong>3–4</strong><span>slides between rhythm changes</span></div>
+              <div class="metric-line"><strong>1</strong><span>dominant idea per page</span></div>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>06</span></footer>
+          <aside class="notes">Use the large number only when it is meaningful and sourced. Replace these design-system metrics with real evidence in production decks.</aside>
+        </section>
+
+        <section class="slide" data-title="Evidence and claim" data-layout="evidence-claim">
+          <header class="slide-header">
+            <p class="eyebrow">06 / EVIDENCE</p>
+            <span class="mono-label">PROOF NEXT TO CLAIM</span>
+          </header>
+
+          <div class="evidence-layout">
+            <figure class="evidence-visual" aria-label="Illustrative chart showing increasing audience recall">
+              <figcaption>Audience recall / illustrative</figcaption>
+              <div class="mini-chart" aria-hidden="true">
+                <div class="mini-bar" style="--bar: 34%"><span>Repeated</span><i></i><b>34</b></div>
+                <div class="mini-bar" style="--bar: 58%"><span>Mixed</span><i></i><b>58</b></div>
+                <div class="mini-bar mini-bar--accent" style="--bar: 82%"><span>Purposeful</span><i></i><b>82</b></div>
+              </div>
+              <p class="source-note">Replace illustrative data with a verified source and date.</p>
+            </figure>
+
+            <div class="evidence-copy">
+              <span class="eyebrow">THE CLAIM</span>
+              <h2>Evidence becomes memorable when the page gives it visual priority.</h2>
+              <p>Keep the explanation adjacent, but let the chart, screenshot, quote, or example remain the anchor.</p>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>07</span></footer>
+          <aside class="notes">This sample chart is explicitly illustrative. Production decks must replace it with verified evidence and a readable source note.</aside>
+        </section>
+
+        <section class="slide" data-title="Code walkthrough" data-layout="code-walkthrough">
+          <header class="slide-header">
+            <p class="eyebrow">07 / BUILD</p>
+            <span class="mono-label">COMMAND AS EVIDENCE</span>
           </header>
 
           <div class="terminal-layout">
             <div>
-              <h2>Turn a brief into a working deck from the terminal.</h2>
-              <p class="body-copy">Keep code and commands short enough to read from the back of the room.</p>
-              <div class="takeaway"><span aria-hidden="true">↳</span> The command is evidence; the outcome is the story.</div>
+              <h2>Use code to prove the workflow—not to decorate the page.</h2>
+              <p class="body-copy">Crop to the lines the audience needs and pair them with the visible outcome.</p>
+              <div class="takeaway"><span aria-hidden="true">↳</span> The command is evidence; the result is the story.</div>
             </div>
 
             <div class="terminal" aria-label="Terminal command example">
@@ -106,22 +228,91 @@
                 <span class="terminal-dot"></span>
                 <span>~/project</span>
               </div>
-              <pre><code><span class="terminal-prompt">$</span> claude
-<span class="terminal-muted"># inside Claude Code</span>
-<span class="terminal-prompt">&gt;</span> /claude-code-slides:create-deck
-  "Architecture review for cloud engineers"
+              <pre><code><span class="terminal-prompt">$</span> codex-slides init "Architecture Review" \
+  --format pptx \
+  --template claude-editorial
 
-<span class="terminal-success">✓ outline approved</span>
-<span class="terminal-success">✓ 8 slides generated</span>
+<span class="terminal-success">✓ 12 layout starters created</span>
+<span class="terminal-success">✓ editable PPTX source generated</span>
 <span class="terminal-success">✓ validation passed</span></code></pre>
             </div>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>04</span></footer>
-          <aside class="notes">Use a live command only when the demo is reliable. Keep a screenshot fallback.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>08</span></footer>
+          <aside class="notes">Use a live command only when the demo is reliable. Keep a screenshot or recorded fallback.</aside>
         </section>
 
-        <section class="slide slide--closing" data-title="Close">
+        <section class="slide" data-title="Comparison matrix" data-layout="comparison-matrix">
+          <header class="slide-header">
+            <p class="eyebrow">08 / TRADE-OFF</p>
+            <span class="mono-label">SHARED AXIS</span>
+          </header>
+
+          <div class="comparison-layout">
+            <h2>Compare options on the criteria that determine the decision.</h2>
+            <div class="comparison-table" role="table" aria-label="Comparison of repeated and content-aware layout approaches">
+              <div class="comparison-row comparison-row--header" role="row">
+                <span role="columnheader">Criterion</span><span role="columnheader">Repeated template</span><span role="columnheader">Content-aware system</span>
+              </div>
+              <div class="comparison-row" role="row"><strong role="rowheader">Speed</strong><span>Fast first draft</span><span>Fast with reusable archetypes</span></div>
+              <div class="comparison-row" role="row"><strong role="rowheader">Clarity</strong><span>Depends on one generic frame</span><span>Composition follows the message</span></div>
+              <div class="comparison-row" role="row"><strong role="rowheader">Rhythm</strong><span>Flat across the deck</span><span class="recommended">Varied but visually consistent</span></div>
+              <div class="comparison-row" role="row"><strong role="rowheader">Maintenance</strong><span>Many one-off fixes</span><span>Shared layout vocabulary</span></div>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>09</span></footer>
+          <aside class="notes">Use the same criteria for both options. Highlight the recommendation only after the comparison is fair.</aside>
+        </section>
+
+        <section class="slide" data-title="Timeline" data-layout="timeline">
+          <header class="slide-header">
+            <p class="eyebrow">09 / ADOPTION</p>
+            <span class="mono-label">NOW → NEXT</span>
+          </header>
+
+          <div class="timeline-layout">
+            <h2>Roll out the layout system without rewriting the visual brand.</h2>
+            <div class="timeline" role="img" aria-label="Four-phase layout system rollout">
+              <article class="timeline-step"><span class="timeline-marker">01</span><h3>Catalog</h3><p>Name the archetypes and their jobs.</p></article>
+              <article class="timeline-step timeline-step--current"><span class="timeline-marker">02</span><h3>Scaffold</h3><p>Ship diverse starters in every format.</p></article>
+              <article class="timeline-step"><span class="timeline-marker">03</span><h3>Validate</h3><p>Check repetition and layout coverage.</p></article>
+              <article class="timeline-step"><span class="timeline-marker">04</span><h3>Learn</h3><p>Add patterns from real presentation work.</p></article>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>10</span></footer>
+          <aside class="notes">Mark the current phase clearly. A roadmap should show changing capability, not just dates.</aside>
+        </section>
+
+        <section class="slide" data-title="Risk matrix" data-layout="risk-matrix">
+          <header class="slide-header">
+            <p class="eyebrow">10 / RISK</p>
+            <span class="mono-label">PROBABILITY × IMPACT</span>
+          </header>
+
+          <div class="risk-layout">
+            <div>
+              <h2>Variation without rules becomes noise.</h2>
+              <div class="risk-matrix" role="img" aria-label="Risk matrix with probability and impact quadrants">
+                <div class="risk-quadrant"><span>Low impact</span><strong>Cosmetic drift</strong></div>
+                <div class="risk-quadrant"><span>High impact</span><strong>Unreadable density</strong></div>
+                <div class="risk-quadrant"><span>Low probability</span><strong>Export edge case</strong></div>
+                <div class="risk-quadrant risk-quadrant--hot"><span>High probability</span><strong>Random layout choice</strong></div>
+              </div>
+            </div>
+            <div class="risk-register">
+              <div class="risk-row"><span>01</span><div><strong>Novelty over meaning</strong><p>Mitigate with slide-role selection.</p></div></div>
+              <div class="risk-row"><span>02</span><div><strong>Too many cards</strong><p>Cap card-based pages near 20%.</p></div></div>
+              <div class="risk-row"><span>03</span><div><strong>Theme drift</strong><p>Keep shared tokens and page chrome.</p></div></div>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>11</span></footer>
+          <aside class="notes">Name the mitigation and owner for real risks. The matrix should prioritize action, not merely classify problems.</aside>
+        </section>
+
+        <section class="slide slide--closing" data-title="Close" data-layout="closing-manifesto">
           <div class="topline">
             <span class="prompt-mark" aria-hidden="true">&gt;</span>
             <span>NEXT ACTION</span>
@@ -129,11 +320,11 @@
 
           <div class="closing-copy">
             <p class="eyebrow">THE DECISION</p>
-            <h2>End with the action,<br /><em>not the recap.</em></h2>
-            <p>Replace this with the decision or next step you need from the room.</p>
+            <h2>Keep the style.<br /><em>Expand the vocabulary.</em></h2>
+            <p>Choose the layout by communication purpose, then let the design system keep the deck coherent.</p>
           </div>
 
-          <div class="closing-command"><span>$</span> start the conversation</div>
+          <div class="closing-command"><span>$</span> build with purpose</div>
           <aside class="notes">Ask for one concrete action, then stop speaking.</aside>
         </section>
       </main>
@@ -141,7 +332,7 @@
 
     <div class="deck-ui" aria-hidden="true">
       <div class="progress"><span id="progressBar"></span></div>
-      <span id="pageCounter">1 / 5</span>
+      <span id="pageCounter">1 / 12</span>
       <span class="key-hint">← → · F fullscreen · N notes · P print</span>
     </div>
 

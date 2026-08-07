@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## 0.6.0 - 2026-08-08
+
+- Rename the default visual preset to `claude-editorial` while preserving `terminal-editorial` as a backward-compatible alias.
+- Add a catalog of 16 semantic layout archetypes and deterministic layout-diversity rules.
+- Expand the HTML, Marp, and editable PPTX starters from five repeated structures to twelve distinct page compositions.
+- Add `codex-slides layouts` and `claude-slides layouts` discovery commands.
+- Record the layout system, rules, starter sequence, and archetype list in every generated `template.json`.
+- Add explicit layout markers for HTML (`data-layout`), Marp slide classes, and PPTX (`LAYOUT_SEQUENCE`).
+- Update create, visual-direction, review, and audit skills to select layouts by communication role and detect repetition.
+- Add tests for template aliases, 16-layout catalog integrity, 12-layout starter diversity, card-share constraints, and synchronized portable resources.
+
 ## 0.5.0 - 2026-08-08
 
 - Add a catalog of seven professional templates across HTML, Marp, and editable PPTX.

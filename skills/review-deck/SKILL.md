@@ -1,6 +1,6 @@
 ---
 name: review-deck
-description: Review and improve an existing HTML, Marp, PptxGenJS, Slidev, Reveal.js, React, or PowerPoint presentation. Use to critique, polish, simplify, validate, fix layout, improve storytelling, check accessibility, or prepare a deck for delivery.
+description: Review and improve an existing HTML, Marp, PptxGenJS, Slidev, Reveal.js, React, or PowerPoint presentation. Use to critique, polish, simplify, validate, fix layout repetition, improve storytelling, check accessibility, or prepare a deck for delivery.
 ---
 
 # Review a presentation deck
@@ -13,6 +13,7 @@ Resolve these paths relative to this skill directory:
 
 - [Review checklist](references/review-checklist.md)
 - [Visual system](references/style-system.md)
+- [Layout system](references/layout-system.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
 
@@ -30,8 +31,9 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 
 4. Use the sibling `deck-reviewer` skill as an independent review pass when available.
 5. Inspect every page and synthesize findings without repeating automated warnings.
-6. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
-7. Re-run validation and preview or generate the deliverable when possible.
+6. Audit the layout sequence: unique archetypes, consecutive repeats, visual-family repetition, card share, and rhythm changes.
+7. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
+8. Re-run validation and preview or generate the deliverable when possible.
 
 ## Review dimensions
 
@@ -52,19 +54,24 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 - Are risks and tradeoffs represented honestly?
 - Are terminology and tense consistent?
 
-### Visual design
+### Layout and visual design
 
+- Does every page's layout match its communication role?
+- Does a 10+ slide deck use at least eight distinct archetypes when appropriate?
+- Are exact consecutive repeats eliminated?
+- Does the same visual family dominate more than two of any three consecutive pages?
+- Are card-grid and node-card pages limited to roughly 20%?
+- Is there a visible rhythm change every three to four pages?
 - Is hierarchy obvious within two seconds?
 - Is there one dominant element per page?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
-- Are repeated cards, pills, borders, gradients, and terminal motifs restrained?
 
 ### Technical quality
 
-- HTML: navigation, hash state, responsive scaling, printing, accessibility, asset paths, and console errors.
-- Marp: frontmatter, theme, separators, overflow risk, assets, and exportability.
-- PPTX: wide layout, output generation, safe APIs, font portability, editability, notes, and text bounds.
+- HTML: navigation, hash state, responsive scaling, printing, accessibility, asset paths, layout markers, and console errors.
+- Marp: frontmatter, theme, separators, layout classes, overflow risk, assets, and exportability.
+- PPTX: wide layout, output generation, explicit layout sequence, safe APIs, font portability, editability, notes, and text bounds.
 - Other frameworks: preserve their component model and build workflow; verify the actual production command.
 
 ### Delivery readiness
@@ -78,7 +85,7 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 ## Severity
 
 - **Critical**: broken output, missing content or assets, unreadable page, false claim, security or confidentiality issue.
-- **Major**: narrative gap, severe density, inconsistent layout, accessibility failure, likely overflow, unreliable demo.
+- **Major**: narrative gap, severe density, repetitive layout sequence, accessibility failure, likely overflow, unreliable demo.
 - **Minor**: polish issue that does not block delivery.
 - **Suggestion**: optional enhancement with a clear audience benefit.
 

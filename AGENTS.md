@@ -6,7 +6,9 @@ This repository ships one portable presentation core plus native Codex and Claud
 
 - `plugin.json`: Agent Plugins 1.0.0 portable manifest.
 - `skills/`: authoritative portable Agent Skills.
-- `references/`: canonical shared reference content.
+- `references/`: canonical storytelling, visual, layout, output, and review guidance.
+- `templates/catalog.json`: visual-theme catalog; default is `claude-editorial`.
+- `templates/layouts.json`: 16 semantic layout archetypes and diversity rules.
 - `scripts/sync-skill-resources.mjs`: copies canonical references and the CLI wrapper into skill-local `references/` and `scripts/`.
 - `.codex-plugin/`, `.agents/plugins/`, `.agents/skills/`: Codex adapter.
 - `.claude-plugin/`, `agents/`, `CLAUDE.md`: Claude Code adapter.
@@ -14,17 +16,9 @@ This repository ships one portable presentation core plus native Codex and Claud
 
 ## Public surface
 
-Portable skills:
+Portable skills: `create-deck`, `review-deck`, `speaker-notes`, `claude-code-style`, `deck-architect`, `visual-director`, and `deck-reviewer`.
 
-- `create-deck`
-- `review-deck`
-- `speaker-notes`
-- `claude-code-style`
-- `deck-architect`
-- `visual-director`
-- `deck-reviewer`
-
-Codex invokes them as `$skill-name`. Claude Code exposes namespaced skills and three native subagents.
+Codex invokes them as `$skill-name`. Claude Code exposes namespaced skills and three native subagents. CLI commands include `templates`, `layouts`, `init`, `check`, and `doctor`.
 
 ## Rules
 
@@ -33,6 +27,8 @@ Codex invokes them as `$skill-name`. Claude Code exposes namespaced skills and t
 - Reference bundled files with `references/...` and `scripts/...` paths relative to the skill root.
 - Edit canonical content under root `references/` or `scripts/skill-cli-wrapper.mjs`, then run `npm run sync:skills`.
 - Do not edit generated skill-local copies without updating their canonical source.
+- Keep `claude-editorial` as the canonical default and preserve documented aliases.
+- Select layout archetypes by semantic page role, not random visual variation.
 - Keep all manifests and package versions synchronized.
 - Preserve HTML, Marp, and editable PPTX output.
 - Do not add root runtime dependencies unless Node-native capabilities are insufficient.

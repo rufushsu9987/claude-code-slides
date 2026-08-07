@@ -6,9 +6,9 @@
 
 **Agent-first presentation workflows for Codex, Claude Code, and Agent Plugins-compatible clients.**
 
-Turn a topic, document, URL, or repository into a story-driven HTML, Marp, or editable PowerPoint deck. The plugin plans the narrative, selects a professional template, creates the files, validates the output, reviews delivery quality, and can add speaker notes.
+Turn a topic, document, URL, or repository into a story-driven HTML, Marp, or editable PowerPoint deck. The plugin plans the narrative, selects a visual theme and content-aware layout sequence, creates the files, validates the output, reviews delivery quality, and can add speaker notes.
 
-[繁體中文](./README.zh-TW.md) · [Template gallery](./docs/templates.md)
+[繁體中文](./README.zh-TW.md) · [Theme and layout gallery](./docs/templates.md)
 
 ![Claude Code Slides example](./docs/images/hero.svg)
 
@@ -20,7 +20,7 @@ Claude Code Slides is not a one-shot “split this document into ten pages” pr
 source material
   → audience and decision
   → narrative architecture
-  → visual direction and template
+  → visual theme + semantic layout sequence
   → HTML / Marp / editable PPTX
   → deterministic validation
   → independent review
@@ -29,13 +29,15 @@ source material
 
 The portable core follows [Agent Plugins 1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and Agent Skills conventions. Native adapters preserve the best installation and invocation experience in Codex and Claude Code.
 
-## Seven professional templates
+## Seven visual themes, sixteen layout archetypes
 
-Every preset supports HTML, Marp, and PPTX.
+A **theme** controls color, typography, surfaces, and background treatment. A **layout archetype** controls information architecture: what dominates the page, how the eye moves, and how the content is compared or sequenced.
 
-| Template | Best for |
+The default theme is `claude-editorial`. The previous name `terminal-editorial` remains a compatible alias.
+
+| Theme | Best for |
 | --- | --- |
-| `terminal-editorial` | Technical talks, architecture reviews, AI and developer tooling |
+| `claude-editorial` | Technical talks, architecture reviews, AI and developer tooling |
 | `executive-brief` | Leadership updates, strategy proposals, quarterly reviews |
 | `cloud-architecture` | Infrastructure, platform engineering, security boundaries |
 | `data-story` | Analytics, research findings, metrics and comparisons |
@@ -43,14 +45,19 @@ Every preset supports HTML, Marp, and PPTX.
 | `dark-terminal` | Live demos, code walkthroughs and engineering deep dives |
 | `incident-review` | Postmortems, impact timelines, root cause and remediation |
 
-List or filter the installed presets:
+The layout system includes 16 archetypes such as `hero-statement`, `before-after`, `layered-architecture`, `flow-architecture`, `metric-spotlight`, `evidence-claim`, `comparison-matrix`, `timeline`, `risk-matrix`, and `closing-manifesto`.
+
+The starter deck now demonstrates **12 distinct layouts instead of repeating 3–4 structures**. For decks of 10 or more slides, the workflow targets at least eight distinct archetypes, prevents consecutive repeats, limits card-grid pages to roughly 20%, and introduces a visible rhythm change every three to four slides.
+
+List the installed themes and layouts:
 
 ```bash
 codex-slides templates
-codex-slides templates --format pptx --json
+codex-slides layouts
+codex-slides layouts --family system --json
 ```
 
-Create a deck with an explicit template:
+Create a deck with an explicit theme:
 
 ```bash
 codex-slides init "Quarterly Strategy Review" \
@@ -58,7 +65,9 @@ codex-slides init "Quarterly Strategy Review" \
   --template executive-brief
 ```
 
-Each generated deck includes `template.json` so the selected palette, typography, visual pattern and format remain reproducible.
+Omitting `--template` uses `claude-editorial`.
+
+Each generated deck includes `template.json`, which records the selected theme, aliases, design tokens, layout-system rules, starter sequence, and output format.
 
 ## Skills
 
@@ -88,11 +97,12 @@ Start a new Codex session, then run:
 $create-deck
 
 Analyze this repository and create a 10-slide Traditional Chinese architecture review.
-Use editable PPTX and the cloud-architecture template.
-Cover data flow, trust boundaries, deployment, operations, risks, and next steps.
+Use editable PPTX and the default claude-editorial theme.
+Use at least eight distinct layout archetypes and cover data flow, trust boundaries,
+deployment, operations, risks, and next steps.
 ```
 
-For an existing marketplace snapshot:
+For an existing Git marketplace snapshot:
 
 ```bash
 codex plugin marketplace upgrade rufus-slides
@@ -113,7 +123,7 @@ Then run:
 /claude-code-slides:create-deck
 
 Turn docs/architecture.md into a 12-minute architecture review.
-Use editable PPTX and the executive-brief template.
+Use editable PPTX, the default claude-editorial theme, and a varied layout sequence.
 ```
 
 After updating the plugin, start a new session or run `/reload-plugins`.
@@ -128,11 +138,18 @@ After updating the plugin, start a new session or run `/reload-plugins`.
 
 The PPTX workflow uses editable text and shapes rather than flattening each page into an image.
 
+Layout markers remain reviewable in every format:
+
+- HTML: `data-layout="..."`
+- Marp: `<!-- _class: ... -->`
+- PPTX: `LAYOUT_SEQUENCE`
+
 ## CLI
 
 ```bash
 codex-slides templates
-codex-slides init "AI Platform" --format html --template terminal-editorial
+codex-slides layouts
+codex-slides init "AI Platform" --format html
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
 codex-slides check slides/cloud-review
 codex-slides doctor
@@ -145,7 +162,9 @@ codex-slides doctor
 ```text
 plugin.json                 Agent Plugins portable manifest
 skills/                     portable Agent Skills
-templates/catalog.json      professional template catalog
+references/layout-system.md semantic layout rules
+templates/catalog.json      visual theme catalog
+templates/layouts.json      layout archetype catalog
 .codex-plugin/              Codex adapter
 .agents/plugins/            Codex marketplace
 .agents/skills/             repository-scoped Codex discovery
@@ -165,7 +184,7 @@ npm run sync:skills
 npm run check
 ```
 
-The test suite scaffolds every template in all three formats, validates portable and native manifests, verifies skill resources, and checks the runnable example deck.
+The test suite scaffolds every theme in all three formats, validates portable and native manifests, verifies the 16-layout catalog, confirms 12 unique starter layouts, checks skill-resource synchronization, and validates the runnable example deck.
 
 ## Independence
 

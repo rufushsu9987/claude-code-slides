@@ -1,6 +1,6 @@
 ---
 name: create-deck
-description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use for slides, presentations, pitch decks, technical talks, architecture reviews, status reports, training decks, or source-to-slides conversion. Supports HTML, Marp, PPTX, named professional templates, and existing slide frameworks.
+description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use for slides, presentations, pitch decks, technical talks, architecture reviews, status reports, training decks, or source-to-slides conversion. Supports HTML, Marp, PPTX, named professional templates, content-aware layout archetypes, and existing slide frameworks.
 ---
 
 # Create a presentation deck
@@ -13,6 +13,7 @@ Resolve these paths relative to this skill directory:
 
 - [Storytelling system](references/storytelling.md)
 - [Visual system](references/style-system.md)
+- [Layout system](references/layout-system.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for the bundled deck CLI
 
@@ -31,7 +32,7 @@ Do not ask the user to choose when the request already implies a sensible defaul
 
 ## 2. Choose a template
 
-Honor an explicit template name. Otherwise select the closest match to the audience and communication goal.
+Honor an explicit template name. Otherwise select the closest match to the audience and communication goal. The default is `claude-editorial`; the legacy name `terminal-editorial` remains an alias.
 
 List the installed presets when needed:
 
@@ -44,7 +45,7 @@ Recommended selection:
 
 | Template | Best use |
 | --- | --- |
-| `terminal-editorial` | Technical talks, architecture reviews, AI and developer tooling |
+| `claude-editorial` | Technical talks, architecture reviews, AI and developer tooling |
 | `executive-brief` | Leadership updates, strategy proposals, quarterly reviews |
 | `cloud-architecture` | Infrastructure, platform engineering, security boundaries |
 | `data-story` | Analytics, research findings, metrics, evidence-led narratives |
@@ -75,23 +76,34 @@ Infer or establish:
 
 Ask only for a missing constraint that materially changes the output. Otherwise make a reasonable assumption and continue.
 
-## 5. Plan before implementation
+## 5. Plan the story and layout sequence
 
 For non-trivial decks, use the sibling `deck-architect` and `visual-director` skills when available. Otherwise perform those planning roles inline.
 
-Synthesize one concise outline. Every page must have one job and one memorable takeaway. A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it to the content rather than forcing it.
+Synthesize one concise outline. Every page must have one job, one memorable takeaway, and one layout archetype selected from the bundled layout system. A useful narrative sequence is cover → context → tension → thesis → evidence → execution → risks → decision, but adapt it to the source.
+
+Before implementation, produce a layout sequence and check it against these rules:
+
+- Use at least eight distinct archetypes in a deck of 10 or more slides when the content supports them.
+- Never repeat the exact archetype on consecutive slides.
+- Do not let the same visual family dominate more than two of any three consecutive slides.
+- Keep card-grid and node-card pages at or below roughly 20% of the deck.
+- Introduce a visible rhythm change every three to four slides through scale, density, background, or dominant visual.
+- Interleave editorial claim pages with evidence, architecture, sequence, risk, and decision pages.
+
+Use `node scripts/slides-cli.mjs layouts` to inspect the available archetypes.
 
 ## 6. Scaffold the output
 
 Run the bundled helper from the user's workspace:
 
 ```bash
-node scripts/slides-cli.mjs init "Deck title" --format html --template terminal-editorial
+node scripts/slides-cli.mjs init "Deck title" --format html --template claude-editorial
 node scripts/slides-cli.mjs init "Deck title" --format marp --template data-story
 node scripts/slides-cli.mjs init "Deck title" --format pptx --template executive-brief
 ```
 
-The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention. The generated `template.json` records the selected preset, palette, typography, pattern, and output format.
+The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention. The generated `template.json` records the selected preset, palette, typography, pattern, layout system, and output format.
 
 | Format | Minimum deliverable |
 | --- | --- |
@@ -103,7 +115,7 @@ Keep assets inside the deck directory.
 
 ## 7. Author the deck
 
-Use the selected template as a visual starting point, not as a reason to force every page into the same layout.
+Use the selected template as a visual language, not as a fixed page structure. Preserve its color, typography, grid, spacing, and component behavior while changing the layout according to each page's communication role.
 
 Content rules:
 
@@ -124,6 +136,12 @@ Technical-deck rules:
 - Cover security, operability, cost, performance, maintainability, and tradeoffs when relevant.
 - Keep code samples short and projection-safe.
 
+Format markers:
+
+- HTML: set `data-layout="<archetype>"` on every slide.
+- Marp: assign a matching slide class such as `<!-- _class: metric-spotlight -->`.
+- PPTX: keep an explicit `LAYOUT_SEQUENCE` array and use editable text and shapes.
+
 ## 8. Validate and improve
 
 Run:
@@ -136,16 +154,16 @@ Then use the sibling `deck-reviewer` skill when available. Fix high-confidence C
 
 Verify the format-specific output:
 
-- HTML: keyboard, click and swipe navigation; hash state; viewport scaling; notes; reduced motion; print-to-PDF; local assets.
-- Marp: frontmatter; separators; theme loading; asset paths; HTML/PDF export.
-- PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename.
+- HTML: keyboard, click and swipe navigation; hash state; viewport scaling; notes; reduced motion; print-to-PDF; local assets; meaningful layout markers.
+- Marp: frontmatter; separators; theme loading; layout classes; asset paths; HTML/PDF export.
+- PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename; explicit layout sequence.
 
 ## 9. Hand off
 
 Report:
 
-- deck path, format, and selected template
-- slide count
+- deck path, format, selected template, and layout diversity summary
+- slide count and unique archetype count
 - preview or export command
 - unresolved assumptions, missing assets, or validation limitations
 

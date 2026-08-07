@@ -12,7 +12,7 @@ claude plugin validate .
 claude --plugin-dir .
 ```
 
-After editing `skills/`, `agents/`, or `.claude-plugin/`, run `/reload-plugins` or start a new Claude Code session.
+After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the template catalogs, run `/reload-plugins` or start a new Claude Code session.
 
 ## Claude Code surface
 
@@ -22,6 +22,16 @@ After editing `skills/`, `agents/`, or `.claude-plugin/`, run `/reload-plugins` 
 - `/claude-code-slides:claude-code-style`
 - subagents: `deck-architect`, `visual-director`, `deck-reviewer`
 - Bash CLI alias: `claude-slides`
+- theme discovery: `claude-slides templates`
+- layout discovery: `claude-slides layouts`
+
+## Theme and layout rules
+
+- `claude-editorial` is the default visual theme.
+- `terminal-editorial` remains a backward-compatible alias.
+- `templates/layouts.json` defines 16 semantic layout archetypes.
+- A 10+ slide deck should normally use at least eight distinct archetypes, avoid consecutive repeats, limit card-based pages, and change rhythm every three to four slides.
+- HTML uses `data-layout`, Marp uses slide classes, and PPTX keeps `LAYOUT_SEQUENCE`.
 
 ## Portability rules
 

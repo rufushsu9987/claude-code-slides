@@ -1,17 +1,19 @@
-# Template gallery
+# Theme and layout gallery
 
-Claude Code Slides ships seven professional presets. Every preset supports HTML, Marp, and editable PPTX output.
+Claude Code Slides separates visual **themes** from semantic **layout archetypes**. Every theme supports HTML, Marp, and editable PPTX output, while the layout system changes composition according to the communication job of each slide.
 
-## List templates
+## Discover themes and layouts
 
 ```bash
 codex-slides templates
 codex-slides templates --format pptx --json
+codex-slides layouts
+codex-slides layouts --family system --json
 ```
 
 The same commands are available through `claude-slides`.
 
-## Create a deck with a preset
+## Create a deck
 
 ```bash
 codex-slides init "Cloud Platform Review" \
@@ -19,13 +21,15 @@ codex-slides init "Cloud Platform Review" \
   --template cloud-architecture
 ```
 
-Every generated deck includes `template.json`, which records the selected preset and its design tokens.
+Omit `--template` to use the default `claude-editorial` theme. The previous `terminal-editorial` name remains an alias.
 
-## Presets
+Every generated deck includes `template.json`, which records the selected theme, design tokens, layout rules, available archetypes, starter sequence, and output format.
 
-| Template | Visual direction | Recommended use |
+## Visual themes
+
+| Theme | Visual direction | Recommended use |
 | --- | --- | --- |
-| `terminal-editorial` | Warm ivory, charcoal, terracotta, editorial typography | Technical talks, architecture reviews, AI and developer tooling |
+| `claude-editorial` | Warm ivory, charcoal, terracotta, editorial typography | Technical talks, architecture reviews, AI and developer tooling |
 | `executive-brief` | Clean navy, cobalt emphasis, compact business hierarchy | Leadership updates, strategy proposals, quarterly reviews |
 | `cloud-architecture` | Blueprint grid, cyan and navy, precise boundaries | Cloud platforms, infrastructure, security and architecture |
 | `data-story` | Calm green editorial system focused on evidence | Analytics, research, metrics and comparison narratives |
@@ -33,35 +37,77 @@ Every generated deck includes `template.json`, which records the selected preset
 | `dark-terminal` | Dark developer workspace with warm code accents | Live demos, code walkthroughs and engineering deep dives |
 | `incident-review` | Structured red and neutral signal system | Postmortems, incident timelines, root cause and remediation |
 
-## Selection guidance
+## Layout archetypes
 
-Use the audience and desired decision rather than personal preference:
+| Archetype | Family | Recommended use |
+| --- | --- | --- |
+| `editorial-cover` | Opening | Cover or section opening |
+| `hero-statement` | Statement | Thesis, tension, or big idea |
+| `asymmetric-editorial` | Statement | Context, provocation, chapter transition |
+| `split-narrative` | Explanation | Claim plus evidence or visual |
+| `metric-spotlight` | Evidence | KPI, outcome, or scale |
+| `evidence-claim` | Evidence | Research, benchmark, quotation, screenshot |
+| `layered-architecture` | System | Platform layers, ownership, trust boundaries |
+| `flow-architecture` | System | Data flow, request path, agent workflow |
+| `before-after` | Comparison | Migration, transformation, current versus target |
+| `comparison-matrix` | Comparison | Technology selection and trade-offs |
+| `timeline` | Sequence | Roadmap, migration, incident chronology |
+| `process-steps` | Sequence | CI/CD, operating model, delivery process |
+| `code-walkthrough` | Demonstration | CLI, API, or implementation evidence |
+| `risk-matrix` | Risk | Security, delivery risk, readiness |
+| `decision` | Decision | Approval, funding, architecture decision |
+| `closing-manifesto` | Closing | Final action or memorable conclusion |
 
-- Executives need low-density claims and an explicit decision: `executive-brief`.
-- Architecture audiences need boundaries, protocols, ownership and flows: `cloud-architecture`.
-- Data-heavy stories need one comparison or metric per page: `data-story`.
-- Product narratives need momentum, benefits and demo moments: `product-launch`.
-- Code-heavy sessions need projection-safe dark surfaces: `dark-terminal`.
-- Postmortems need chronology, impact, cause and accountable actions: `incident-review`.
-- General technical storytelling remains strongest with `terminal-editorial`.
+## Layout diversity rules
 
-A supplied company brand or existing template should override these presets.
+For decks of 10 or more slides:
 
-## Adding another preset
+- Use at least eight distinct archetypes when the content supports them.
+- Do not repeat the exact archetype consecutively.
+- Do not let one visual family dominate more than two of any three consecutive slides.
+- Keep card-grid and node-card pages at or below roughly 20%.
+- Introduce a visible rhythm change every three to four slides.
+- Interleave editorial, evidence, architecture, sequence, risk, and decision pages.
+- Repeat a layout only when the semantic task genuinely repeats.
 
-Add an entry to `templates/catalog.json` with:
+The base HTML, Marp, and PPTX starters demonstrate this sequence:
 
-- kebab-case `name`
-- display name and description
-- supported formats
-- light or dark mode
-- a supported background pattern
-- complete palette, font and shape tokens
+```text
+editorial-cover
+→ hero-statement
+→ before-after
+→ layered-architecture
+→ flow-architecture
+→ metric-spotlight
+→ evidence-claim
+→ code-walkthrough
+→ comparison-matrix
+→ timeline
+→ risk-matrix
+→ closing-manifesto
+```
 
-Then run:
+## Format markers
+
+Layout choices remain explicit and reviewable:
+
+```text
+HTML  data-layout="metric-spotlight"
+Marp  <!-- _class: metric-spotlight -->
+PPTX  LAYOUT_SEQUENCE = ['...', 'metric-spotlight', '...']
+```
+
+## Adding another visual theme
+
+Add an entry to `templates/catalog.json` with a kebab-case name, optional aliases, display metadata, supported formats, mode, background pattern, the layout system name, and complete palette, font, and shape tokens.
+
+## Adding another layout archetype
+
+Add an entry to `templates/layouts.json` with a kebab-case name, semantic family, description, recommended uses, card-based flag, and supported formats. Then implement the layout in the relevant starter or generation workflow and run:
 
 ```bash
+npm run sync:skills
 npm run check
 ```
 
-The smoke test scaffolds every preset in HTML, Marp and PPTX to prevent a catalog entry from shipping without working output.
+The smoke test scaffolds every theme in HTML, Marp, and PPTX, verifies layout metadata, and rejects repetitive starter sequences.

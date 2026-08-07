@@ -6,51 +6,79 @@
 
 **支援 Codex、Claude Code 與 Agent Plugins 相容客戶端的 Agent-first 簡報工作流程。**
 
-可將主題、文件、URL 或程式碼 Repository 轉成故事線完整的 HTML、Marp 與可編輯 PowerPoint。Plugin 會協助規劃故事線、選擇專業模板、建立檔案、執行驗證、審查交付品質，並產生 Speaker Notes。
+可將主題、文件、URL 或程式碼 Repository 轉成故事線完整的 HTML、Marp 或可編輯 PowerPoint。Plugin 會規劃敘事、選擇視覺主題與內容導向版型、建立檔案、驗證輸出、獨立審查，並可補上 Speaker Notes。
 
-[English](./README.md) · [模板總覽](./docs/templates.md)
+[English](./README.md) · [主題與版型說明](./docs/templates.md)
 
-![Claude Code Slides 範例](./docs/images/hero.svg)
+![Claude Code Slides example](./docs/images/hero.svg)
 
-## 和一般 AI 簡報工具的差異
+## 與一般 AI 簡報工具的差異
 
-Claude Code Slides 不是一次性地把文件切成十頁，而是一套可重複執行的流程：
+Claude Code Slides 不是一次性地把文件切成十頁，而是封裝一套可重複的工作流程：
 
 ```text
-來源資料
-  → 受眾與決策目標
-  → 故事線規劃
-  → 視覺方向與模板
+來源內容
+  → 受眾與目標決策
+  → 故事線架構
+  → 視覺主題 + 語意版型序列
   → HTML / Marp / 可編輯 PPTX
-  → 確定性檢查
+  → 確定性驗證
   → 獨立審查
   → 講稿與 Q&A
 ```
 
-核心遵循 Agent Plugins 1.0 與 Agent Skills 慣例，並保留 Codex、Claude Code 的原生安裝與呼叫方式。
+Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Codex 與 Claude Code 的原生安裝與呼叫體驗。
 
-## 內建 7 種專業模板
+## 7 種視覺主題，16 種內容導向版型
 
-所有模板都支援 HTML、Marp 與 PPTX。
+**主題 Theme** 負責色彩、字體、背景與元件風格；**版型 Layout Archetype** 負責資訊架構、視線移動與主要視覺重心。
 
-| Template | 適用情境 |
+預設主題已改為 `claude-editorial`。舊名稱 `terminal-editorial` 仍可繼續使用，會自動解析到同一主題。
+
+| 主題 | 適用情境 |
 | --- | --- |
-| `terminal-editorial` | 技術分享、架構審查、AI 與開發工具 |
+| `claude-editorial` | 技術分享、架構審查、AI 與開發工具 |
 | `executive-brief` | 主管報告、策略提案、季度回顧 |
-| `cloud-architecture` | 雲端架構、平台工程、資安邊界 |
-| `data-story` | 數據分析、研究結果、指標與比較 |
-| `product-launch` | 產品展示、發布、Roadmap 與功能敘事 |
-| `dark-terminal` | 現場 Demo、程式碼導讀、工程深度分享 |
-| `incident-review` | 事故檢討、影響時間線、根因與改善措施 |
+| `cloud-architecture` | 基礎設施、平台工程、資安邊界 |
+| `data-story` | 分析、研究結果、數據比較 |
+| `product-launch` | 產品 Demo、發布、Roadmap |
+| `dark-terminal` | Live Demo、程式碼導讀、工程深度分享 |
+| `incident-review` | Postmortem、事件時間軸、根因與改善 |
 
-查看或篩選模板：
+版型系統包含 16 種 Archetypes，例如：
+
+```text
+editorial-cover
+hero-statement
+before-after
+layered-architecture
+flow-architecture
+metric-spotlight
+evidence-claim
+code-walkthrough
+comparison-matrix
+timeline
+risk-matrix
+closing-manifesto
+```
+
+新的 Starter Deck 會直接展示 **12 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
+
+- 至少使用 8 種不同版型。
+- 不連續重複相同版型。
+- 卡片或節點卡頁面控制在約 20% 以內。
+- 每 3–4 頁安排一次明顯的視覺節奏變化。
+- 敘事、證據、架構、流程、風險與決策頁交錯安排。
+
+查看目前主題與版型：
 
 ```bash
 codex-slides templates
-codex-slides templates --format pptx --json
+codex-slides layouts
+codex-slides layouts --family system --json
 ```
 
-指定模板建立簡報：
+建立簡報：
 
 ```bash
 codex-slides init "季度策略回顧" \
@@ -58,19 +86,21 @@ codex-slides init "季度策略回顧" \
   --template executive-brief
 ```
 
-每份輸出都會包含 `template.json`，保留模板、色彩、字體、視覺 Pattern 與格式資訊，方便重現與後續維護。
+沒有指定 `--template` 時，預設使用 `claude-editorial`。
+
+每份產出都會包含 `template.json`，記錄主題、相容別名、色票、字體、版型規則、Starter Sequence 與輸出格式。
 
 ## Skills
 
 | 能力 | Codex | Claude Code |
 | --- | --- | --- |
 | 建立簡報 | `$create-deck` | `/claude-code-slides:create-deck` |
-| 審查與改善 | `$review-deck` | `/claude-code-slides:review-deck` |
+| 審查與修正 | `$review-deck` | `/claude-code-slides:review-deck` |
 | 產生講稿 | `$speaker-notes` | `/claude-code-slides:speaker-notes` |
 | 套用視覺系統 | `$claude-code-style` | `/claude-code-slides:claude-code-style` |
 | 規劃故事線 | `$deck-architect` | Skill 或 `deck-architect` Subagent |
 | 規劃視覺 | `$visual-director` | Skill 或 `visual-director` Subagent |
-| 獨立品質審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
+| 獨立審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
 
 ## 安裝到 Codex
 
@@ -82,14 +112,14 @@ codex plugin marketplace add \
 codex plugin add claude-code-slides@rufus-slides
 ```
 
-重新開啟 Codex Session 後執行：
+重新開啟 Codex Session 後：
 
 ```text
 $create-deck
 
 請分析目前 Repository，製作 10 頁繁體中文架構審查簡報。
-使用可編輯 PPTX 與 cloud-architecture 模板。
-內容包含資料流、信任邊界、部署、維運、風險與下一步。
+使用可編輯 PPTX 與預設 claude-editorial 主題。
+至少使用 8 種不同版型，內容包含資料流、信任邊界、部署、維運、風險與下一步。
 ```
 
 更新既有 Git Marketplace：
@@ -98,7 +128,7 @@ $create-deck
 codex plugin marketplace upgrade rufus-slides
 ```
 
-若 Codex 顯示 Marketplace 不是 Git 類型，請先移除，再使用上面的完整 GitHub URL 重新加入。
+若 Codex 顯示 Marketplace 不是 Git 類型，請移除後使用上方完整 GitHub URL 重新加入。
 
 ## 安裝到 Claude Code
 
@@ -107,34 +137,41 @@ claude plugin marketplace add rufushsu9987/claude-code-slides
 claude plugin install claude-code-slides@rufus-slides
 ```
 
-接著執行：
+接著使用：
 
 ```text
 /claude-code-slides:create-deck
 
-請將 docs/architecture.md 製作成 12 分鐘架構審查簡報。
-使用可編輯 PPTX 與 executive-brief 模板。
+請把 docs/architecture.md 製作成 12 分鐘架構審查簡報。
+使用可編輯 PPTX、預設 claude-editorial 主題與多樣化版型序列。
 ```
 
-更新後請開啟新 Session，或執行 `/reload-plugins`。
+更新後請建立新 Session，或執行 `/reload-plugins`。
 
 ## 輸出格式
 
-| 格式 | 適用情境 | 產出 |
+| 格式 | 適合情境 | 產出 |
 | --- | --- | --- |
-| HTML | 現場分享、高視覺品質、離線播放與瀏覽器分享 | `index.html`、`theme.css`、`slides.js` |
-| Marp | Markdown Review、Git Diff、快速產生 HTML/PDF | `deck.md`、`theme.css` |
+| HTML | 現場分享、高視覺品質、離線播放、網頁分享 | `index.html`、`theme.css`、`slides.js` |
+| Marp | Markdown Review、Git Diff、快速輸出 HTML/PDF | `deck.md`、`theme.css` |
 | PPTX | 可編輯 Microsoft PowerPoint 與企業交付 | `deck.mjs`、產生的 `.pptx` |
 
-PPTX 以可編輯文字與圖形為主，不會把整頁投影片壓平成圖片。
+PPTX 使用可編輯文字與圖形，不會把每一頁壓成單張圖片。
+
+三種格式都保留可審查的版型標記：
+
+- HTML：`data-layout="..."`
+- Marp：`<!-- _class: ... -->`
+- PPTX：`LAYOUT_SEQUENCE`
 
 ## CLI
 
 ```bash
 codex-slides templates
-codex-slides init "AI 平台" --format html --template terminal-editorial
-codex-slides init "雲端架構審查" --format pptx --template cloud-architecture
-codex-slides check slides/雲端架構審查
+codex-slides layouts
+codex-slides init "AI Platform" --format html
+codex-slides init "Cloud Review" --format pptx --template cloud-architecture
+codex-slides check slides/cloud-review
 codex-slides doctor
 ```
 
@@ -143,16 +180,18 @@ codex-slides doctor
 ## 專案架構
 
 ```text
-plugin.json                 Agent Plugins 可攜式 Manifest
+plugin.json                 Agent Plugins portable manifest
 skills/                     Portable Agent Skills
-templates/catalog.json      專業模板目錄
+references/layout-system.md 版型設計與防重複規則
+templates/catalog.json      視覺主題目錄
+templates/layouts.json      版型 Archetype 目錄
 .codex-plugin/              Codex Adapter
 .agents/plugins/            Codex Marketplace
-.agents/skills/             Codex Repository Skill Discovery
+.agents/skills/             Repository-scoped Codex Discovery
 .claude-plugin/             Claude Code Manifest 與 Marketplace
 agents/                     Claude Code Subagents
 bin/ + lib/                 零依賴 Scaffold 與驗證 CLI
-templates/                  HTML、Marp、PptxGenJS 基礎模板
+templates/                  HTML、Marp、PptxGenJS Base
 ```
 
 ## 開發與驗證
@@ -165,12 +204,12 @@ npm run sync:skills
 npm run check
 ```
 
-測試會將每一種模板分別產生為 HTML、Marp 與 PPTX，並驗證 Portable / Native Manifest、Skill Resources 與範例簡報。
+測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 16 種版型目錄、12 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
 
-## 獨立專案聲明
+## 獨立性聲明
 
-這是獨立的開源社群專案，與 Anthropic、OpenAI 均無官方關聯或背書。名稱描述的是內建的開發工具風格簡報方向，不包含官方 Logo 或專有產品介面。
+這是獨立的開源社群專案，與 Anthropic、OpenAI 均無官方關聯或背書。名稱只描述內建的開發者工具風格，不包含官方 Logo 或專有產品介面。
 
-## 授權
+## License
 
 MIT
