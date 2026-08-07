@@ -1,15 +1,11 @@
 ---
 name: speaker-notes
 description: Write or improve speaker notes for an existing presentation, including time budgets, opening language, slide transitions, demo cues, caveats, likely audience questions, and concise answers.
-argument-hint: "<deck path> [duration] [audience] [language]"
-effort: high
 ---
 
 # Create speaker notes
 
-Request: `$ARGUMENTS`
-
-Read the complete deck, source citations, and existing notes before writing. Infer the thesis, audience expertise, intended decision, language, and delivery context.
+Use the current user request as the brief. Read the complete deck, source citations, and existing notes before writing. Infer the thesis, audience expertise, intended decision, language, duration, and delivery context.
 
 For every slide provide:
 

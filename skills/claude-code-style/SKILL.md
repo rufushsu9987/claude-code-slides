@@ -1,12 +1,11 @@
 ---
 name: claude-code-style
-description: Apply the Claude Code-inspired warm terminal-editorial presentation system: warm neutral canvas, restrained terracotta accent, strong editorial typography, terminal details, precise grids, and minimal chrome. Use automatically when designing or polishing decks unless another brand system is specified.
-user-invocable: false
+description: Apply a Claude Code-inspired warm terminal-editorial presentation system with warm neutrals, restrained terracotta, editorial typography, precise grids, and minimal developer-tool chrome. Use when designing or polishing a deck unless another brand system is specified.
 ---
 
 # Warm terminal-editorial presentation system
 
-Use `${CLAUDE_PLUGIN_ROOT}/references/style-system.md` as the authoritative design reference.
+Use this `SKILL.md` path as the anchor and read `<plugin-root>/references/style-system.md`, where `<plugin-root>` is two directories above this file.
 
 Core intent:
 

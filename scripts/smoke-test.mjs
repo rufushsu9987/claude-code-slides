@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { checkDeck, initDeck } from '../lib/cli.mjs';
 
-const workspace = await mkdtemp(path.join(os.tmpdir(), 'claude-code-slides-smoke-'));
+const workspace = await mkdtemp(path.join(os.tmpdir(), 'codex-slides-smoke-'));
 
 try {
   for (const format of ['html', 'marp', 'pptx']) {

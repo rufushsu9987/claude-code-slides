@@ -3,10 +3,13 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { checkDeck, doctor, initDeck, slugify } from '../lib/cli.mjs';
+import { VERSION, checkDeck, doctor, initDeck, slugify } from '../lib/cli.mjs';
 
-test('doctor accepts the documented Node.js baseline', () => {
-  assert.equal(doctor().node.available, Number(process.versions.node.split('.')[0]) >= 18);
+test('doctor accepts the documented Node.js baseline and reports Codex', () => {
+  const result = doctor();
+  assert.equal(result.node.available, Number(process.versions.node.split('.')[0]) >= 18);
+  assert.ok('codex' in result);
+  assert.equal(VERSION, '0.2.0');
 });
 
 test('slugify creates stable portable identifiers', () => {
@@ -18,7 +21,7 @@ test('slugify creates stable portable identifiers', () => {
 
 for (const format of ['html', 'marp', 'pptx']) {
   test(`initDeck scaffolds and validates ${format}`, async (t) => {
-    const temporary = await mkdtemp(path.join(os.tmpdir(), `claude-slides-${format}-`));
+    const temporary = await mkdtemp(path.join(os.tmpdir(), `codex-slides-${format}-`));
     t.after(() => rm(temporary, { recursive: true, force: true }));
 
     const destination = path.join(temporary, 'deck');
@@ -36,7 +39,7 @@ for (const format of ['html', 'marp', 'pptx']) {
 }
 
 test('initDeck refuses to overwrite a non-empty directory without force', async (t) => {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), 'claude-slides-force-'));
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'codex-slides-force-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
 
   const destination = path.join(temporary, 'deck');
@@ -53,7 +56,7 @@ test('initDeck refuses to overwrite a non-empty directory without force', async 
 });
 
 test('generated HTML replaces title tokens in the runtime', async (t) => {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), 'claude-slides-token-'));
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'codex-slides-token-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
 
   const destination = path.join(temporary, 'deck');
@@ -64,7 +67,7 @@ test('generated HTML replaces title tokens in the runtime', async (t) => {
 });
 
 test('checkDeck reports missing local assets', async (t) => {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), 'claude-slides-broken-'));
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'codex-slides-broken-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
 
   const destination = path.join(temporary, 'deck');
@@ -79,7 +82,7 @@ test('checkDeck reports missing local assets', async (t) => {
 });
 
 test('checkDeck reports accessibility and runtime warnings', async (t) => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'claude-slides-check-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'codex-slides-check-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
 
   await mkdir(path.join(directory, 'assets'));

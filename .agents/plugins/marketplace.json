@@ -1,0 +1,21 @@
+{
+  "name": "rufus-slides",
+  "interface": {
+    "displayName": "Rufus Slides"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-slides",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/rufushsu9987/claude-code-slides.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

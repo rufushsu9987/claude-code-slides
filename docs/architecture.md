@@ -1,74 +1,77 @@
 # Architecture
 
-Claude Code Slides is a local-first content-and-tooling plugin rather than a hosted application.
+Claude Code Slides is a skills-only Codex plugin with a local, dependency-free Node.js CLI.
 
-## Components
-
-```text
-Claude Code
-├── skills/
-│   ├── create-deck
-│   ├── review-deck
-│   ├── speaker-notes
-│   └── claude-code-style
-├── agents/
-│   ├── deck-architect
-│   ├── visual-director
-│   └── deck-reviewer
-├── references/
-│   ├── style-system.md
-│   └── output-formats.md
-├── templates/
-│   ├── html
-│   ├── marp
-│   └── pptx
-└── bin/claude-slides.mjs
-    └── lib/cli.mjs
-```
-
-## Creation flow
+## Surfaces
 
 ```text
-source material
-      │
-      ▼
-create-deck skill
-      ├── deck-architect ── narrative and evidence plan
-      ├── visual-director ─ visual and layout plan
-      └── claude-slides init ─ deterministic scaffold
-      │
-      ▼
-authored HTML / Marp / PPTX source
-      │
-      ├── claude-slides check
-      └── deck-reviewer
-      │
-      ▼
-validated deliverable + run/export instructions
+Codex CLI / ChatGPT desktop Codex
+        │
+        ├─ Marketplace discovery
+        │    └─ .agents/plugins/marketplace.json
+        │
+        ├─ Installed plugin
+        │    ├─ .codex-plugin/plugin.json
+        │    └─ skills/*/SKILL.md
+        │
+        └─ Repository development
+             └─ .agents/skills/* -> ../../skills/*
 ```
 
-## Design choices
+Codex can select a skill implicitly from its description or explicitly through `$skill-name`. The same workflow files are used for installed-plugin and repository-scoped development.
 
-### Local-first and dependency-light
+## Skills
 
-The root plugin uses Node.js standard-library modules only. HTML output has no runtime CDN requirement. Marp is invoked on demand through its CLI, while a generated PowerPoint project declares PptxGenJS locally inside the deck directory.
+The main delivery skills are:
 
-### Separation of judgment and checks
+- `create-deck`
+- `review-deck`
+- `speaker-notes`
 
-Skills and subagents handle audience reasoning, narrative, design, and tradeoffs. The CLI handles deterministic structure, asset, accessibility, and format checks. Neither layer replaces the other.
+Supporting skills provide design and independent planning passes:
 
-### Multi-format contract
+- `claude-code-style`
+- `deck-architect`
+- `visual-director`
+- `deck-reviewer`
 
-All formats share the same communication principles but retain their native strengths:
+Each skill resolves the plugin root from its own `SKILL.md` location. This avoids relying on Claude-specific environment variables or a globally installed command.
 
-- HTML: interaction, responsive playback, offline portability, print-to-PDF.
-- Marp: readable Markdown, Git review, repeatable export.
-- PPTX: editable Office objects and enterprise handoff.
+## CLI
 
-### Framework preservation
+`bin/codex-slides.mjs` and the compatibility wrapper `bin/claude-slides.mjs` call the same library:
 
-The built-in templates are defaults. When a project already uses Slidev, Reveal.js, React, Marp, a corporate theme, or another established workflow, the skills inspect and preserve it instead of forcing migration.
+```text
+bin/*
+  └─ lib/cli.mjs
+       ├─ lib/runtime.mjs   template scaffolding and diagnostics
+       └─ lib/validate.mjs  deterministic deck validation
+```
 
-### Unofficial visual inspiration
+The plugin skills invoke the CLI through an absolute path derived from the installed skill location:
 
-The warm terminal-editorial system captures the calm precision of a developer workspace without copying Anthropic trademarks, official logos, proprietary UI, or brand assets.
+```bash
+node "<plugin-root>/bin/codex-slides.mjs" init "Title" --format html
+node "<plugin-root>/bin/codex-slides.mjs" check slides/title
+```
+
+## Formats
+
+Templates remain local and editable:
+
+- HTML: dependency-free presentation runtime
+- Marp: Markdown deck plus custom theme
+- PPTX: PptxGenJS source project
+
+The root package has no runtime dependencies. A generated PPTX project owns its own PptxGenJS dependency.
+
+## Validation
+
+`npm run check` performs:
+
+1. Node syntax checks.
+2. Codex plugin and marketplace validation.
+3. Skill metadata and portability checks.
+4. Template smoke tests for HTML, Marp, and PPTX.
+5. Example-deck validation.
+6. Node test suite.

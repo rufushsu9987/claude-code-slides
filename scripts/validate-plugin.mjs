@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { access, readFile, readdir, stat } from 'node:fs/promises';
+import { access, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -9,37 +9,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 const warnings = [];
 
-const skillFields = new Set([
-  'name',
-  'description',
-  'when_to_use',
-  'argument-hint',
-  'arguments',
-  'disable-model-invocation',
-  'user-invocable',
-  'allowed-tools',
-  'model',
-  'effort',
-  'context',
-  'agent',
-  'hooks',
-  'paths',
-  'shell',
-]);
-
-const agentFields = new Set([
-  'name',
-  'description',
-  'model',
-  'effort',
-  'maxTurns',
-  'tools',
-  'disallowedTools',
-  'skills',
-  'memory',
-  'background',
-  'isolation',
-]);
+const expectedSkills = [
+  'claude-code-style',
+  'create-deck',
+  'deck-architect',
+  'deck-reviewer',
+  'review-deck',
+  'speaker-notes',
+  'visual-director',
+];
 
 async function readJson(relativePath) {
   try {
@@ -78,35 +56,21 @@ async function fileExists(relativePath) {
   }
 }
 
-async function markdownFiles(directory) {
-  const absolute = path.join(root, directory);
-  const output = [];
-  for (const entry of await readdir(absolute, { withFileTypes: true })) {
-    const relative = path.join(directory, entry.name);
-    if (entry.isDirectory()) output.push(...(await markdownFiles(relative)));
-    else if (entry.name.endsWith('.md')) output.push(relative);
-  }
-  return output;
-}
-
-const plugin = await readJson('.claude-plugin/plugin.json');
-const marketplace = await readJson('.claude-plugin/marketplace.json');
+const plugin = await readJson('.codex-plugin/plugin.json');
+const marketplace = await readJson('.agents/plugins/marketplace.json');
 const packageJson = await readJson('package.json');
+const packageLock = await readJson('package-lock.json');
 
 const required = [
-  '.claude-plugin/plugin.json',
-  '.claude-plugin/marketplace.json',
-  'skills/create-deck/SKILL.md',
-  'skills/review-deck/SKILL.md',
-  'skills/speaker-notes/SKILL.md',
-  'skills/claude-code-style/SKILL.md',
-  'agents/deck-architect.md',
-  'agents/visual-director.md',
-  'agents/deck-reviewer.md',
+  '.codex-plugin/plugin.json',
+  '.agents/plugins/marketplace.json',
+  ...expectedSkills.map((name) => `skills/${name}/SKILL.md`),
+  ...expectedSkills.map((name) => `.agents/skills/${name}/SKILL.md`),
   'references/style-system.md',
   'references/storytelling.md',
   'references/output-formats.md',
   'references/review-checklist.md',
+  'bin/codex-slides.mjs',
   'bin/claude-slides.mjs',
   'lib/cli.mjs',
   'templates/html/index.html',
@@ -131,15 +95,15 @@ if (plugin) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(plugin.name || '')) {
     errors.push('plugin.name must be kebab-case');
   }
-  if (plugin.$schema !== 'https://json.schemastore.org/claude-code-plugin-manifest.json') {
-    warnings.push('plugin.json should declare the Claude Code plugin schema');
-  }
   if (!plugin.description) errors.push('plugin.description is required');
   if (!/^\d+\.\d+\.\d+$/.test(plugin.version || '')) {
     errors.push('plugin.version must use semantic versioning');
   }
-  if (plugin.skills !== './skills/' || plugin.agents !== './agents/') {
-    errors.push('plugin component paths must point to root skills/ and agents/ directories');
+  if (plugin.skills !== './skills/') {
+    errors.push('plugin.skills must point to ./skills/');
+  }
+  if (!plugin.interface?.displayName || !plugin.interface?.shortDescription) {
+    errors.push('plugin.interface display metadata is required');
   }
 }
 
@@ -147,81 +111,118 @@ if (marketplace) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(marketplace.name || '')) {
     errors.push('marketplace.name must be kebab-case');
   }
-  if (!marketplace.owner?.name) errors.push('marketplace.owner.name is required');
+  if (!marketplace.interface?.displayName) {
+    errors.push('marketplace.interface.displayName is required');
+  }
   if (!Array.isArray(marketplace.plugins) || marketplace.plugins.length === 0) {
     errors.push('marketplace.plugins must contain at least one entry');
   }
 }
 
-if (plugin && marketplace && packageJson) {
+if (plugin && marketplace && packageJson && packageLock) {
   const entry = marketplace.plugins?.find((candidate) => candidate.name === plugin.name);
   if (!entry) errors.push('marketplace does not list the plugin');
-  if (entry?.version !== plugin.version) errors.push('marketplace plugin version must match plugin.json');
-  if (marketplace.version !== plugin.version || packageJson.version !== plugin.version) {
-    errors.push('package and manifest versions must match');
+  if (entry?.source?.source !== 'url') errors.push('marketplace source must use url');
+  if (entry?.source?.url !== 'https://github.com/rufushsu9987/claude-code-slides.git') {
+    errors.push('marketplace source must reference the canonical repository');
   }
-  if (entry?.source?.source !== 'github' || entry?.source?.repo !== 'rufushsu9987/claude-code-slides') {
-    errors.push('marketplace source must reference rufushsu9987/claude-code-slides');
+  if (entry?.source?.ref !== 'main') errors.push('marketplace source must track main');
+  if (entry?.policy?.installation !== 'AVAILABLE') {
+    errors.push('marketplace installation policy must be AVAILABLE');
+  }
+  if (!entry?.policy?.authentication) {
+    errors.push('marketplace authentication policy is required');
+  }
+  if (entry?.category !== 'Productivity') {
+    errors.push('marketplace category must be Productivity');
+  }
+  if (packageJson.version !== plugin.version || packageLock.version !== plugin.version) {
+    errors.push('package and Codex manifest versions must match');
+  }
+  if (packageLock.packages?.['']?.version !== plugin.version) {
+    errors.push('package-lock root package version must match');
+  }
+  if (packageJson.bin?.['codex-slides'] !== './bin/codex-slides.mjs') {
+    errors.push('package.json must expose the codex-slides CLI');
   }
   if (packageJson.bin?.['claude-slides'] !== './bin/claude-slides.mjs') {
-    errors.push('package.json must expose the claude-slides CLI');
+    errors.push('package.json must preserve the claude-slides compatibility alias');
   }
   if (!String(packageJson.engines?.node || '').includes('18')) {
     warnings.push('package.json should document Node.js 18+ compatibility');
   }
 }
 
-for (const relativePath of await markdownFiles('skills')) {
-  if (path.basename(relativePath) !== 'SKILL.md') continue;
+for (const name of expectedSkills) {
+  const relativePath = `skills/${name}/SKILL.md`;
+  if (!(await fileExists(relativePath))) continue;
+
   const content = await readFile(path.join(root, relativePath), 'utf8');
   const metadata = parseFrontmatter(content, relativePath);
   if (!metadata) continue;
 
-  const expectedName = path.basename(path.dirname(relativePath));
-  if (!metadata.name) errors.push(`${relativePath}: name is required`);
-  if (metadata.name && metadata.name !== expectedName) {
-    errors.push(`${relativePath}: name must match directory (${expectedName})`);
+  if (metadata.name !== name) {
+    errors.push(`${relativePath}: name must match directory (${name})`);
   }
-  if (!metadata.description) errors.push(`${relativePath}: description is required`);
-  for (const key of Object.keys(metadata)) {
-    if (!skillFields.has(key)) warnings.push(`${relativePath}: unrecognized skill field ${key}`);
+  if (!metadata.description) {
+    errors.push(`${relativePath}: description is required`);
+  }
+
+  for (const forbidden of [
+    '$ARGUMENTS',
+    'CLAUDE_PLUGIN_ROOT',
+    'claude-code-slides:',
+    'argument-hint:',
+    'effort:',
+    'user-invocable:',
+  ]) {
+    if (content.includes(forbidden)) {
+      errors.push(`${relativePath}: contains Claude-specific token ${forbidden}`);
+    }
+  }
+
+  const forwarderPath = `.agents/skills/${name}/SKILL.md`;
+  try {
+    const forwarder = await readFile(path.join(root, forwarderPath), 'utf8');
+    const forwarderMetadata = parseFrontmatter(forwarder, forwarderPath);
+    if (forwarderMetadata?.name !== name) {
+      errors.push(`${forwarderPath}: name must match ${name}`);
+    }
+    if (!forwarder.includes(`../../../skills/${name}/SKILL.md`)) {
+      errors.push(`${forwarderPath}: must point to the authoritative skill`);
+    }
+  } catch (error) {
+    errors.push(`${forwarderPath}: ${error.message}`);
   }
 }
 
-for (const relativePath of await markdownFiles('agents')) {
-  const content = await readFile(path.join(root, relativePath), 'utf8');
-  const metadata = parseFrontmatter(content, relativePath);
-  if (!metadata) continue;
-
-  const expectedName = path.basename(relativePath, '.md');
-  if (!metadata.name) errors.push(`${relativePath}: name is required`);
-  if (metadata.name && metadata.name !== expectedName) {
-    errors.push(`${relativePath}: name must match filename (${expectedName})`);
-  }
-  if (!metadata.description) errors.push(`${relativePath}: description is required`);
-  if (metadata.isolation && metadata.isolation !== 'worktree') {
-    errors.push(`${relativePath}: isolation must be worktree when set`);
-  }
-  for (const key of Object.keys(metadata)) {
-    if (!agentFields.has(key)) warnings.push(`${relativePath}: unrecognized agent field ${key}`);
+for (const forbiddenPath of [
+  '.claude-plugin/plugin.json',
+  '.claude-plugin/marketplace.json',
+  'agents/deck-architect.md',
+  'agents/visual-director.md',
+  'agents/deck-reviewer.md',
+]) {
+  if (await fileExists(forbiddenPath)) {
+    errors.push(`${forbiddenPath} is a legacy Claude Code component and must be removed`);
   }
 }
 
-for (const forbidden of ['.claude-plugin/skills', '.claude-plugin/agents', '.claude-plugin/hooks']) {
-  if (await fileExists(forbidden)) errors.push(`${forbidden} must be at the plugin root`);
-}
-
-if (await fileExists('bin/claude-slides.mjs')) {
-  const mode = (await stat(path.join(root, 'bin/claude-slides.mjs'))).mode;
-  if ((mode & 0o111) === 0) errors.push('bin/claude-slides.mjs must be executable');
+for (const executable of ['bin/codex-slides.mjs', 'bin/claude-slides.mjs']) {
+  if (!(await fileExists(executable))) continue;
+  const mode = (await stat(path.join(root, executable))).mode;
+  if ((mode & 0o111) === 0) errors.push(`${executable} must be executable`);
 }
 
 if (await fileExists('README.md')) {
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
-  for (const command of ['create-deck', 'review-deck', 'speaker-notes']) {
-    if (!readme.includes(`/claude-code-slides:${command}`)) {
-      errors.push(`README.md must document /claude-code-slides:${command}`);
+  for (const skill of ['create-deck', 'review-deck', 'speaker-notes']) {
+    if (!readme.includes(`$${skill}`)) {
+      errors.push(`README.md must document $${skill}`);
     }
+  }
+  if (!readme.includes('codex plugin marketplace add')) {
+    errors.push('README.md must document Codex marketplace installation');
   }
 }
 
@@ -229,8 +230,8 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Validated ${plugin?.displayName || plugin?.name} ${plugin?.version}.`);
-  console.log(`Found ${(await markdownFiles('skills')).filter((file) => file.endsWith('SKILL.md')).length} skills and ${(await markdownFiles('agents')).length} agents.`);
+  console.log(`Validated ${plugin?.interface?.displayName || plugin?.name} ${plugin?.version}.`);
+  console.log(`Found ${expectedSkills.length} Codex skills and ${expectedSkills.length} repo-scoped forwarders.`);
 }
 
 for (const warning of warnings) console.warn(`WARN  ${warning}`);

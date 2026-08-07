@@ -1,20 +1,34 @@
 ---
 name: review-deck
-description: Review and improve an existing HTML, Marp, PptxGenJS, Slidev, Reveal.js, React, or PowerPoint presentation. Use when the user asks to critique, polish, simplify, validate, fix layout, improve storytelling, check accessibility, or prepare a deck for delivery.
-argument-hint: "<deck path> [--fix]"
-effort: high
+description: Review and improve an existing HTML, Marp, PptxGenJS, Slidev, Reveal.js, React, or PowerPoint presentation. Use to critique, polish, simplify, validate, fix layout, improve storytelling, check accessibility, or prepare a deck for delivery.
 ---
 
 # Review a presentation deck
 
-Review the deck identified in `$ARGUMENTS`. When `--fix` is present, or the user explicitly asks for improvements, implement high-confidence fixes after diagnosis.
+Review the deck identified by the current user request. When the user asks for fixes, implement high-confidence improvements after diagnosis.
+
+## Resolve the plugin root
+
+Use this `SKILL.md` path as the anchor. The plugin root is two directories above it. Read:
+
+- `<plugin-root>/references/review-checklist.md`
+- `<plugin-root>/references/style-system.md`
+- `<plugin-root>/references/output-formats.md`
+
+Run deterministic checks with:
+
+```bash
+node "<plugin-root>/bin/codex-slides.mjs" check <deck-path> --json
+```
+
+Do not assume a globally installed CLI.
 
 ## Workflow
 
 1. Detect the format and locate source files, generated output, notes, and local assets.
-2. Read `${CLAUDE_PLUGIN_ROOT}/references/review-checklist.md`, `${CLAUDE_PLUGIN_ROOT}/references/style-system.md`, and `${CLAUDE_PLUGIN_ROOT}/references/output-formats.md`.
-3. Run `claude-slides check <deck-path> --json` when the format is supported.
-4. Delegate an independent review to `claude-code-slides:deck-reviewer` when available.
+2. Read the three references above.
+3. Run the bundled validator when the format is supported.
+4. Use `$deck-reviewer` as an independent review pass when available.
 5. Inspect every page and synthesize findings without repeating automated warnings.
 6. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
 7. Re-run validation and preview or generate the deliverable when possible.

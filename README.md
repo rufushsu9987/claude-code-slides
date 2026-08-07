@@ -1,101 +1,106 @@
-# Claude Code Slides
+# Claude Code Slides for Codex
 
 [![CI](https://github.com/rufushsu9987/claude-code-slides/actions/workflows/ci.yml/badge.svg)](https://github.com/rufushsu9987/claude-code-slides/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-211f1b.svg)](./LICENSE)
 
-A production-minded Claude Code plugin for turning briefs, source files, URLs, and repositories into **clear, modern, story-driven presentations**.
+A Codex plugin that turns topics, documents, URLs, and repositories into **clear, modern, story-driven presentations**.
 
-It combines narrative planning, visual direction, reusable templates, speaker notes, and deterministic checks. The built-in visual language is a warm terminal-editorial system inspired by focused developer tools—not a copy of Anthropic branding.
-
-> Independent community project. Not affiliated with or endorsed by Anthropic.
+The name describes the built-in visual direction: warm ivory, charcoal typography, restrained terracotta, editorial headlines, and functional terminal details. It is an independent community project and is not affiliated with or endorsed by Anthropic or OpenAI.
 
 [繁體中文說明](./README.zh-TW.md)
 
-![Claude Code Slides example deck](./docs/images/hero.svg)
+![Claude Code-inspired presentation example](./docs/images/hero.svg)
 
-**Build decks like code:** plan the argument, generate an editable artifact, validate it, and refine it without leaving Claude Code.
+## What it includes
 
-## What you get
-
-| Surface | Purpose |
+| Skill | Purpose |
 | --- | --- |
-| `/claude-code-slides:create-deck` | Create a complete HTML, Marp, or editable PowerPoint deck from a topic or source material |
-| `/claude-code-slides:review-deck` | Audit or fix narrative, density, hierarchy, accessibility, assets, and export readiness |
-| `/claude-code-slides:speaker-notes` | Add timed talk tracks, transitions, demo cues, caveats, and likely Q&A |
-| `claude-code-style` | Background design system automatically available to Claude |
-| `deck-architect` | Read-only subagent for audience journey, thesis, evidence, and page sequence |
-| `visual-director` | Read-only subagent for layout, diagrams, hierarchy, and visual consistency |
-| `deck-reviewer` | Independent read-only delivery review |
-| `claude-slides` | Zero-dependency CLI for scaffolding and deterministic validation |
+| `$create-deck` | Create a complete HTML, Marp, or editable PowerPoint deck |
+| `$review-deck` | Audit or fix narrative, density, hierarchy, accessibility, assets, and export readiness |
+| `$speaker-notes` | Add timing, talk tracks, transitions, demo cues, caveats, and likely Q&A |
+| `$claude-code-style` | Apply the warm terminal-editorial visual system |
+| `$deck-architect` | Plan audience journey, thesis, evidence, and page sequence |
+| `$visual-director` | Plan page composition, diagrams, hierarchy, and visual consistency |
+| `$deck-reviewer` | Run an independent delivery review |
 
-## Install
+It also includes a zero-dependency Node.js CLI for scaffolding and deterministic validation.
 
-From your terminal:
+## Install in Codex
+
+Add the repository marketplace:
 
 ```bash
-claude plugin marketplace add rufushsu9987/claude-code-slides
-claude plugin install claude-code-slides@rufus-slides
+codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
 ```
 
-Or inside Claude Code:
+Start Codex, open the plugin browser, and install **Claude Code Slides**:
 
 ```text
-/plugin marketplace add rufushsu9987/claude-code-slides
-/plugin install claude-code-slides@rufus-slides
-/reload-plugins
+/plugins
 ```
 
-Local development:
+Start a new Codex session after installation. Then invoke a workflow explicitly:
+
+```text
+$create-deck Build a 12-minute Traditional Chinese architecture review for cloud engineers from docs/architecture.md using HTML.
+```
+
+Codex can also select a skill implicitly when your request matches its description.
+
+## Develop or test directly from the repository
 
 ```bash
 git clone https://github.com/rufushsu9987/claude-code-slides.git
-claude --plugin-dir ./claude-code-slides
+cd claude-code-slides
+npm ci
+npm run check
+codex
 ```
 
-## Create a deck
-
-```text
-/claude-code-slides:create-deck Build a 12-minute Traditional Chinese architecture review for cloud engineers from docs/architecture.md --format html
-```
-
-The workflow:
-
-1. Inspect the source material and separate verified facts from assumptions.
-2. Define the audience promise, thesis, decision, and page budget.
-3. Plan the narrative and visual system with focused subagents when useful.
-4. Generate the selected format and local assets.
-5. Add speaker notes and delivery cues.
-6. Run deterministic checks plus an independent deck review.
-7. Fix high-confidence issues before handoff.
+The checked-in `.agents/skills/` forwarders make all seven skills available when Codex is launched anywhere inside the repository. Use `/skills` to inspect them.
 
 ## Output formats
 
 | Format | Best for | Generated files |
 | --- | --- | --- |
 | **HTML** | Live talks, strong design fidelity, offline playback, browser sharing, PDF printing | `index.html`, `theme.css`, `slides.js`, `README.md` |
-| **Marp** | Markdown review, Git diffs, low-maintenance docs, quick PDF export | `deck.md`, `theme.css`, `README.md` |
-| **PPTX** | Editable Office delivery, corporate handoff, PowerPoint compatibility | `deck.mjs`, `package.json`, `README.md`, generated `.pptx` |
+| **Marp** | Markdown review, Git diffs, maintainable docs, quick PDF export | `deck.md`, `theme.css`, `README.md` |
+| **PPTX** | Editable Office delivery and corporate handoff | `deck.mjs`, `package.json`, `README.md`, generated `.pptx` |
 
 HTML is the default when the request does not imply another format.
 
+## Example prompts
+
+```text
+$create-deck Turn this repository into a 10-slide enterprise architecture review for cloud engineers. Use Traditional Chinese and HTML.
+
+$review-deck Review slides/enterprise-ai-platform, fix Critical and Major issues, and preserve the current brand.
+
+$speaker-notes Add a 15-minute Traditional Chinese talk track with demo cues and likely Q&A.
+
+$visual-director Propose a Claude Code-inspired visual system for this security architecture deck without copying official product UI.
+```
+
 ## CLI
 
-When the plugin is enabled, `claude-slides` is available to Claude Code's Bash tool. It also works locally through Node:
+The skills call the bundled CLI by absolute path, so no global installation is required. For manual local use:
 
 ```bash
-node bin/claude-slides.mjs init "Enterprise AI Platform" --format html
-node bin/claude-slides.mjs init "Quarterly Review" --format marp
-node bin/claude-slides.mjs init "Executive Proposal" --format pptx
-node bin/claude-slides.mjs check slides/enterprise-ai-platform
-node bin/claude-slides.mjs doctor
+node bin/codex-slides.mjs init "Enterprise AI Platform" --format html
+node bin/codex-slides.mjs init "Quarterly Review" --format marp
+node bin/codex-slides.mjs init "Executive Proposal" --format pptx
+node bin/codex-slides.mjs check examples/ai-platform
+node bin/codex-slides.mjs doctor
 ```
 
-With `npm link`, use the shorter form:
+With `npm link`, use:
 
 ```bash
-claude-slides init "Enterprise AI Platform" --format html
-claude-slides check slides/enterprise-ai-platform --json
+codex-slides init "Enterprise AI Platform" --format html
+codex-slides check examples/ai-platform --json
 ```
+
+The legacy `claude-slides` command remains an alias.
 
 ## HTML controls
 
@@ -109,31 +114,36 @@ claude-slides check slides/enterprise-ai-platform --json
 | `P` | Print or export to PDF |
 | Swipe / click | Navigate on touch or pointer devices |
 
-The deck preserves its page in the URL hash, scales from a 1920 × 1080 canvas, supports reduced motion, and prints one slide per page.
+The HTML template preserves its page in the URL hash, scales from a 1920 × 1080 canvas, supports reduced motion, and prints one slide per page.
 
-## Review and repair
+## Validation
 
-```text
-/claude-code-slides:review-deck slides/enterprise-ai-platform --fix
+```bash
+npm run check
+node bin/codex-slides.mjs check examples/ai-platform
 ```
 
-The validator detects, among other things:
+The validator checks, among other things:
 
-- missing slides, assets, files, or template tokens
+- missing slides, assets, files, or unresolved template tokens
 - duplicate HTML IDs and images without useful alt text
 - missing headings, notes, print rules, reduced-motion handling, keyboard controls, or hash state
 - invalid Marp frontmatter, theme configuration, or asset paths
 - missing PptxGenJS setup, wide layout, output writing, slide creation, or package dependency
+- invalid Codex plugin, marketplace, skill metadata, or Claude-specific runtime tokens
 
-## Example
+## Repository layout
 
-A complete example lives in [`examples/ai-platform`](./examples/ai-platform/).
-
-```bash
-python3 -m http.server 8000 --directory examples/ai-platform
-# open http://localhost:8000
-
-node bin/claude-slides.mjs check examples/ai-platform
+```text
+.codex-plugin/        Codex plugin manifest
+.agents/plugins/      repository marketplace
+.agents/skills/       repo-scoped skill forwarders
+skills/               Codex workflows and design guidance
+references/           storytelling, style, format, and review guidance
+bin/ + lib/           codex-slides CLI
+templates/            HTML, Marp, and PptxGenJS starters
+examples/             runnable example decks
+scripts/ + test/      validation and regression tests
 ```
 
 ## Design direction
@@ -146,28 +156,6 @@ node bin/claude-slides.mjs check examples/ai-platform
 - no Anthropic logos, copied product screenshots, or claims of official association
 
 A supplied brand system always takes precedence.
-
-## Repository layout
-
-```text
-.claude-plugin/       plugin and marketplace manifests
-skills/               user workflows and background design guidance
-agents/               focused presentation subagents
-references/           format contracts and visual system
-bin/ + lib/           claude-slides CLI
-scripts/ + test/      validation and regression tests
-templates/            HTML, Marp, and PptxGenJS starters
-examples/             runnable example decks
-```
-
-## Development
-
-```bash
-npm test
-npm run check
-claude plugin validate .
-claude --plugin-dir .
-```
 
 ## License
 

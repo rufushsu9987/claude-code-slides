@@ -1,13 +1,33 @@
 ---
 name: create-deck
-description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use when the user asks for slides, a presentation, pitch deck, technical talk, architecture review, status report, training deck, or wants existing content converted into slides.
-argument-hint: "<topic, source, or brief> [--format html|marp|pptx]"
-effort: high
+description: Create a polished presentation deck from a topic, brief, document, URL, or repository. Use for slides, presentations, pitch decks, technical talks, architecture reviews, status reports, training decks, or source-to-slides conversion. Supports HTML, Marp, PPTX, and existing slide frameworks.
 ---
 
 # Create a presentation deck
 
-Build the deck requested in `$ARGUMENTS`. Treat the request as a deliverable: create the files, validate them, and leave clear preview or export instructions.
+Create the presentation requested in the current user message. Treat it as a deliverable: inspect the source material, create editable files, validate the result, and leave clear preview or export instructions.
+
+## Resolve the plugin root
+
+Use the absolute path of this `SKILL.md` as the anchor. The plugin root is two directories above it:
+
+```text
+<plugin-root>/skills/create-deck/SKILL.md
+```
+
+Read these references before implementation:
+
+- `<plugin-root>/references/storytelling.md`
+- `<plugin-root>/references/style-system.md`
+- `<plugin-root>/references/output-formats.md`
+
+Run the bundled CLI with:
+
+```bash
+node "<plugin-root>/bin/codex-slides.mjs" <command>
+```
+
+Never assume that `codex-slides` is globally installed.
 
 ## 1. Choose the delivery format
 
@@ -20,19 +40,13 @@ Honor an explicit format. Otherwise infer it from the intended use:
 
 Do not ask the user to choose when the request already implies a sensible default. State the assumption briefly and proceed.
 
-Read:
-
-- `${CLAUDE_PLUGIN_ROOT}/references/storytelling.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/style-system.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/output-formats.md`
-
 ## 2. Inspect the source material
 
-- Read every file, URL, document, image, or code path the request depends on.
-- For a repository-based technical deck, identify the actual architecture, dependencies, data flows, trust boundaries, deployment model, operations, costs, and risks. Do not invent them.
+- Read every local file, URL, document, image, or code path the request depends on.
+- For repository-based technical decks, identify the actual architecture, dependencies, data flows, trust boundaries, deployment model, operations, costs, and risks. Do not invent them.
 - Preserve attribution for external facts, charts, screenshots, quotations, and benchmarks.
 - Label uncertain claims as assumptions.
-- Never copy confidential material into a deck unless the user explicitly intends that audience to receive it.
+- Never copy confidential material into a deck unless the user clearly intends that audience to receive it.
 
 ## 3. Lock the communication objective
 
@@ -49,26 +63,21 @@ Ask only for a missing constraint that materially changes the output. Otherwise 
 
 ## 4. Plan before implementation
 
-For non-trivial decks, delegate focused read-only work in parallel when custom agents are available:
+For non-trivial decks, use the `$deck-architect` and `$visual-director` skills as focused planning passes when they are available. If Codex cannot load them, perform the same roles inline.
 
-1. `claude-code-slides:deck-architect` for audience journey, argument, evidence, and page sequence.
-2. `claude-code-slides:visual-director` for visual concept, page archetypes, diagrams, and asset needs.
-
-Synthesize both into one concise outline. Every page must have one job and one memorable takeaway.
-
-A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it to the content rather than forcing it.
+Synthesize one concise outline. Every page must have one job and one memorable takeaway. A useful default sequence is cover → context → tension → thesis → evidence → execution → risks → decision. Adapt it rather than forcing it.
 
 ## 5. Scaffold the output
 
-Use the bundled CLI when starting a new deck:
+For a new deck, run one of:
 
 ```bash
-claude-slides init "Deck title" --format html
-claude-slides init "Deck title" --format marp
-claude-slides init "Deck title" --format pptx
+node "<plugin-root>/bin/codex-slides.mjs" init "Deck title" --format html
+node "<plugin-root>/bin/codex-slides.mjs" init "Deck title" --format marp
+node "<plugin-root>/bin/codex-slides.mjs" init "Deck title" --format pptx
 ```
 
-The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention.
+The default destination is `slides/<slug>/`. Respect an explicit path or existing repository convention.
 
 | Format | Minimum deliverable |
 | --- | --- |
@@ -86,7 +95,7 @@ Content rules:
 
 - One idea per page.
 - Use claim-style headlines, not labels such as “Overview” or “Architecture”.
-- Prefer diagrams, numbers, timelines, comparisons, code, screenshots, and quotations over bullet walls.
+- Prefer diagrams, numbers, timelines, comparisons, short code, screenshots, and quotations over bullet walls.
 - Keep most pages below roughly 35 visible words. Dense reference pages are an explicit exception.
 - Put nuance, caveats, transitions, and secondary evidence in speaker notes.
 - Use useful alt text and text equivalents for meaningful visuals.
@@ -106,10 +115,10 @@ Technical-deck rules:
 Run:
 
 ```bash
-claude-slides check <deck-path>
+node "<plugin-root>/bin/codex-slides.mjs" check <deck-path>
 ```
 
-Then delegate an independent read-only review to `claude-code-slides:deck-reviewer`. Fix high-confidence Critical and Major findings and re-run validation.
+Then use `$deck-reviewer` for an independent review when available. Fix high-confidence Critical and Major findings and re-run validation.
 
 Also verify the format-specific output:
 

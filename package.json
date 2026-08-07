@@ -1,18 +1,19 @@
 {
   "name": "claude-code-slides",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Claude Code plugin and CLI for creating polished HTML, Marp, and PowerPoint presentations.",
+  "description": "Codex plugin and local CLI for creating polished Claude Code-inspired HTML, Marp, and PowerPoint presentations.",
   "bin": {
+    "codex-slides": "./bin/codex-slides.mjs",
     "claude-slides": "./bin/claude-slides.mjs"
   },
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "validate": "node scripts/validate-plugin.mjs",
     "smoke": "node scripts/smoke-test.mjs",
-    "check:example": "node bin/claude-slides.mjs check examples/ai-platform",
-    "check": "node --check lib/runtime.mjs && node --check lib/validate.mjs && node --check lib/cli.mjs && node --check bin/claude-slides.mjs && node --check scripts/validate-plugin.mjs && node --check scripts/smoke-test.mjs && npm run validate && npm run smoke && npm run check:example && npm test"
+    "check:example": "node bin/codex-slides.mjs check examples/ai-platform",
+    "check": "node --check lib/runtime.mjs && node --check lib/validate.mjs && node --check lib/cli.mjs && node --check bin/codex-slides.mjs && node --check bin/claude-slides.mjs && node --check scripts/validate-plugin.mjs && node --check scripts/smoke-test.mjs && npm run validate && npm run smoke && npm run check:example && npm test"
   },
   "engines": {
     "node": ">=18"
@@ -27,12 +28,15 @@
   },
   "homepage": "https://github.com/rufushsu9987/claude-code-slides#readme",
   "keywords": [
-    "claude-code",
+    "codex",
+    "openai",
+    "agent-skill",
     "plugin",
     "presentations",
     "slides",
     "powerpoint",
     "marp",
-    "pptxgenjs"
+    "pptxgenjs",
+    "claude-code-style"
   ]
 }
