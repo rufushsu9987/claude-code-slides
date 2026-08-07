@@ -5,15 +5,15 @@
     "name": "Rufus Hsu",
     "url": "https://github.com/rufushsu9987"
   },
-  "description": "Cross-platform presentation workflows for Claude Code and Codex.",
-  "version": "0.3.0",
+  "description": "Portable presentation workflows for Claude Code, Codex, and Agent Plugins-compatible clients.",
+  "version": "0.4.0",
   "plugins": [
     {
       "name": "claude-code-slides",
       "displayName": "Claude Code Slides",
       "source": "./",
-      "description": "Create, review, and rehearse polished HTML, Marp, and editable PowerPoint presentations with a warm terminal-editorial visual system.",
-      "version": "0.3.0",
+      "description": "Create, review, and rehearse polished HTML, Marp, and editable PowerPoint presentations with portable Agent Skills.",
+      "version": "0.4.0",
       "author": {
         "name": "Rufus Hsu",
         "url": "https://github.com/rufushsu9987"
@@ -22,6 +22,8 @@
       "repository": "https://github.com/rufushsu9987/claude-code-slides",
       "license": "MIT",
       "keywords": [
+        "agent-plugins",
+        "agent-skills",
         "claude-code",
         "codex",
         "slides",

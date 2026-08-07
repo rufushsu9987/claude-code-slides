@@ -5,16 +5,7 @@ description: Apply a Claude Code-inspired warm terminal-editorial presentation s
 
 # Warm terminal-editorial presentation system
 
-## Resolve the plugin root
-
-This skill is shared by Codex and Claude Code.
-
-- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
-- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/claude-code-style/SKILL.md`.
-
-Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
-
-Read `<plugin-root>/references/style-system.md` as the authoritative visual reference.
+Read [the visual system](references/style-system.md), resolved relative to this skill directory.
 
 Core intent:
 

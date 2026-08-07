@@ -1,31 +1,35 @@
 # Claude Code repository guide
 
-This repository ships one shared presentation workflow to both Claude Code and Codex.
+This repository is a Claude Code plugin backed by a portable Agent Plugins 1.0.0 core shared with Codex and other compatible clients.
 
-## Development commands
+## Development
 
 ```bash
 npm ci
+npm run sync:skills
 npm run check
+claude plugin validate .
 claude --plugin-dir .
 ```
 
-After editing `skills/`, `agents/`, or `.claude-plugin/`, run `/reload-plugins` in Claude Code or start a new session.
+After editing `skills/`, `agents/`, or `.claude-plugin/`, run `/reload-plugins` or start a new Claude Code session.
 
-## Claude Code plugin surface
+## Claude Code surface
 
 - `/claude-code-slides:create-deck`
 - `/claude-code-slides:review-deck`
 - `/claude-code-slides:speaker-notes`
 - `/claude-code-slides:claude-code-style`
 - subagents: `deck-architect`, `visual-director`, `deck-reviewer`
-- CLI alias on Bash `PATH`: `claude-slides`
+- Bash CLI alias: `claude-slides`
 
-## Compatibility rules
+## Portability rules
 
-- The authoritative workflows live in root `skills/`; do not create a separate Claude-only copy.
-- Claude Code metadata lives in `.claude-plugin/` and `agents/`.
-- Codex metadata lives in `.codex-plugin/`, `.agents/plugins/`, and `.agents/skills/`.
-- Keep versions synchronized across both platforms.
-- Preserve HTML, Marp, and PPTX output support.
-- Do not use official Anthropic or OpenAI logos, copied product UI, or wording that implies endorsement.
+- Root `skills/` are authoritative and must remain host-neutral.
+- Skill resources are local to each skill under `references/` and `scripts/`.
+- Root `references/` and `scripts/skill-cli-wrapper.mjs` are canonical; run `npm run sync:skills` after edits.
+- Claude-specific behavior belongs in `.claude-plugin/`, `agents/`, or this guide.
+- Codex-specific behavior belongs in `.codex-plugin/` and `.agents/`.
+- Keep versions synchronized across `plugin.json`, both native manifests, both marketplaces, `package.json`, `package-lock.json`, and `lib/runtime.mjs`.
+- Preserve HTML, Marp, and PPTX support.
+- Do not use official Anthropic or OpenAI marks or wording that implies endorsement.

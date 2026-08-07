@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { access, readFile, stat } from 'node:fs/promises';
+import { access, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 const warnings = [];
+
+const AGENT_PLUGINS_SCHEMA =
+  'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
 
 const expectedSkills = [
   'claude-code-style',
@@ -20,6 +23,39 @@ const expectedSkills = [
 ];
 
 const expectedClaudeAgents = ['deck-architect', 'deck-reviewer', 'visual-director'];
+
+const portableManifestFields = new Set([
+  '$schema',
+  'name',
+  'version',
+  'description',
+  'author',
+  'homepage',
+  'repository',
+  'license',
+  'keywords',
+  'extensions',
+]);
+
+const skillResources = {
+  'claude-code-style': ['references/style-system.md'],
+  'create-deck': [
+    'references/storytelling.md',
+    'references/style-system.md',
+    'references/output-formats.md',
+    'scripts/slides-cli.mjs',
+  ],
+  'deck-architect': ['references/storytelling.md'],
+  'deck-reviewer': ['references/review-checklist.md', 'scripts/slides-cli.mjs'],
+  'review-deck': [
+    'references/review-checklist.md',
+    'references/style-system.md',
+    'references/output-formats.md',
+    'scripts/slides-cli.mjs',
+  ],
+  'speaker-notes': [],
+  'visual-director': ['references/style-system.md'],
+};
 
 async function readJson(relativePath) {
   try {
@@ -58,6 +94,18 @@ async function fileExists(relativePath) {
   }
 }
 
+function validatePluginIdentity(plugin, label) {
+  if (!plugin) return;
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(plugin.name || '')) {
+    errors.push(`${label}.name must be kebab-case`);
+  }
+  if (!plugin.description) errors.push(`${label}.description is required`);
+  if (!/^\d+\.\d+\.\d+$/.test(plugin.version || '')) {
+    errors.push(`${label}.version must use semantic versioning`);
+  }
+}
+
+const portablePlugin = await readJson('plugin.json');
 const codexPlugin = await readJson('.codex-plugin/plugin.json');
 const codexMarketplace = await readJson('.agents/plugins/marketplace.json');
 const claudePlugin = await readJson('.claude-plugin/plugin.json');
@@ -66,6 +114,7 @@ const packageJson = await readJson('package.json');
 const packageLock = await readJson('package-lock.json');
 
 const required = [
+  'plugin.json',
   '.codex-plugin/plugin.json',
   '.agents/plugins/marketplace.json',
   '.claude-plugin/plugin.json',
@@ -73,10 +122,15 @@ const required = [
   ...expectedSkills.map((name) => `skills/${name}/SKILL.md`),
   ...expectedSkills.map((name) => `.agents/skills/${name}/SKILL.md`),
   ...expectedClaudeAgents.map((name) => `agents/${name}.md`),
+  ...Object.entries(skillResources).flatMap(([name, resources]) =>
+    resources.map((resource) => `skills/${name}/${resource}`),
+  ),
   'references/style-system.md',
   'references/storytelling.md',
   'references/output-formats.md',
   'references/review-checklist.md',
+  'scripts/skill-cli-wrapper.mjs',
+  'scripts/sync-skill-resources.mjs',
   'bin/codex-slides.mjs',
   'bin/claude-slides.mjs',
   'lib/cli.mjs',
@@ -100,19 +154,42 @@ for (const relativePath of required) {
   if (!(await fileExists(relativePath))) errors.push(`missing ${relativePath}`);
 }
 
-function validatePluginName(plugin, label) {
-  if (!plugin) return;
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(plugin.name || '')) {
-    errors.push(`${label}.name must be kebab-case`);
+validatePluginIdentity(portablePlugin, 'Agent Plugins manifest');
+validatePluginIdentity(codexPlugin, 'Codex plugin');
+validatePluginIdentity(claudePlugin, 'Claude Code plugin');
+
+if (portablePlugin) {
+  if (portablePlugin.$schema !== AGENT_PLUGINS_SCHEMA) {
+    errors.push(`plugin.json.$schema must be ${AGENT_PLUGINS_SCHEMA}`);
   }
-  if (!plugin.description) errors.push(`${label}.description is required`);
-  if (!/^\d+\.\d+\.\d+$/.test(plugin.version || '')) {
-    errors.push(`${label}.version must use semantic versioning`);
+
+  for (const key of Object.keys(portablePlugin)) {
+    if (!portableManifestFields.has(key)) {
+      errors.push(`plugin.json contains non-portable top-level field ${key}`);
+    }
+  }
+
+  if (
+    portablePlugin.extensions === null ||
+    typeof portablePlugin.extensions !== 'object' ||
+    Array.isArray(portablePlugin.extensions)
+  ) {
+    errors.push('plugin.json.extensions must be an object when present');
+  } else {
+    for (const namespace of [
+      'io.github.rufushsu9987.codex',
+      'io.github.rufushsu9987.claudecode',
+    ]) {
+      if (
+        portablePlugin.extensions[namespace] === null ||
+        typeof portablePlugin.extensions[namespace] !== 'object' ||
+        Array.isArray(portablePlugin.extensions[namespace])
+      ) {
+        errors.push(`plugin.json.extensions must define object namespace ${namespace}`);
+      }
+    }
   }
 }
-
-validatePluginName(codexPlugin, 'Codex plugin');
-validatePluginName(claudePlugin, 'Claude Code plugin');
 
 if (codexPlugin) {
   if (codexPlugin.skills !== './skills/') {
@@ -160,6 +237,7 @@ if (claudeMarketplace) {
 }
 
 if (
+  portablePlugin &&
   codexPlugin &&
   codexMarketplace &&
   claudePlugin &&
@@ -185,6 +263,7 @@ if (
   }
 
   const versions = [
+    portablePlugin.version,
     codexPlugin.version,
     claudePlugin.version,
     codexEntry?.version,
@@ -194,8 +273,19 @@ if (
     packageLock.version,
     packageLock.packages?.['']?.version,
   ];
-  if (versions.some((value) => value !== codexPlugin.version)) {
-    errors.push('Codex, Claude Code, package, lockfile, and marketplace versions must match');
+  if (versions.some((value) => value !== portablePlugin.version)) {
+    errors.push(
+      'Agent Plugins, Codex, Claude Code, package, lockfile, and marketplace versions must match',
+    );
+  }
+
+  for (const [label, plugin] of [
+    ['Codex', codexPlugin],
+    ['Claude Code', claudePlugin],
+  ]) {
+    if (plugin.name !== portablePlugin.name) {
+      errors.push(`${label} plugin name must match portable plugin.json`);
+    }
   }
 
   if (!codexEntry?.description || !codexEntry?.interface?.displayName) {
@@ -237,6 +327,17 @@ if (
   }
 }
 
+const actualSkillDirectories = (await readdir(path.join(root, 'skills'), { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .sort();
+
+if (JSON.stringify(actualSkillDirectories) !== JSON.stringify(expectedSkills)) {
+  errors.push(
+    `skills/ immediate child directories must be exactly: ${expectedSkills.join(', ')}`,
+  );
+}
+
 for (const name of expectedSkills) {
   const relativePath = `skills/${name}/SKILL.md`;
   if (!(await fileExists(relativePath))) continue;
@@ -257,9 +358,22 @@ for (const name of expectedSkills) {
     'argument-hint:',
     'effort:',
     'user-invocable:',
+    'CLAUDE_PLUGIN_ROOT',
+    '<plugin-root>',
+    'claude-code-slides:',
   ]) {
     if (content.includes(forbidden)) {
-      errors.push(`${relativePath}: contains host-specific frontmatter or runtime token ${forbidden}`);
+      errors.push(`${relativePath}: contains host-specific token ${forbidden}`);
+    }
+  }
+
+  if (content.includes('../')) {
+    errors.push(`${relativePath}: resources must be referenced from the skill root`);
+  }
+
+  for (const resource of skillResources[name]) {
+    if (!content.includes(resource)) {
+      errors.push(`${relativePath}: must reference bundled resource ${resource}`);
     }
   }
 
@@ -296,7 +410,14 @@ for (const name of expectedClaudeAgents) {
   }
 }
 
-for (const executable of ['bin/codex-slides.mjs', 'bin/claude-slides.mjs']) {
+for (const executable of [
+  'bin/codex-slides.mjs',
+  'bin/claude-slides.mjs',
+  'scripts/skill-cli-wrapper.mjs',
+  'skills/create-deck/scripts/slides-cli.mjs',
+  'skills/review-deck/scripts/slides-cli.mjs',
+  'skills/deck-reviewer/scripts/slides-cli.mjs',
+]) {
   if (!(await fileExists(executable))) continue;
   const mode = (await stat(path.join(root, executable))).mode;
   if ((mode & 0o111) === 0) errors.push(`${executable} must be executable`);
@@ -312,6 +433,9 @@ if (await fileExists('README.md')) {
       errors.push(`README.md must document Claude Code skill /claude-code-slides:${skill}`);
     }
   }
+  if (!readme.includes(AGENT_PLUGINS_SCHEMA)) {
+    errors.push('README.md must document Agent Plugins 1.0.0');
+  }
   if (!readme.includes('codex plugin marketplace add')) {
     errors.push('README.md must document Codex marketplace installation');
   }
@@ -324,9 +448,11 @@ if (errors.length) {
   for (const error of errors) console.error(`ERROR ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Validated dual-platform Claude Code Slides ${codexPlugin?.version}.`);
   console.log(
-    `Found ${expectedSkills.length} shared skills, ${expectedSkills.length} Codex forwarders, and ${expectedClaudeAgents.length} Claude Code agents.`,
+    `Validated Agent Plugins v1 portable core and native adapters ${portablePlugin?.version}.`,
+  );
+  console.log(
+    `Found ${expectedSkills.length} portable skills, ${expectedSkills.length} Codex forwarders, and ${expectedClaudeAgents.length} Claude Code agents.`,
   );
 }
 

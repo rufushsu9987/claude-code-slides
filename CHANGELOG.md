@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## 0.4.0 - 2026-08-07
+
+- Add the root Agent Plugins 1.0.0 `plugin.json` portable manifest.
+- Package all seven workflows as fixed-location portable Agent Skills.
+- Move runtime references and helper scripts behind skill-relative `references/` and `scripts/` paths.
+- Add deterministic synchronization for generated skill-local resources.
+- Preserve native Codex and Claude Code manifests, marketplaces, commands, and subagents.
+- Extend CI to validate Agent Plugins conformance, portable resource boundaries, synchronization, and cross-platform version alignment.
+- Document usage for Agent Plugins-compatible clients, Codex, and Claude Code.
+
 ## 0.3.0 - 2026-08-07
 
 - Add native Claude Code plugin and marketplace manifests alongside Codex.
@@ -20,11 +30,8 @@ All notable changes to this project are documented here.
 ## 0.2.0 - 2026-08-07
 
 - Convert the package to a native Codex plugin with `.codex-plugin/plugin.json`.
-- Add a repo marketplace and repo-scoped `.agents/skills` discovery.
-- Replace Claude Code command and subagent syntax with Codex `$skill-name` workflows.
-- Convert narrative, visual-direction, and review roles into reusable Codex skills.
+- Add a repository marketplace and repository-scoped `.agents/skills` discovery.
 - Add the `codex-slides` CLI entry point while retaining `claude-slides` as a compatibility alias.
-- Update validation, tests, documentation, and environment diagnostics for Codex.
 
 ## 0.1.0 - 2026-08-07
 

@@ -1,12 +1,20 @@
 # Repository instructions
 
-This repository is a dual-platform presentation plugin for Codex and Claude Code plus a zero-dependency Node.js CLI. The product name describes the bundled visual direction; it is not an official Anthropic or OpenAI integration.
+This repository ships one portable presentation core plus native Codex and Claude Code adapters.
 
-Work in focused, reviewable changes. Run `npm test` and `npm run check` before committing.
+## Architecture
+
+- `plugin.json`: Agent Plugins 1.0.0 portable manifest.
+- `skills/`: authoritative portable Agent Skills.
+- `references/`: canonical shared reference content.
+- `scripts/sync-skill-resources.mjs`: copies canonical references and the CLI wrapper into skill-local `references/` and `scripts/`.
+- `.codex-plugin/`, `.agents/plugins/`, `.agents/skills/`: Codex adapter.
+- `.claude-plugin/`, `agents/`, `CLAUDE.md`: Claude Code adapter.
+- `bin/` and `lib/`: zero-dependency presentation CLI.
 
 ## Public surface
 
-Shared skills:
+Portable skills:
 
 - `create-deck`
 - `review-deck`
@@ -16,34 +24,24 @@ Shared skills:
 - `visual-director`
 - `deck-reviewer`
 
-Codex invocation:
-
-- `$create-deck`, `$review-deck`, `$speaker-notes`
-- repository discovery through `.agents/skills/`
-- install metadata in `.codex-plugin/plugin.json`
-- marketplace in `.agents/plugins/marketplace.json`
-
-Claude Code invocation:
-
-- `/claude-code-slides:create-deck`
-- `/claude-code-slides:review-deck`
-- `/claude-code-slides:speaker-notes`
-- subagents in `agents/`
-- install metadata and marketplace in `.claude-plugin/`
-
-Local CLI:
-
-- `codex-slides init|check|doctor`
-- `claude-slides init|check|doctor`
+Codex invokes them as `$skill-name`. Claude Code exposes namespaced skills and three native subagents.
 
 ## Rules
 
-- Keep the root `skills/` directory platform-neutral; both hosts consume the same workflow source.
-- Keep Codex forwarders under `.agents/skills/`.
-- Keep Claude Code subagents under `agents/`.
-- Keep all four manifests valid and versions synchronized with `package.json`, `package-lock.json`, and `lib/runtime.mjs`.
-- Do not add a root runtime dependency unless Node-native capabilities cannot solve the problem.
-- Generated PPTX decks may declare PptxGenJS inside their own output directory.
-- Keep generated decks portable, local-first, accessible, and easy to archive.
-- A supplied corporate brand or existing slide framework takes precedence over the bundled style.
-- Never imply that this repository is maintained, endorsed, or affiliated with Anthropic or OpenAI.
+- Keep root `plugin.json` conformant to `https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`.
+- Keep portable `SKILL.md` files free of host-specific runtime variables, command namespaces, and plugin-root placeholders.
+- Reference bundled files with `references/...` and `scripts/...` paths relative to the skill root.
+- Edit canonical content under root `references/` or `scripts/skill-cli-wrapper.mjs`, then run `npm run sync:skills`.
+- Do not edit generated skill-local copies without updating their canonical source.
+- Keep all manifests and package versions synchronized.
+- Preserve HTML, Marp, and editable PPTX output.
+- Do not add root runtime dependencies unless Node-native capabilities are insufficient.
+- Never imply official Anthropic or OpenAI affiliation.
+
+## Validation
+
+```bash
+npm ci
+npm run sync:skills
+npm run check
+```

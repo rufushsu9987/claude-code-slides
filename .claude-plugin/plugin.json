@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "claude-code-slides",
   "displayName": "Claude Code Slides",
-  "version": "0.3.0",
-  "description": "Create, review, and rehearse story-driven HTML, Marp, and editable PowerPoint presentations with shared workflows for Claude Code and Codex.",
+  "version": "0.4.0",
+  "description": "Create, review, and rehearse story-driven HTML, Marp, and editable PowerPoint presentations using a portable Agent Plugins-compatible core.",
   "author": {
     "name": "Rufus Hsu",
     "url": "https://github.com/rufushsu9987"
@@ -12,6 +12,8 @@
   "repository": "https://github.com/rufushsu9987/claude-code-slides",
   "license": "MIT",
   "keywords": [
+    "agent-plugins",
+    "agent-skills",
     "claude-code",
     "codex",
     "presentations",

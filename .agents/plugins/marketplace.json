@@ -6,8 +6,8 @@
   "plugins": [
     {
       "name": "claude-code-slides",
-      "version": "0.3.0",
-      "description": "Create, review, and rehearse polished HTML, Marp, and PowerPoint presentations from Codex or Claude Code with Claude Code-inspired warm terminal-editorial styling.",
+      "version": "0.4.0",
+      "description": "Create, review, and rehearse portable HTML, Marp, and PowerPoint presentations from Codex or Claude Code.",
       "author": {
         "name": "Rufus Hsu",
         "url": "https://github.com/rufushsu9987"
@@ -16,6 +16,8 @@
       "repository": "https://github.com/rufushsu9987/claude-code-slides",
       "license": "MIT",
       "keywords": [
+        "agent-plugins",
+        "agent-skills",
         "codex",
         "claude-code",
         "presentation",
@@ -25,13 +27,12 @@
         "pptx",
         "marp",
         "html",
-        "speaker-notes",
-        "claude-code-style"
+        "speaker-notes"
       ],
       "interface": {
         "displayName": "Claude Code Slides",
-        "shortDescription": "Presentation workflows for Codex and Claude Code",
-        "longDescription": "Turn briefs, documents, URLs, and repositories into story-driven HTML, Marp, or editable PowerPoint decks. Includes narrative planning, visual direction, speaker notes, platform-aware installation, and deterministic quality checks.",
+        "shortDescription": "Portable presentation workflows for Codex and Claude Code",
+        "longDescription": "Turn briefs, documents, URLs, and repositories into story-driven HTML, Marp, or editable PowerPoint decks with portable Agent Skills and native host adapters.",
         "developerName": "Rufus Hsu",
         "category": "Productivity",
         "capabilities": [

@@ -5,16 +5,7 @@ description: Plan the narrative, audience journey, slide sequence, evidence, and
 
 # Plan the deck narrative
 
-## Resolve the plugin root
-
-This skill is shared by Codex and Claude Code.
-
-- In Claude Code, use the installed plugin directory shown here when it expands to an absolute path: `${CLAUDE_PLUGIN_ROOT}`.
-- In Codex, derive the plugin root from this file's path: `<plugin-root>/skills/deck-architect/SKILL.md`.
-
-Before running bundled tools, verify that `<plugin-root>/bin/codex-slides.mjs` and `<plugin-root>/references/` exist. Never assume a global CLI installation.
-
-Read `<plugin-root>/references/storytelling.md`. Produce a narrative plan, not slide implementation code.
+Read [the storytelling system](references/storytelling.md), resolved relative to this skill directory. Produce a narrative plan, not slide implementation code.
 
 Start by identifying:
 

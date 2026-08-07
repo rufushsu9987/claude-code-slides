@@ -2,12 +2,16 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+const AGENT_PLUGINS_SCHEMA =
+  'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
+
 async function json(path) {
   return JSON.parse(await readFile(path, 'utf8'));
 }
 
-test('release versions stay synchronized across both plugin systems', async () => {
+test('release versions stay synchronized across portable and native plugin systems', async () => {
   const [
+    portablePlugin,
     codexPlugin,
     codexMarketplace,
     claudePlugin,
@@ -15,6 +19,7 @@ test('release versions stay synchronized across both plugin systems', async () =
     packageJson,
     packageLock,
   ] = await Promise.all([
+    json('plugin.json'),
     json('.codex-plugin/plugin.json'),
     json('.agents/plugins/marketplace.json'),
     json('.claude-plugin/plugin.json'),
@@ -29,6 +34,7 @@ test('release versions stay synchronized across both plugin systems', async () =
   assert.ok(claudeEntry);
 
   const versions = [
+    portablePlugin.version,
     codexPlugin.version,
     claudePlugin.version,
     codexEntry.version,
@@ -39,6 +45,31 @@ test('release versions stay synchronized across both plugin systems', async () =
     packageLock.packages[''].version,
   ];
   assert.equal(new Set(versions).size, 1);
+});
+
+test('root plugin.json conforms to the Agent Plugins v1 portable manifest shape', async () => {
+  const plugin = await json('plugin.json');
+  const allowed = new Set([
+    '$schema',
+    'name',
+    'version',
+    'description',
+    'author',
+    'homepage',
+    'repository',
+    'license',
+    'keywords',
+    'extensions',
+  ]);
+
+  assert.equal(plugin.$schema, AGENT_PLUGINS_SCHEMA);
+  assert.equal(plugin.name, 'claude-code-slides');
+  assert.deepEqual(
+    Object.keys(plugin).filter((key) => !allowed.has(key)),
+    [],
+  );
+  assert.equal(typeof plugin.extensions['io.github.rufushsu9987.codex'], 'object');
+  assert.equal(typeof plugin.extensions['io.github.rufushsu9987.claudecode'], 'object');
 });
 
 test('Codex marketplace loads the root plugin with searchable fallback metadata', async () => {
@@ -54,6 +85,7 @@ test('Codex marketplace loads the root plugin with searchable fallback metadata'
   assert.equal(entry.category, 'Productivity');
   assert.equal(entry.interface.displayName, plugin.interface.displayName);
   assert.equal(entry.description.length > 0, true);
+  assert.equal(entry.keywords.includes('agent-plugins'), true);
   assert.equal(entry.keywords.includes('slides'), true);
 });
 
@@ -65,20 +97,22 @@ test('Claude Code marketplace loads the root plugin', async () => {
   assert.equal(entry.source, './');
   assert.equal(entry.displayName, plugin.displayName);
   assert.equal(entry.version, plugin.version);
+  assert.equal(entry.keywords.includes('agent-plugins'), true);
   assert.equal(entry.keywords.includes('slides'), true);
 });
 
-test('Codex manifest exposes the shared skills bundle', async () => {
-  const plugin = await json('.codex-plugin/plugin.json');
-  assert.equal(plugin.name, 'claude-code-slides');
-  assert.equal(plugin.skills, './skills/');
-  assert.equal(plugin.interface.displayName, 'Claude Code Slides');
-});
+test('native manifests expose the shared portable skills bundle', async () => {
+  const [codex, claude] = await Promise.all([
+    json('.codex-plugin/plugin.json'),
+    json('.claude-plugin/plugin.json'),
+  ]);
 
-test('Claude Code manifest exposes shared skills and native subagents', async () => {
-  const plugin = await json('.claude-plugin/plugin.json');
-  assert.equal(plugin.name, 'claude-code-slides');
-  assert.equal(plugin.skills, './skills/');
-  assert.equal(plugin.agents, './agents/');
-  assert.equal(plugin.displayName, 'Claude Code Slides');
+  assert.equal(codex.name, 'claude-code-slides');
+  assert.equal(codex.skills, './skills/');
+  assert.equal(codex.interface.displayName, 'Claude Code Slides');
+
+  assert.equal(claude.name, 'claude-code-slides');
+  assert.equal(claude.skills, './skills/');
+  assert.equal(claude.agents, './agents/');
+  assert.equal(claude.displayName, 'Claude Code Slides');
 });

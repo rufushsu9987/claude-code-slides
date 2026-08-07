@@ -1,19 +1,21 @@
 {
   "name": "claude-code-slides",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "Dual Codex and Claude Code plugin plus local CLI for creating polished HTML, Marp, and PowerPoint presentations.",
+  "description": "Agent Plugins-compatible presentation workflows with native Codex and Claude Code adapters.",
   "bin": {
     "codex-slides": "./bin/codex-slides.mjs",
     "claude-slides": "./bin/claude-slides.mjs"
   },
   "scripts": {
     "test": "node --test test/*.test.mjs",
+    "sync:skills": "node scripts/sync-skill-resources.mjs",
+    "check:skills": "node scripts/sync-skill-resources.mjs --check",
     "validate": "node scripts/validate-plugin.mjs",
     "smoke": "node scripts/smoke-test.mjs",
     "check:example": "node bin/codex-slides.mjs check examples/ai-platform",
-    "check": "node --check lib/runtime.mjs && node --check lib/validate.mjs && node --check lib/cli.mjs && node --check bin/codex-slides.mjs && node --check bin/claude-slides.mjs && node --check scripts/validate-plugin.mjs && node --check scripts/smoke-test.mjs && npm run validate && npm run smoke && npm run check:example && npm test"
+    "check": "node --check lib/runtime.mjs && node --check lib/validate.mjs && node --check lib/cli.mjs && node --check bin/codex-slides.mjs && node --check bin/claude-slides.mjs && node --check scripts/validate-plugin.mjs && node --check scripts/sync-skill-resources.mjs && node --check scripts/skill-cli-wrapper.mjs && node --check scripts/smoke-test.mjs && npm run check:skills && npm run validate && npm run smoke && npm run check:example && npm test"
   },
   "engines": {
     "node": ">=18"
@@ -28,11 +30,12 @@
   },
   "homepage": "https://github.com/rufushsu9987/claude-code-slides#readme",
   "keywords": [
+    "agent-plugins",
+    "agent-skills",
     "codex",
     "openai",
     "claude-code",
     "anthropic",
-    "agent-skill",
     "plugin",
     "presentations",
     "slides",
