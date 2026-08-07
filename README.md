@@ -27,17 +27,15 @@ It also includes a zero-dependency Node.js CLI for scaffolding and deterministic
 
 ## Install in Codex
 
-Add the repository marketplace:
+Add or refresh the repository marketplace, then install the plugin:
 
 ```bash
 codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
+codex plugin marketplace upgrade rufus-slides
+codex plugin add claude-code-slides@rufus-slides
 ```
 
-Start Codex, open the plugin browser, and install **Claude Code Slides**:
-
-```text
-/plugins
-```
+You can also start Codex, open `/plugins`, select **Rufus Slides**, and install **Claude Code Slides** from the browser.
 
 Start a new Codex session after installation. Then invoke a workflow explicitly:
 
@@ -46,6 +44,26 @@ $create-deck Build a 12-minute Traditional Chinese architecture review for cloud
 ```
 
 Codex can also select a skill implicitly when your request matches its description.
+
+### Marketplace troubleshooting
+
+If the marketplace was added before the latest plugin manifest, or `/plugins` shows **no matches**, refresh and inspect the installed snapshot:
+
+```bash
+codex plugin marketplace upgrade rufus-slides
+codex plugin list --marketplace rufus-slides --available --json
+codex plugin add claude-code-slides@rufus-slides
+```
+
+If the snapshot is still stale, rebuild it:
+
+```bash
+codex plugin marketplace remove rufus-slides
+codex plugin marketplace add rufushsu9987/claude-code-slides --ref main
+codex plugin add claude-code-slides@rufus-slides
+```
+
+Restart Codex and open a new session after installing or upgrading a plugin.
 
 ## Develop or test directly from the repository
 
