@@ -5,11 +5,12 @@ import path from 'node:path';
 import test from 'node:test';
 import { VERSION, checkDeck, doctor, initDeck, slugify } from '../lib/cli.mjs';
 
-test('doctor accepts the documented Node.js baseline and reports Codex', () => {
+test('doctor accepts the documented Node.js baseline and reports Codex', async () => {
   const result = doctor();
+  const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(result.node.available, Number(process.versions.node.split('.')[0]) >= 18);
   assert.ok('codex' in result);
-  assert.equal(VERSION, '0.2.0');
+  assert.equal(VERSION, packageJson.version);
 });
 
 test('slugify creates stable portable identifiers', () => {
