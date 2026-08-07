@@ -7,26 +7,35 @@ async function json(path) {
 }
 
 test('release versions stay synchronized', async () => {
-  const [plugin, packageJson, packageLock] = await Promise.all([
+  const [plugin, marketplace, packageJson, packageLock] = await Promise.all([
     json('.codex-plugin/plugin.json'),
+    json('.agents/plugins/marketplace.json'),
     json('package.json'),
     json('package-lock.json'),
   ]);
 
+  const marketplacePlugin = marketplace.plugins.find((entry) => entry.name === plugin.name);
+  assert.ok(marketplacePlugin);
+  assert.equal(plugin.version, marketplacePlugin.version);
   assert.equal(plugin.version, packageJson.version);
   assert.equal(plugin.version, packageLock.version);
   assert.equal(plugin.version, packageLock.packages[''].version);
 });
 
-test('marketplace points to the canonical public repository', async () => {
+test('marketplace loads the root plugin with searchable fallback metadata', async () => {
   const marketplace = await json('.agents/plugins/marketplace.json');
-  assert.deepEqual(marketplace.plugins[0].source, {
-    source: 'url',
-    url: 'https://github.com/rufushsu9987/claude-code-slides.git',
-    ref: 'main',
+  const plugin = await json('.codex-plugin/plugin.json');
+  const entry = marketplace.plugins[0];
+
+  assert.deepEqual(entry.source, {
+    source: 'local',
+    path: './',
   });
-  assert.equal(marketplace.plugins[0].policy.installation, 'AVAILABLE');
-  assert.equal(marketplace.plugins[0].category, 'Productivity');
+  assert.equal(entry.policy.installation, 'AVAILABLE');
+  assert.equal(entry.category, 'Productivity');
+  assert.equal(entry.interface.displayName, plugin.interface.displayName);
+  assert.equal(entry.description.length > 0, true);
+  assert.equal(entry.keywords.includes('slides'), true);
 });
 
 test('Codex manifest exposes the skills bundle', async () => {
