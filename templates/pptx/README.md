@@ -1,6 +1,8 @@
 # {{TITLE}}
 
-An editable 16:9 PowerPoint deck generated with PptxGenJS.
+An editable 16:9 PowerPoint deck using **{{TEMPLATE_NAME}}** (`{{TEMPLATE_ID}}`) and PptxGenJS.
+
+The generated `template.json` records the selected palette, typography, visual pattern, and output format. The scaffolded `deck.mjs` already contains the selected preset values.
 
 ## Build
 
@@ -14,6 +16,8 @@ The presentation is written to `dist/{{OUTPUT_FILE}}`.
 ## Validate source
 
 ```bash
+codex-slides check .
+# or
 claude-slides check .
 ```
 

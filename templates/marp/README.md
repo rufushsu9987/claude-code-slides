@@ -1,6 +1,8 @@
 # {{TITLE}}
 
-A Git-friendly Marp presentation using the bundled `claude-code` theme.
+A Git-friendly Marp presentation using **{{TEMPLATE_NAME}}** (`{{TEMPLATE_ID}}`).
+
+The generated `template.json` records the selected palette, typography, visual pattern, and output format.
 
 ## Preview
 
@@ -18,6 +20,8 @@ npx @marp-team/marp-cli@latest deck.md --theme theme.css --pptx
 ## Validate
 
 ```bash
+codex-slides check .
+# or
 claude-slides check .
 ```
 

@@ -1,6 +1,8 @@
 # {{TITLE}}
 
-A self-contained 16:9 HTML presentation with inline speaker notes.
+A self-contained 16:9 HTML presentation using **{{TEMPLATE_NAME}}** (`{{TEMPLATE_ID}}`).
+
+The generated `template.json` records the selected palette, typography, visual pattern, and output format.
 
 ## Preview
 
@@ -24,6 +26,8 @@ Then open `http://localhost:8000`.
 ## Validate
 
 ```bash
+codex-slides check .
+# or
 claude-slides check .
 ```
 
@@ -31,6 +35,6 @@ claude-slides check .
 
 - Slides are `<section class="slide">` elements in `index.html`.
 - Put the talk track in an `<aside class="notes">` inside each slide.
-- Visual tokens and reusable patterns live in `theme.css`.
+- Visual tokens, the base system, and the selected preset live in `theme.css`.
 - Navigation and 1920 × 1080 viewport scaling live in `slides.js`.
 - Keep images and diagrams local to this directory.
