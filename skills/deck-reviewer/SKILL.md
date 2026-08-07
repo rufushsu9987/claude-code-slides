@@ -35,6 +35,6 @@ Review:
 - Format quality: HTML behavior and layout markers, Marp classes and exportability, or PPTX generation, layout sequence, and editability.
 - Delivery: notes, timing, demo risk, unresolved placeholders, missing assets.
 
-For decks of 10 or more slides, flag fewer than eight distinct archetypes as a Major finding unless the content clearly requires a repeated matched structure. Flag exact consecutive repeats, excessive card grids, or more than four slides without a visible rhythm change.
+For decks of 10 or more slides, flag fewer than eight distinct archetypes as a Major finding unless the content clearly requires a repeated matched structure. Flag exact consecutive repeats, card-grid or node-card pages above roughly 20%, or more than four slides without a visible rhythm change.
 
 Return findings grouped by Critical, Major, Minor, and Suggestions. Include page or file references and a concrete recommended fix. Lead with the three changes that would most improve the audience outcome. Do not flood the report with cosmetic details.
