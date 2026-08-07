@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## 0.5.0 - 2026-08-08
+
+- Add a catalog of seven professional templates across HTML, Marp, and editable PPTX.
+- Add `codex-slides templates` and `claude-slides templates` discovery commands.
+- Add `--template <name>` to the deck scaffolding workflow.
+- Generate `template.json` in every deck for reproducible palette, typography, pattern, and format metadata.
+- Apply template-specific CSS overlays to HTML and Marp and deterministic palette/font replacement to PptxGenJS.
+- Extend the portable `create-deck` skill with audience-based template selection guidance.
+- Expand smoke tests to scaffold every template in every supported format.
+- Add template catalog validation, documentation, and regression tests.
+
 ## 0.4.0 - 2026-08-07
 
 - Add the root Agent Plugins 1.0.0 `plugin.json` portable manifest.

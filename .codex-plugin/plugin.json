@@ -1,7 +1,7 @@
 {
   "name": "claude-code-slides",
-  "version": "0.4.0",
-  "description": "Create, review, and rehearse portable HTML, Marp, and PowerPoint presentations from Codex or Claude Code with Agent Plugins-compatible skills.",
+  "version": "0.5.0",
+  "description": "Create, review, and rehearse portable HTML, Marp, and editable PowerPoint presentations with seven professional templates.",
   "author": {
     "name": "Rufus Hsu",
     "url": "https://github.com/rufushsu9987"
@@ -17,16 +17,18 @@
     "presentations",
     "slides",
     "powerpoint",
+    "pptx",
     "marp",
     "html",
     "speaker-notes",
+    "templates",
     "design"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Claude Code Slides",
-    "shortDescription": "Portable presentation workflows for Codex and Claude Code",
-    "longDescription": "Turn briefs, documents, URLs, and repositories into story-driven HTML, Marp, or editable PowerPoint decks. The portable core follows Agent Plugins 1.0 and Agent Skills conventions, with native Codex and Claude Code adapters.",
+    "shortDescription": "Agent-first slides with seven professional templates",
+    "longDescription": "Turn briefs, documents, URLs, and repositories into story-driven HTML, Marp, or editable PowerPoint decks. Choose from seven professional templates for technical, executive, cloud, data, product, demo, and incident-review scenarios.",
     "developerName": "Rufus Hsu",
     "category": "Productivity",
     "capabilities": [
@@ -35,9 +37,9 @@
     ],
     "websiteURL": "https://github.com/rufushsu9987/claude-code-slides",
     "defaultPrompt": [
-      "Use Claude Code Slides to create a technical presentation from this repository.",
-      "Review this presentation and fix the highest-impact delivery issues.",
-      "Add speaker notes for a 12-minute engineering presentation."
+      "Create a technical presentation from this repository using the cloud-architecture template.",
+      "Turn this strategy brief into an executive PowerPoint using the executive-brief template.",
+      "Review this presentation and fix the highest-impact delivery issues."
     ],
     "brandColor": "#D97757"
   }
