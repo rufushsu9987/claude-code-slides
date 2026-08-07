@@ -27,7 +27,7 @@ function frontmatter(content) {
   );
 }
 
-test('all Codex skills have portable metadata and repo links', async () => {
+test('all shared skills have portable metadata and Codex repo links', async () => {
   const skillDirectories = (await readdir('skills', { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
@@ -40,7 +40,7 @@ test('all Codex skills have portable metadata and repo links', async () => {
     const metadata = frontmatter(content);
     assert.equal(metadata.name, name);
     assert.ok(metadata.description);
-    assert.doesNotMatch(content, /\$ARGUMENTS|CLAUDE_PLUGIN_ROOT|claude-code-slides:/);
+    assert.doesNotMatch(content, /\$ARGUMENTS|argument-hint:|effort:|user-invocable:/);
     const forwarder = await readFile(path.join('.agents', 'skills', name, 'SKILL.md'), 'utf8');
     assert.match(forwarder, new RegExp(`\\.\\.\\/\\.\\.\\/\\.\\.\\/skills/${name}/SKILL\\.md`));
   }
