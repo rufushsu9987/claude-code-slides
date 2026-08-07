@@ -105,7 +105,7 @@ codex-slides check examples/ai-platform --json
 | 按鍵 | 功能 |
 | --- | --- |
 | `→`、`↓`、`Space`、`PageDown` | 下一頁 |
-| `←`、`↑`、`PageUp` | 上一頁／最後一頁 |
+| `←`、`↑`、`PageUp` | 上一頁 |
 | `Home` / `End` | 第一頁／最後一頁 |
 | `N` | 顯示或隱藏 Speaker Notes |
 | `F` | 全螢幕 |

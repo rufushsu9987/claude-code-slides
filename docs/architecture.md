@@ -15,7 +15,7 @@ Codex CLI / ChatGPT desktop Codex
         │    └─ skills/*/SKILL.md
         │
         └─ Repository development
-             └─ .agents/skills/* -> ../../skills/*
+             └─ .agents/skills/* -> ../../../skills/*
 ```
 
 Codex can select a skill implicitly from its description or explicitly through `$skill-name`. The same workflow files are used for installed-plugin and repository-scoped development.
