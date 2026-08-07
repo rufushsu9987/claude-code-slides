@@ -3,7 +3,11 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { checkDeck, initDeck, slugify } from '../lib/cli.mjs';
+import { checkDeck, doctor, initDeck, slugify } from '../lib/cli.mjs';
+
+test('doctor accepts the documented Node.js baseline', () => {
+  assert.equal(doctor().node.available, Number(process.versions.node.split('.')[0]) >= 18);
+});
 
 test('slugify creates stable portable identifiers', () => {
   assert.equal(slugify('AI Agent Platform 2026'), 'ai-agent-platform-2026');

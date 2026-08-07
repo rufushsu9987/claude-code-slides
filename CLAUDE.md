@@ -20,7 +20,7 @@ This repository is a Claude Code plugin, marketplace, and zero-dependency projec
 - Preserve accessibility: semantic headings, keyboard navigation, readable contrast, reduced motion, and useful alt text.
 - Do not invent facts, sources, logos, benchmarks, screenshots, or customer names.
 - Never imply that this project is maintained, endorsed, or affiliated with Anthropic.
-- Bump the version in `package.json`, both manifests, `lib/cli.mjs`, and `CHANGELOG.md` for releases.
+- Bump the version in `package.json`, both manifests, `lib/runtime.mjs`, and `CHANGELOG.md` for releases.
 
 ## Validation
 
