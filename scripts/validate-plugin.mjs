@@ -122,11 +122,21 @@ if (marketplace) {
 if (plugin && marketplace && packageJson && packageLock) {
   const entry = marketplace.plugins?.find((candidate) => candidate.name === plugin.name);
   if (!entry) errors.push('marketplace does not list the plugin');
-  if (entry?.source?.source !== 'url') errors.push('marketplace source must use url');
-  if (entry?.source?.url !== 'https://github.com/rufushsu9987/claude-code-slides.git') {
-    errors.push('marketplace source must reference the canonical repository');
+  if (entry?.source?.source !== 'local' || entry?.source?.path !== './') {
+    errors.push('marketplace source must resolve the plugin from the marketplace root');
   }
-  if (entry?.source?.ref !== 'main') errors.push('marketplace source must track main');
+  if (entry?.version !== plugin.version) {
+    errors.push('marketplace fallback version must match plugin.json');
+  }
+  if (!entry?.description || !entry?.interface?.displayName) {
+    errors.push('marketplace entry must include searchable fallback metadata');
+  }
+  if (entry?.interface?.displayName !== plugin.interface?.displayName) {
+    errors.push('marketplace and plugin display names must match');
+  }
+  if (!Array.isArray(entry?.keywords) || !entry.keywords.includes('slides')) {
+    errors.push('marketplace entry must include discovery keywords');
+  }
   if (entry?.policy?.installation !== 'AVAILABLE') {
     errors.push('marketplace installation policy must be AVAILABLE');
   }
@@ -223,6 +233,9 @@ if (await fileExists('README.md')) {
   }
   if (!readme.includes('codex plugin marketplace add')) {
     errors.push('README.md must document Codex marketplace installation');
+  }
+  if (!readme.includes('codex plugin marketplace upgrade rufus-slides')) {
+    errors.push('README.md must document marketplace refresh');
   }
 }
 
