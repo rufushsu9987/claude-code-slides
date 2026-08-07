@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>{{TITLE}}</title>
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <div class="deck-shell">
+      <main id="deck" class="deck" aria-label="{{TITLE}} presentation" aria-live="polite">
+        <section class="slide slide--cover" data-title="Cover">
+          <div class="topline">
+            <span class="prompt-mark" aria-hidden="true">&gt;</span>
+            <span>CLAUDE CODE SLIDES</span>
+          </div>
+
+          <div class="cover-copy">
+            <p class="eyebrow">PRESENTATION / {{DATE}}</p>
+            <h1>{{TITLE}}</h1>
+            <p class="lede">Replace this sentence with the one promise your audience should remember.</p>
+          </div>
+
+          <div class="cover-meta">
+            <span>Prepared with Claude Code</span>
+            <span aria-hidden="true">→</span>
+          </div>
+
+          <aside class="notes">Open with the audience problem, not with a table of contents.</aside>
+        </section>
+
+        <section class="slide" data-title="Thesis">
+          <header class="slide-header">
+            <p class="eyebrow">01 / THE SHIFT</p>
+            <span class="status"><span class="status-dot"></span>LIVE</span>
+          </header>
+
+          <div class="thesis-layout">
+            <div>
+              <h2>The best slide makes one idea impossible to miss.</h2>
+              <p class="body-copy">Use this page for the central change, tension, or insight that frames the rest of the story.</p>
+            </div>
+            <div class="metric-block" aria-label="One idea per slide">
+              <strong>1</strong>
+              <span>idea per slide</span>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>02</span></footer>
+          <aside class="notes">Pause after the headline. Let the audience read it before adding context.</aside>
+        </section>
+
+        <section class="slide" data-title="System map">
+          <header class="slide-header">
+            <p class="eyebrow">02 / SYSTEM MAP</p>
+            <span class="mono-label">INPUT → DECISION → OUTCOME</span>
+          </header>
+
+          <div class="slide-title-row">
+            <h2>Show the path, the owner, and the boundary.</h2>
+            <p>Direct labels beat legends. Every arrow should explain what moves and why.</p>
+          </div>
+
+          <div class="flow" role="img" aria-label="Three-step flow from source material to audience outcome">
+            <article class="flow-node">
+              <span class="node-index">01</span>
+              <h3>Source</h3>
+              <p>Brief, data, code, research, or customer evidence.</p>
+            </article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-node flow-node--accent">
+              <span class="node-index">02</span>
+              <h3>Argument</h3>
+              <p>One coherent narrative with explicit tradeoffs.</p>
+            </article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-node">
+              <span class="node-index">03</span>
+              <h3>Action</h3>
+              <p>A decision, next step, or belief the audience can carry forward.</p>
+            </article>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>03</span></footer>
+          <aside class="notes">Replace the generic flow with the real architecture or decision model.</aside>
+        </section>
+
+        <section class="slide" data-title="Terminal">
+          <header class="slide-header">
+            <p class="eyebrow">03 / BUILD</p>
+            <span class="mono-label">NO CONTEXT SWITCHING</span>
+          </header>
+
+          <div class="terminal-layout">
+            <div>
+              <h2>Turn a brief into a working deck from the terminal.</h2>
+              <p class="body-copy">Keep code and commands short enough to read from the back of the room.</p>
+              <div class="takeaway"><span aria-hidden="true">↳</span> The command is evidence; the outcome is the story.</div>
+            </div>
+
+            <div class="terminal" aria-label="Terminal command example">
+              <div class="terminal-bar">
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span>~/project</span>
+              </div>
+              <pre><code><span class="terminal-prompt">$</span> claude
+<span class="terminal-muted"># inside Claude Code</span>
+<span class="terminal-prompt">&gt;</span> /claude-code-slides:create-deck
+  "Architecture review for cloud engineers"
+
+<span class="terminal-success">✓ outline approved</span>
+<span class="terminal-success">✓ 8 slides generated</span>
+<span class="terminal-success">✓ validation passed</span></code></pre>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>04</span></footer>
+          <aside class="notes">Use a live command only when the demo is reliable. Keep a screenshot fallback.</aside>
+        </section>
+
+        <section class="slide slide--closing" data-title="Close">
+          <div class="topline">
+            <span class="prompt-mark" aria-hidden="true">&gt;</span>
+            <span>NEXT ACTION</span>
+          </div>
+
+          <div class="closing-copy">
+            <p class="eyebrow">THE DECISION</p>
+            <h2>End with the action,<br /><em>not the recap.</em></h2>
+            <p>Replace this with the decision or next step you need from the room.</p>
+          </div>
+
+          <div class="closing-command"><span>$</span> start the conversation</div>
+          <aside class="notes">Ask for one concrete action, then stop speaking.</aside>
+        </section>
+      </main>
+    </div>
+
+    <div class="deck-ui" aria-hidden="true">
+      <div class="progress"><span id="progressBar"></span></div>
+      <span id="pageCounter">1 / 5</span>
+      <span class="key-hint">← → · F fullscreen · N notes · P print</span>
+    </div>
+
+    <aside id="notesPanel" class="notes-panel" aria-label="Speaker notes" hidden>
+      <div class="notes-panel__header">
+        <strong>Speaker notes</strong>
+        <button id="closeNotes" type="button">Close</button>
+      </div>
+      <div id="notesContent"></div>
+    </aside>
+
+    <script src="slides.js"></script>
+  </body>
+</html>

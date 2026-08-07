@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Example enterprise AI platform presentation" />
+    <meta name="color-scheme" content="light" />
+    <title>Enterprise AI Platform</title>
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <div class="deck-shell">
+      <main id="deck" class="deck" aria-label="Enterprise AI Platform presentation" aria-live="polite">
+        <section class="slide slide--cover" data-title="Make the safe path the fast path">
+          <div class="topline">
+            <span class="prompt-mark" aria-hidden="true">&gt;</span>
+            <span>ENTERPRISE AI · PLATFORM STRATEGY</span>
+          </div>
+
+          <div class="cover-copy">
+            <p class="eyebrow">PLATFORM THESIS / 2026</p>
+            <h1>Make the safe path<br />the fast path.</h1>
+            <p class="lede">A shared AI platform lets product teams ship useful experiences without rebuilding governance, data access, and operations every time.</p>
+          </div>
+
+          <div class="cover-meta">
+            <span>Cloud · Data · Security · AI</span>
+            <span aria-hidden="true">→</span>
+          </div>
+
+          <aside class="notes">Open with the tension: teams are asked to move fast and remain safe, but today those goals often arrive as separate workflows. The platform thesis is that the safe path should also be the easiest path.</aside>
+        </section>
+
+        <section class="slide" data-title="Repeated controls become operating risk">
+          <header class="slide-header">
+            <p class="eyebrow">01 / CURRENT FRICTION</p>
+            <span class="status"><span class="status-dot"></span>REPEATED WORK</span>
+          </header>
+
+          <div class="thesis-layout">
+            <div>
+              <h2>Repeated controls become operating risk.</h2>
+              <p class="body-copy">Identity, prompt safety, data access, evaluation, and observability are rebuilt with different quality and cost in every project.</p>
+            </div>
+            <div class="metric-block" aria-label="Five controls repeatedly rebuilt">
+              <strong>5×</strong>
+              <span>common controls</span>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>duplication compounds</span><span>02</span></footer>
+          <aside class="notes">The issue is not that product teams are careless. The organization has not yet provided reusable capabilities. Repetition creates slower delivery, uneven risk, fragmented observability, and hidden cost.</aside>
+        </section>
+
+        <section class="slide" data-title="Governance becomes part of the delivery path">
+          <header class="slide-header">
+            <p class="eyebrow">02 / PAVED ROAD</p>
+            <span class="mono-label">PRODUCT → PLATFORM → FOUNDATION</span>
+          </header>
+
+          <div class="slide-title-row">
+            <h2>Governance becomes part of the delivery path.</h2>
+            <p>Standardize the road, not every destination.</p>
+          </div>
+
+          <div class="flow" role="img" aria-label="Product teams use a shared AI platform built on a governed cloud foundation">
+            <article class="flow-node">
+              <span class="node-index">01</span>
+              <h3>Product teams</h3>
+              <p>Own users, domain logic, experience, and outcomes.</p>
+            </article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-node flow-node--accent">
+              <span class="node-index">02</span>
+              <h3>AI platform</h3>
+              <p>RAG, routing, evaluation, policy, and observability.</p>
+            </article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-node">
+              <span class="node-index">03</span>
+              <h3>Cloud foundation</h3>
+              <p>Identity, network, data, security, and cost controls.</p>
+            </article>
+          </div>
+
+          <footer class="slide-footer"><span>platform as a product</span><span>03</span></footer>
+          <aside class="notes">Explain the ownership boundary. Product teams still own the user outcome. The platform owns reusable developer capabilities. The cloud foundation owns durable enterprise controls. Governance is encoded into the path rather than added as a separate final gate.</aside>
+        </section>
+
+        <section class="slide" data-title="Teams consume policy through a paved workflow">
+          <header class="slide-header">
+            <p class="eyebrow">03 / DEVELOPER EXPERIENCE</p>
+            <span class="mono-label">POLICY AS A CAPABILITY</span>
+          </header>
+
+          <div class="terminal-layout">
+            <div>
+              <h2>Teams consume policy through a paved workflow.</h2>
+              <p class="body-copy">The platform should feel like a product: opinionated defaults, escape hatches, clear ownership, and measurable reliability.</p>
+              <div class="takeaway"><span aria-hidden="true">↳</span> Product teams own the destination; the platform owns the road.</div>
+            </div>
+
+            <div class="terminal" aria-label="AI platform deployment command">
+              <div class="terminal-bar">
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span>~/customer-assistant</span>
+              </div>
+              <pre><code><span class="terminal-prompt">$</span> ai-platform deploy
+<span class="terminal-success">✓ identity       inherited</span>
+<span class="terminal-success">✓ guardrails     enforced</span>
+<span class="terminal-success">✓ evaluation     attached</span>
+<span class="terminal-success">✓ observability  enabled</span>
+
+<span class="terminal-muted">→ deployment ready for review</span></code></pre>
+            </div>
+          </div>
+
+          <footer class="slide-footer"><span>make reuse easier than reinvention</span><span>04</span></footer>
+          <aside class="notes">The command is illustrative, not a product claim. The point is the developer contract: platform capabilities appear as a coherent workflow, while policy and telemetry are inherited by default.</aside>
+        </section>
+
+        <section class="slide slide--closing" data-title="Pilot one reusable path">
+          <div class="topline">
+            <span class="prompt-mark" aria-hidden="true">&gt;</span>
+            <span>NEXT 90 DAYS</span>
+          </div>
+
+          <div class="closing-copy">
+            <p class="eyebrow">THE DECISION</p>
+            <h2>Pilot one reusable path,<br /><em>then expand from evidence.</em></h2>
+            <p>Choose one high-value workflow and measure delivery speed, quality, risk, adoption, and cost before broad platform investment.</p>
+          </div>
+
+          <div class="closing-command"><span>$</span> start-pilot --owner platform-team --review 90d</div>
+          <aside class="notes">Ask for a concrete pilot, owner, success measures, and a 90-day review. Avoid asking the room to approve an entire platform roadmap before the first reusable path has produced evidence.</aside>
+        </section>
+      </main>
+    </div>
+
+    <div class="deck-ui" aria-hidden="true">
+      <div class="progress"><span id="progressBar"></span></div>
+      <span id="pageCounter">1 / 5</span>
+      <span class="key-hint">← → · F fullscreen · N notes · P print</span>
+    </div>
+
+    <aside id="notesPanel" class="notes-panel" aria-label="Speaker notes" hidden>
+      <div class="notes-panel__header">
+        <strong>Speaker notes</strong>
+        <button id="closeNotes" type="button">Close</button>
+      </div>
+      <div id="notesContent"></div>
+    </aside>
+
+    <script src="slides.js"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code Slides example deck</title>
+  <desc id="desc">Warm editorial presentation cover with a terminal-inspired interface.</desc>
+  <defs>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#211f1b" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+    <clipPath id="canvas-clip"><rect width="1600" height="900"/></clipPath>
+  </defs>
+  <rect width="1600" height="900" fill="#f7f3ec"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <g clip-path="url(#canvas-clip)">
+    <circle cx="1580" cy="-40" r="245" fill="none" stroke="#d97757" stroke-opacity="0.26" stroke-width="1.5"/>
+    <circle cx="1580" cy="-40" r="345" fill="none" stroke="#d97757" stroke-opacity="0.075" stroke-width="100"/>
+    <path d="M1378 141h128v128" fill="none" stroke="#d97757" stroke-opacity="0.74" stroke-width="3"/>
+  </g>
+  <text x="96" y="87" fill="#d97757" font-family="Consolas, Menlo, monospace" font-size="24" font-weight="700">&gt;</text>
+  <text x="1128" y="86" fill="#6f6962" font-family="Consolas, Menlo, monospace" font-size="18" letter-spacing="2">ENTERPRISE AI · PLATFORM STRATEGY</text>
+  <text x="96" y="246" fill="#d97757" font-family="Consolas, Menlo, monospace" font-size="25" font-weight="700" letter-spacing="7">PLATFORM THESIS / 2026</text>
+  <text x="96" y="362" fill="#211f1b" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="600" letter-spacing="-5">Make the safe path</text>
+  <text x="96" y="486" fill="#211f1b" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="600" letter-spacing="-5">the fast path.</text>
+  <text x="96" y="561" fill="#6f6962" font-family="Arial, sans-serif" font-size="32">A shared AI platform lets product teams ship useful</text>
+  <text x="96" y="609" fill="#6f6962" font-family="Arial, sans-serif" font-size="32">experiences without rebuilding governance, data access,</text>
+  <text x="96" y="657" fill="#6f6962" font-family="Arial, sans-serif" font-size="32">and operations every time.</text>
+  <line x1="96" y1="797" x2="1504" y2="797" stroke="#d8d0c6"/>
+  <text x="96" y="836" fill="#6f6962" font-family="Consolas, Menlo, monospace" font-size="17" letter-spacing="2">CLOUD · DATA · SECURITY · AI</text>
+  <text x="1492" y="837" text-anchor="end" fill="#6f6962" font-family="Consolas, Menlo, monospace" font-size="18">→</text>
+  <line x1="24" y1="872" x2="260" y2="872" stroke="#d97757" stroke-width="2"/>
+  <text x="1220" y="876" fill="#d8d0c6" font-family="Consolas, Menlo, monospace" font-size="14" letter-spacing="1">1 / 5 · ← → · F fullscreen · N notes · P print</text>
+</svg>
