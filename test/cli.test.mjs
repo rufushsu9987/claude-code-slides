@@ -9,6 +9,7 @@ import {
   doctor,
   initDeck,
   listLayouts,
+  main,
   listTemplates,
   slugify,
 } from '../lib/cli.mjs';
@@ -147,4 +148,28 @@ test('checkDeck reports accessibility and runtime warnings', async (t) => {
   assert.ok(result.warnings.some((item) => item.code === 'hash-navigation'));
   assert.ok(result.warnings.some((item) => item.code === 'print-css'));
   assert.ok(result.warnings.some((item) => item.code === 'reduced-motion'));
+});
+
+test('promo command exposes the unified pipeline help', async () => {
+  let output = '';
+  const io = { stdout: { write: (value) => { output += value; } }, stderr: { write: () => {} } };
+  const code = await main(['promo', 'help'], io);
+  assert.equal(code, 0);
+  assert.match(output, /promo run <repository-path>/);
+  assert.match(output, /--capture/);
+});
+
+test('promo command runs the deterministic intake stage and records skipped stages', async (t) => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'code-slides-promo-'));
+  t.after(() => rm(temporary, { recursive: true, force: true }));
+  let output = '';
+  const io = { stdout: { write: (value) => { output += value; } }, stderr: { write: () => {} } };
+  const code = await main(['promo', 'run', 'test/fixtures/promo-source', '--out', temporary, '--json'], io);
+  assert.equal(code, 0);
+  const result = JSON.parse(output);
+  assert.equal(result.status, 'PARTIAL');
+  assert.equal(result.stages.intake.status, 'completed');
+  assert.equal(result.stages.narration.status, 'skipped');
+  assert.match(await readFile(path.join(temporary, 'project-facts.json'), 'utf8'), /demo-project/);
+  assert.match(await readFile(path.join(temporary, 'pipeline-status.json'), 'utf8'), /manual-approval-required/);
 });

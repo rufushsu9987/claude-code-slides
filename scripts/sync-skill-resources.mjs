@@ -57,6 +57,65 @@ const mappings = [
       'skills/deck-reviewer/scripts/slides-cli.mjs',
     ],
   },
+  {
+    source: 'lib/promo.mjs',
+    executable: true,
+    destinations: [
+      'skills/repo-intake/lib/promo.mjs',
+      'skills/narration-producer/lib/promo.mjs',
+      'skills/html-video-renderer/lib/promo.mjs',
+      'skills/media-qa/lib/promo.mjs',
+      'skills/release-packager/lib/promo.mjs',
+      'skills/promo-video/lib/promo.mjs',
+    ],
+  },
+  {
+    source: 'scripts/project-intake.mjs',
+    executable: true,
+    destinations: [
+      'skills/repo-intake/scripts/project-intake.mjs',
+      'skills/promo-video/scripts/project-intake.mjs',
+    ],
+  },
+  {
+    source: 'scripts/narration-pipeline.mjs',
+    executable: true,
+    destinations: [
+      'skills/narration-producer/scripts/narration-pipeline.mjs',
+      'skills/promo-video/scripts/narration-pipeline.mjs',
+    ],
+  },
+  {
+    source: 'scripts/html-video-renderer.mjs',
+    executable: true,
+    destinations: [
+      'skills/html-video-renderer/scripts/html-video-renderer.mjs',
+      'skills/promo-video/scripts/html-video-renderer.mjs',
+    ],
+  },
+  {
+    source: 'scripts/media-qa.mjs',
+    executable: true,
+    destinations: [
+      'skills/media-qa/scripts/media-qa.mjs',
+      'skills/promo-video/scripts/media-qa.mjs',
+    ],
+  },
+  {
+    source: 'scripts/release-packager.mjs',
+    executable: true,
+    destinations: [
+      'skills/release-packager/scripts/release-packager.mjs',
+      'skills/promo-video/scripts/release-packager.mjs',
+    ],
+  },
+  {
+    source: 'scripts/promo-pipeline.mjs',
+    executable: true,
+    destinations: [
+      'skills/promo-video/scripts/promo-pipeline.mjs',
+    ],
+  },
 ];
 
 let failures = 0;
