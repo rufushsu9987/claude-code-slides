@@ -4,6 +4,8 @@ A **theme** controls visual tokens: color, typography, surfaces, line treatment,
 
 Do not solve repetition by randomly moving boxes. Choose a layout because it matches the communication job of the slide, then vary the geometry only when the meaning changes.
 
+For `editorial-cover`, the right half is **optional**. Empty space is acceptable. If you use the right half, it must earn its place by carrying meaning: a real artifact, a compact proof stack, a direct system cue, or one operational signal. Avoid unlabeled orbit diagrams, abstract circles, and decorative structures that do not improve the audience's understanding within two seconds.
+
 ## Visual Grammar v2
 
 Every slide should declare five properties before implementation:
@@ -20,7 +22,7 @@ A deck can technically use twenty different class names and still feel repetitiv
 
 | Archetype | Use it for | Dominant composition |
 | --- | --- | --- |
-| `editorial-cover` | Cover or section opening | Large title, one promise, restrained metadata |
+| `editorial-cover` | Cover or section opening | Large title, one promise, restrained metadata, and an optional meaningful right-side module |
 | `hero-statement` | Thesis, tension, big idea | One decisive claim with a compact proof rail |
 | `chapter-index` | Agenda or chapter map | Oversized chapter number with a short editorial index |
 | `asymmetric-editorial` | Context or provocation | Offset copy and deliberate visual imbalance |
@@ -48,6 +50,21 @@ A deck can technically use twenty different class names and still feel repetitiv
 | `code-walkthrough` | CLI, API, implementation evidence | Projection-safe code paired with its visible result |
 | `risk-matrix` | Security or readiness | Priority risk plus mitigation and owner |
 | `closing-manifesto` | Final action or memorable conclusion | One final line and one concrete next step |
+
+## Cover execution rules
+
+Use `editorial-cover` to establish the promise of the talk, not to preview every topic.
+
+- The right half is **not mandatory**. Prefer whitespace over filler.
+- If the right half exists, choose exactly **one** meaningful pattern:
+  - **Artifact-right** — one screenshot, product frame, code crop, or architecture fragment that the talk will revisit.
+  - **Proof-rail** — two to four evidence chips such as metric, owner, constraint, or date.
+  - **Signal-stack** — one core signal with a short caption, for example “3 bottlenecks”, “12 services”, or “T+2 handoff”.
+  - **Direct system cue** — a tiny labeled boundary or flow only when the talk itself is about that system.
+- Any diagram on the cover must use direct labels and a single takeaway.
+- Never place a generic hub-and-spoke, concentric-circle, or orbit graphic on the cover unless the cover thesis is specifically about orchestration or boundaries.
+- If the title is already visually dominant, keep the right module quieter than the left and smaller than one-third of the slide width.
+- The cover should still read well in thumbnail view and in print.
 
 ## Selection workflow
 

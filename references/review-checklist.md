@@ -9,6 +9,15 @@
 - [ ] Every page advances the argument and creates a reason for the next.
 - [ ] The close gives a concrete decision, action, or memorable conclusion.
 
+## Cover
+
+- [ ] The title and audience promise are the dominant visual elements.
+- [ ] The right half is treated as optional and remains empty when no meaningful content improves the opening.
+- [ ] If present, the right half contains exactly one sourced artifact, compact proof rail, operational signal, or direct system cue.
+- [ ] Generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label diagrams are not used as decorative filler.
+- [ ] The right-side module is secondary to the title and understandable within two seconds.
+- [ ] The cover remains clear at thumbnail scale, from presentation distance, and in print.
+
 ## Content
 
 - [ ] One dominant idea per page.

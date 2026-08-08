@@ -28,6 +28,7 @@ Then inspect the deck source and all referenced local assets.
 Review:
 
 - Narrative: audience promise, thesis, sequence, transitions, close.
+- Cover: title and promise dominance, right-side information value, source quality, two-second comprehension, thumbnail readability, and whether whitespace would be stronger.
 - Content: claim quality, density, evidence, sourcing, assumptions, terminology.
 - Layout sequence: page roles, archetype fit, unique count, consecutive repeats, visual-family rhythm, card share, and rhythm changes.
 - Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity.
@@ -36,5 +37,7 @@ Review:
 - Delivery: notes, timing, demo risk, unresolved placeholders, missing assets.
 
 For decks of 10 or more slides, flag fewer than eight distinct archetypes as a Major finding unless the content clearly requires a repeated matched structure. Flag exact consecutive repeats, card-grid or node-card pages above roughly 20%, or more than four slides without a visible rhythm change.
+
+Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.
 
 Return findings grouped by Critical, Major, Minor, and Suggestions. Include page or file references and a concrete recommended fix. Lead with the three changes that would most improve the audience outcome. Do not flood the report with cosmetic details.
