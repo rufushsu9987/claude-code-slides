@@ -17,18 +17,12 @@ const expectedSkills = [
   'create-deck',
   'deck-architect',
   'deck-reviewer',
-  'html-video-renderer',
-  'media-qa',
-  'narration-producer',
-  'promo-video',
-  'release-packager',
-  'repo-intake',
   'review-deck',
   'speaker-notes',
   'visual-director',
 ];
 
-const expectedClaudeAgents = ['deck-architect', 'deck-reviewer', 'promo-video', 'visual-director'];
+const expectedClaudeAgents = ['deck-architect', 'deck-reviewer', 'visual-director'];
 
 const portableManifestFields = new Set([
   '$schema',
@@ -48,39 +42,19 @@ const skillResources = {
   'create-deck': [
     'references/storytelling.md',
     'references/style-system.md',
-    'references/layout-system.md',
     'references/output-formats.md',
     'scripts/slides-cli.mjs',
   ],
   'deck-architect': ['references/storytelling.md'],
-  'deck-reviewer': [
-    'references/review-checklist.md',
-    'references/layout-system.md',
-    'scripts/slides-cli.mjs',
-  ],
-  'html-video-renderer': ['lib/promo.mjs', 'scripts/html-video-renderer.mjs'],
-  'media-qa': ['lib/promo.mjs', 'scripts/media-qa.mjs'],
-  'narration-producer': ['lib/promo.mjs', 'scripts/narration-pipeline.mjs'],
-  'promo-video': [
-    'lib/promo.mjs',
-    'scripts/project-intake.mjs',
-    'scripts/narration-pipeline.mjs',
-    'scripts/html-video-renderer.mjs',
-    'scripts/media-qa.mjs',
-    'scripts/release-packager.mjs',
-    'scripts/promo-pipeline.mjs',
-  ],
-  'release-packager': ['lib/promo.mjs', 'scripts/release-packager.mjs'],
-  'repo-intake': ['lib/promo.mjs', 'scripts/project-intake.mjs'],
+  'deck-reviewer': ['references/review-checklist.md', 'scripts/slides-cli.mjs'],
   'review-deck': [
     'references/review-checklist.md',
     'references/style-system.md',
-    'references/layout-system.md',
     'references/output-formats.md',
     'scripts/slides-cli.mjs',
   ],
   'speaker-notes': [],
-  'visual-director': ['references/style-system.md', 'references/layout-system.md'],
+  'visual-director': ['references/style-system.md'],
 };
 
 async function readJson(relativePath) {
@@ -460,26 +434,9 @@ for (const executable of [
   'bin/codex-slides.mjs',
   'bin/claude-slides.mjs',
   'scripts/skill-cli-wrapper.mjs',
-  'scripts/project-intake.mjs',
-  'scripts/narration-pipeline.mjs',
-  'scripts/html-video-renderer.mjs',
-  'scripts/media-qa.mjs',
-  'scripts/release-packager.mjs',
-  'scripts/promo-pipeline.mjs',
   'skills/create-deck/scripts/slides-cli.mjs',
   'skills/review-deck/scripts/slides-cli.mjs',
   'skills/deck-reviewer/scripts/slides-cli.mjs',
-  'skills/repo-intake/scripts/project-intake.mjs',
-  'skills/narration-producer/scripts/narration-pipeline.mjs',
-  'skills/html-video-renderer/scripts/html-video-renderer.mjs',
-  'skills/media-qa/scripts/media-qa.mjs',
-  'skills/release-packager/scripts/release-packager.mjs',
-  'skills/promo-video/scripts/project-intake.mjs',
-  'skills/promo-video/scripts/narration-pipeline.mjs',
-  'skills/promo-video/scripts/html-video-renderer.mjs',
-  'skills/promo-video/scripts/media-qa.mjs',
-  'skills/promo-video/scripts/release-packager.mjs',
-  'skills/promo-video/scripts/promo-pipeline.mjs',
 ]) {
   if (!(await fileExists(executable))) continue;
   const mode = (await stat(path.join(root, executable))).mode;
@@ -488,7 +445,7 @@ for (const executable of [
 
 if (await fileExists('README.md')) {
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
-  for (const skill of ['create-deck', 'review-deck', 'speaker-notes', 'promo-video']) {
+  for (const skill of ['create-deck', 'review-deck', 'speaker-notes']) {
     if (!readme.includes(`$${skill}`)) {
       errors.push(`README.md must document Codex skill $${skill}`);
     }

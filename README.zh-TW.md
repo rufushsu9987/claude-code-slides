@@ -101,34 +101,6 @@ codex-slides init "季度策略回顧" \
 | 規劃故事線 | `$deck-architect` | Skill 或 `deck-architect` Subagent |
 | 規劃視覺 | `$visual-director` | Skill 或 `visual-director` Subagent |
 | 獨立審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
-| 統一推廣 Pipeline | `$promo-video` | `/claude-code-slides:promo-video` |
-
-## 統一推廣 Pipeline
-
-`promo-video` 是唯一的頂層編排入口，內部依序整合 Repository 掃描、既有 deck 與 speaker-notes、旁白／TTS、HTML-first 影片、Media QA 與發布封裝；不需要手動操作六個頂層 Agent。
-
-```text
-$promo-video Turn this repository into a verified project introduction package.
-
-/claude-code-slides:promo-video Turn this repository into a verified project introduction package.
-```
-
-也可以直接執行 deterministic pipeline：
-
-```bash
-node scripts/promo-pipeline.mjs run . \
-  --out promo \
-  --deck promo/deck/index.html \
-  --html promo/deck/index.html \
-  --speaker-notes NARRATION.md \
-  --narration NARRATION.md \
-  --source-url https://github.com/example/project \
-  --frames promo/video/html-frames \
-  --capture \
-  --json
-```
-
-需要 HTML-derived 影片時，HTML deck 是唯一視覺來源。若缺少 capture runtime、音訊、字幕、frames 或 QA 證據，Pipeline 會標記 deferred／unverified，不會假稱完成；外部發布會停在可審查草稿，必須經人工核准。
 
 ## 安裝到 Codex
 
@@ -201,7 +173,6 @@ codex-slides init "AI Platform" --format html
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
 codex-slides check slides/cloud-review
 codex-slides doctor
-codex-slides promo run . --out promo --deck promo/deck/index.html --speaker-notes NARRATION.md --json
 ```
 
 `claude-slides` 提供相同介面。
@@ -219,8 +190,7 @@ templates/layouts.json      版型 Archetype 目錄
 .agents/skills/             Repository-scoped Codex Discovery
 .claude-plugin/             Claude Code Manifest 與 Marketplace
 agents/                     Claude Code Subagents
-bin/ + lib/                 零依賴 Scaffold、驗證與推廣 CLI
-scripts/                    確定性的 intake、旁白、渲染、QA 與封裝階段
+bin/ + lib/                 零依賴 Scaffold 與驗證 CLI
 templates/                  HTML、Marp、PptxGenJS Base
 ```
 
@@ -234,7 +204,7 @@ npm run sync:skills
 npm run check
 ```
 
-測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 16 種版型目錄、12 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter、deterministic 推廣 Pipeline 與範例簡報。
+測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 16 種版型目錄、12 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
 
 ## 獨立性聲明
 
