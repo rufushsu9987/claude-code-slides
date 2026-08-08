@@ -31,9 +31,10 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 
 4. Use the sibling `deck-reviewer` skill as an independent review pass when available.
 5. Inspect every page and synthesize findings without repeating automated warnings.
-6. Audit the layout sequence: unique archetypes, consecutive repeats, visual-family repetition, card share, and rhythm changes.
-7. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
-8. Re-run validation and preview or generate the deliverable when possible.
+6. Audit the cover separately: title and promise dominance, whether the right half has a clear information job, source quality, two-second comprehension, and thumbnail readability.
+7. Audit the layout sequence: unique archetypes, consecutive repeats, visual-family repetition, card share, and rhythm changes.
+8. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
+9. Re-run validation and preview or generate the deliverable when possible.
 
 ## Review dimensions
 
@@ -64,6 +65,8 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 - Is there a visible rhythm change every three to four pages?
 - Is hierarchy obvious within two seconds?
 - Is there one dominant element per page?
+- Does the cover's right half carry one meaningful artifact, proof, signal, or direct system cue—or remain empty when none exists?
+- Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
 
@@ -85,7 +88,7 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 ## Severity
 
 - **Critical**: broken output, missing content or assets, unreadable page, false claim, security or confidentiality issue.
-- **Major**: narrative gap, severe density, repetitive layout sequence, accessibility failure, likely overflow, unreliable demo.
+- **Major**: narrative gap, severe density, repetitive layout sequence, decorative or meaningless cover visual, accessibility failure, likely overflow, unreliable demo.
 - **Minor**: polish issue that does not block delivery.
 - **Suggestion**: optional enhancement with a clear audience benefit.
 

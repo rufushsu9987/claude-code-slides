@@ -82,6 +82,8 @@ For non-trivial decks, use the sibling `deck-architect` and `visual-director` sk
 
 Synthesize one concise outline. Every page must have one job, one memorable takeaway, and one layout archetype selected from the bundled layout system. A useful narrative sequence is cover → context → tension → thesis → evidence → execution → risks → decision, but adapt it to the source.
 
+For every `editorial-cover`, explicitly record `coverRight` as one of `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, plus the source or rationale. Choose `none` when no source-backed artifact, proof, or signal improves the opening.
+
 Before implementation, produce a layout sequence and check it against these rules:
 
 - Use at least eight distinct archetypes in a deck of 10 or more slides when the content supports them.
@@ -127,6 +129,14 @@ Content rules:
 - Use useful alt text and text equivalents for meaningful visuals.
 - Never fabricate logos, customer names, benchmarks, citations, product screenshots, or research findings.
 - Do not use private or copyrighted assets without authorization and attribution.
+
+Cover rules:
+
+- Keep the title and audience promise dominant. The right half is optional; whitespace is a valid and often preferable design decision.
+- If the right half is used, include exactly one meaningful module: a sourced artifact, a compact proof rail, one operational signal, or a tiny direct system cue.
+- Never invent a generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram merely to fill space.
+- A cover visual must be understandable within two seconds, remain secondary to the title, and be readable from the back of the room.
+- Prefer removing a weak visual over adding decorative complexity.
 
 Technical-deck rules:
 

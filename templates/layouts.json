@@ -56,15 +56,15 @@
     {
       "name": "editorial-cover",
       "family": "opening",
-      "description": "Large editorial title, one audience promise, and restrained metadata.",
+      "description": "Large editorial title, one audience promise, restrained metadata, and an optional meaningful right-side module.",
       "bestFor": ["cover", "section opening"],
       "dominantElement": "title",
       "eyePath": "top-left to lower-right",
       "density": "low",
       "geometry": "full-bleed",
       "cardBased": false,
-      "variants": ["title-left", "title-bottom", "dark-cover"],
-      "avoid": "Do not add an agenda, feature grid, and long subtitle to the cover.",
+      "variants": ["title-left", "artifact-right", "proof-rail", "signal-stack", "dark-cover"],
+      "avoid": "Do not add an agenda, generic orbit diagram, decorative concentric circles, feature grid, or long subtitle to the cover.",
       "formats": ["html", "marp", "pptx"]
     },
     {

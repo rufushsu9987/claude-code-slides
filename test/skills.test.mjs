@@ -64,3 +64,34 @@ test('portable deck workflows explicitly enforce layout diversity', async () => 
     assert.match(content, /20%/);
   }
 });
+
+test('cover guidance prefers meaningful evidence or whitespace over decorative right-side filler', async () => {
+  const [layoutSystem, createDeck, visualDirector, reviewDeck, deckReviewer, reviewChecklist, layoutsText] = await Promise.all([
+    readFile('references/layout-system.md', 'utf8'),
+    readFile('skills/create-deck/SKILL.md', 'utf8'),
+    readFile('skills/visual-director/SKILL.md', 'utf8'),
+    readFile('skills/review-deck/SKILL.md', 'utf8'),
+    readFile('skills/deck-reviewer/SKILL.md', 'utf8'),
+    readFile('references/review-checklist.md', 'utf8'),
+    readFile('templates/layouts.json', 'utf8'),
+  ]);
+
+  assert.match(layoutSystem, /right half is \*\*optional\*\*/i);
+  assert.match(layoutSystem, /artifact-right/i);
+  assert.match(layoutSystem, /generic hub-and-spoke|concentric-circle|orbit graphic/i);
+  assert.match(createDeck, /coverRight/);
+  assert.match(createDeck, /leave the space empty|whitespace is a valid/i);
+  assert.match(visualDirector, /never invent generic orbit/i);
+  assert.match(reviewDeck, /decorative or meaningless cover visual/i);
+  assert.match(deckReviewer, /flag a cover as Major/i);
+  assert.match(reviewChecklist, /decorative filler/i);
+
+  const layouts = JSON.parse(layoutsText);
+  const cover = layouts.archetypes.find((layout) => layout.name === 'editorial-cover');
+  assert.ok(cover);
+  for (const variant of ['artifact-right', 'proof-rail', 'signal-stack']) {
+    assert.ok(cover.variants.includes(variant), variant);
+  }
+  assert.match(cover.avoid, /orbit|concentric/i);
+});
+
