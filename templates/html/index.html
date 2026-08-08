@@ -10,182 +10,123 @@
   <body>
     <div class="deck-shell">
       <main id="deck" class="deck" aria-label="{{TITLE}} presentation" aria-live="polite">
-        <section class="slide slide--cover" data-title="Cover" data-layout="editorial-cover">
-          <div class="topline">
-            <span class="prompt-mark" aria-hidden="true">&gt;</span>
-            <span>CLAUDE CODE SLIDES</span>
-          </div>
-
+        <section class="slide slide--cover" data-title="Cover" data-layout="editorial-cover" data-geometry="full-bleed">
+          <div class="topline"><span class="prompt-mark" aria-hidden="true">&gt;</span><span>CLAUDE CODE SLIDES</span></div>
           <div class="cover-copy">
             <p class="eyebrow">PRESENTATION / {{DATE}}</p>
             <h1>{{TITLE}}</h1>
             <p class="lede">Replace this sentence with the one promise your audience should remember.</p>
           </div>
-
-          <div class="cover-meta">
-            <span>{{TEMPLATE_NAME}} · 15 layout starters</span>
-            <span aria-hidden="true">→</span>
-          </div>
-
+          <div class="cover-meta"><span>{{TEMPLATE_NAME}} · 20 layout starters</span><span aria-hidden="true">→</span></div>
           <aside class="notes">Open with the audience problem, not with a table of contents.</aside>
         </section>
 
-        <section class="slide" data-title="Thesis" data-layout="hero-statement">
-          <header class="slide-header">
-            <p class="eyebrow">01 / THESIS</p>
-            <span class="mono-label">CLAIM + PROOF</span>
-          </header>
-
+        <section class="slide" data-title="Thesis" data-layout="hero-statement" data-geometry="hero-plus-rail">
+          <header class="slide-header"><p class="eyebrow">01 / THESIS</p><span class="mono-label">CLAIM + PROOF</span></header>
           <div class="hero-layout">
-            <div>
+            <div class="hero-claim">
               <h2>The layout should change when the communication job changes.</h2>
-              <p class="body-copy">Keep the visual language stable while varying composition, density, and eye path.</p>
+              <p class="body-copy">Keep the visual language stable while varying composition, geometry, density, and eye path.</p>
             </div>
             <div class="proof-rail" aria-label="Layout diversity proof points">
-              <div class="proof-item"><strong>19</strong><span>available archetypes</span></div>
-              <div class="proof-item"><strong>8+</strong><span>unique layouts in a 10-page deck</span></div>
+              <div class="proof-item"><strong>28</strong><span>semantic archetypes</span></div>
+              <div class="proof-item"><strong>20</strong><span>distinct starter geometries</span></div>
               <div class="proof-item"><strong>0</strong><span>consecutive repeats</span></div>
             </div>
           </div>
-
           <footer class="slide-footer"><span>{{SLUG}}</span><span>02</span></footer>
-          <aside class="notes">State the governing principle before showing examples. The theme stays consistent; the layout follows meaning.</aside>
+          <aside class="notes">State the governing principle first: style stays coherent while composition follows meaning.</aside>
         </section>
 
-        <section class="slide" data-title="Before and after" data-layout="before-after">
-          <header class="slide-header">
-            <p class="eyebrow">02 / TRANSFORMATION</p>
-            <span class="mono-label">CURRENT → TARGET</span>
-          </header>
+        <section class="slide slide--index" data-title="Chapter index" data-layout="chapter-index" data-geometry="index-rail">
+          <header class="slide-header"><p class="eyebrow">02 / STORY MAP</p><span class="mono-label">FOUR MOVES</span></header>
+          <div class="chapter-index-layout">
+            <div class="chapter-number" aria-hidden="true">04</div>
+            <div class="chapter-copy">
+              <h2>A deck needs a rhythm, not a pile of interchangeable pages.</h2>
+              <p>Use the index as a promise of movement rather than a list of every topic.</p>
+            </div>
+            <ol class="chapter-list">
+              <li><span>01</span><strong>Frame</strong><small>Context and tension</small></li>
+              <li><span>02</span><strong>Reveal</strong><small>System and evidence</small></li>
+              <li><span>03</span><strong>Decide</strong><small>Trade-offs and risk</small></li>
+              <li><span>04</span><strong>Act</strong><small>Owner and next step</small></li>
+            </ol>
+          </div>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>03</span></footer>
+          <aside class="notes">A chapter index should expose the audience journey in three to five meaningful moves.</aside>
+        </section>
 
+        <section class="slide" data-title="Before and after" data-layout="before-after" data-geometry="matched-comparison">
+          <header class="slide-header"><p class="eyebrow">03 / TRANSFORMATION</p><span class="mono-label">CURRENT → TARGET</span></header>
           <div class="slide-title-row">
-            <h2>Move from repeated cards to content-aware composition.</h2>
+            <h2>Move from repeated containers to content-aware composition.</h2>
             <p>Use matched criteria so the audience sees the actual change instead of two unrelated lists.</p>
           </div>
-
           <div class="before-after" role="img" aria-label="Before and after comparison of repetitive layouts and content-aware layouts">
             <article class="state-panel">
               <span class="state-label">Before</span>
-              <h3>One structure for every page</h3>
-              <ul class="state-list">
-                <li>Repeated left–right split</li>
-                <li>Card grid for unrelated content</li>
-                <li>Visual rhythm stays flat</li>
-              </ul>
+              <h3>Different labels, same geometry</h3>
+              <ul class="state-list"><li>Left copy and right card</li><li>Cards for unrelated content</li><li>Flat thumbnail rhythm</li></ul>
             </article>
-            <div class="delta-arrow" aria-hidden="true">→</div>
+            <div class="delta-column"><span>Δ</span><small>meaning drives form</small></div>
             <article class="state-panel state-panel--target">
               <span class="state-label">Target</span>
-              <h3>Layout selected by slide role</h3>
-              <ul class="state-list">
-                <li>Architecture uses layers or flows</li>
-                <li>Evidence gets visual priority</li>
-                <li>Decisions end with a clear ask</li>
-              </ul>
+              <h3>Geometry selected by the slide’s job</h3>
+              <ul class="state-list"><li>Systems use boundaries or hubs</li><li>Evidence becomes the anchor</li><li>Decisions end with an action</li></ul>
             </article>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>03</span></footer>
-          <aside class="notes">Explain the delta using the same criteria on both sides. Do not turn this into two unrelated feature lists.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>04</span></footer>
+          <aside class="notes">Explain the delta using the same criteria on both sides.</aside>
         </section>
 
-        <section class="slide" data-title="Layered architecture" data-layout="layered-architecture">
-          <header class="slide-header">
-            <p class="eyebrow">03 / LAYERED ARCHITECTURE</p>
-            <span class="mono-label">OWNERSHIP · TRUST · OPERATIONS</span>
-          </header>
-
+        <section class="slide" data-title="Layered architecture" data-layout="layered-architecture" data-geometry="stacked-layers">
+          <header class="slide-header"><p class="eyebrow">04 / LAYERED ARCHITECTURE</p><span class="mono-label">OWNERSHIP · TRUST · OPERATIONS</span></header>
           <div class="architecture-layout">
             <div class="architecture-copy">
-              <h2>Use layers when responsibility changes by boundary.</h2>
+              <h2>Use layers only when responsibility changes by boundary.</h2>
               <p class="body-copy">Label who owns each layer, what it exposes, and where policy is enforced.</p>
-              <div class="boundary-note"><span aria-hidden="true">↳</span> A boundary must explain a responsibility, not just draw a box.</div>
+              <div class="takeaway"><span aria-hidden="true">↳</span>A boundary must explain responsibility—not just draw a box.</div>
             </div>
-
             <div class="architecture-stack" role="img" aria-label="Four-layer platform architecture">
-              <div class="architecture-layer architecture-layer--accent">
-                <span class="layer-index">01</span><strong>Experience</strong><span class="layer-meta">Product teams</span>
-              </div>
-              <div class="architecture-layer">
-                <span class="layer-index">02</span><strong>Application services</strong><span class="layer-meta">APIs · workflows</span>
-              </div>
-              <div class="architecture-layer">
-                <span class="layer-index">03</span><strong>Platform controls</strong><span class="layer-meta">Identity · policy · observability</span>
-              </div>
-              <div class="architecture-layer">
-                <span class="layer-index">04</span><strong>Infrastructure</strong><span class="layer-meta">Compute · network · data</span>
-              </div>
+              <div class="architecture-layer architecture-layer--accent"><span class="layer-index">01</span><strong>Experience</strong><span class="layer-meta">Product teams</span></div>
+              <div class="architecture-layer"><span class="layer-index">02</span><strong>Application services</strong><span class="layer-meta">APIs · workflows</span></div>
+              <div class="architecture-layer"><span class="layer-index">03</span><strong>Platform controls</strong><span class="layer-meta">Identity · policy · observability</span></div>
+              <div class="architecture-layer"><span class="layer-index">04</span><strong>Infrastructure</strong><span class="layer-meta">Compute · network · data</span></div>
             </div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>04</span></footer>
-          <aside class="notes">Walk from the audience-facing layer down to the operating foundation. Name the owner and control at each boundary.</aside>
-        </section>
-
-        <section class="slide" data-title="Flow architecture" data-layout="flow-architecture">
-          <header class="slide-header">
-            <p class="eyebrow">04 / FLOW ARCHITECTURE</p>
-            <span class="mono-label">INPUT → DECISION → OUTCOME</span>
-          </header>
-
-          <div class="slide-title-row">
-            <h2>Show what moves, who owns it, and why the next step exists.</h2>
-            <p>Direct labels beat legends. Every arrow should name data, protocol, identity, or decision.</p>
-          </div>
-
-          <div class="flow" role="img" aria-label="Three-step flow from source material to audience action">
-            <article class="flow-node">
-              <span class="node-index">01</span>
-              <h3>Source</h3>
-              <p>Brief, data, code, research, or customer evidence.</p>
-            </article>
-            <span class="flow-arrow" aria-hidden="true">→</span>
-            <article class="flow-node flow-node--accent">
-              <span class="node-index">02</span>
-              <h3>Argument</h3>
-              <p>One coherent narrative with explicit trade-offs.</p>
-            </article>
-            <span class="flow-arrow" aria-hidden="true">→</span>
-            <article class="flow-node">
-              <span class="node-index">03</span>
-              <h3>Action</h3>
-              <p>A decision, next step, or belief the audience can carry forward.</p>
-            </article>
-          </div>
-
           <footer class="slide-footer"><span>{{SLUG}}</span><span>05</span></footer>
-          <aside class="notes">Replace the generic flow with the real request path, data flow, or decision model.</aside>
+          <aside class="notes">Walk from the audience-facing layer down to the operating foundation.</aside>
         </section>
 
-        <section class="slide" data-title="Metric spotlight" data-layout="metric-spotlight">
-          <header class="slide-header">
-            <p class="eyebrow">05 / OUTCOME</p>
-            <span class="mono-label">ONE NUMBER DOMINATES</span>
-          </header>
-
+        <section class="slide" data-title="Metric spotlight" data-layout="metric-spotlight" data-geometry="metric-stage">
+          <header class="slide-header"><p class="eyebrow">05 / OUTCOME</p><span class="mono-label">ONE NUMBER DOMINATES</span></header>
           <div class="metric-stage">
             <div class="metric-primary">
-              <span class="metric-kicker">LAYOUT DIVERSITY</span>
+              <span class="metric-kicker">GEOMETRY DIVERSITY</span>
               <strong>80%</strong>
-              <p>of a 10-slide deck should use a distinct composition before any layout repeats.</p>
+              <p>of a ten-slide deck should use a distinct composition before any geometry repeats.</p>
             </div>
             <div class="metric-secondary">
               <div class="metric-line"><strong>≤20%</strong><span>card-based pages</span></div>
-              <div class="metric-line"><strong>3–4</strong><span>slides between rhythm changes</span></div>
-              <div class="metric-line"><strong>1</strong><span>dominant idea per page</span></div>
+              <div class="metric-line"><strong>≤35%</strong><span>generic split screens</span></div>
+              <div class="metric-line"><strong>3</strong><span>slides between rhythm changes</span></div>
             </div>
           </div>
-
           <footer class="slide-footer"><span>{{SLUG}}</span><span>06</span></footer>
-          <aside class="notes">Use the large number only when it is meaningful and sourced. Replace these design-system metrics with real evidence in production decks.</aside>
+          <aside class="notes">Replace these design-system measures with verified evidence in a production deck.</aside>
         </section>
 
-        <section class="slide" data-title="Evidence and claim" data-layout="evidence-claim">
-          <header class="slide-header">
-            <p class="eyebrow">06 / EVIDENCE</p>
-            <span class="mono-label">PROOF NEXT TO CLAIM</span>
-          </header>
+        <section class="slide slide--visual" data-title="System map" data-layout="system-map" data-geometry="hub-and-spoke">
+          <header class="slide-header"><p class="eyebrow">06 / SYSTEM MAP</p><span class="mono-label">ACTORS · HUB · BOUNDARY</span></header>
+          <div class="visual-title"><h2>Map access, trust, and policy boundaries.</h2><p>Use a hub when orchestration is central; use the boundary to show trust and ownership.</p></div>
+          <figure class="visual-stage visual-stage--map"><img src="assets/system-map.svg" alt="Hub-and-boundary map of a user, agent control plane, tools, context, observability, and model gateway" /></figure>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>07</span></footer>
+          <aside class="notes">Every connection should name access, data, protocol, or responsibility. Avoid logo clouds.</aside>
+        </section>
 
+        <section class="slide" data-title="Evidence and claim" data-layout="evidence-claim" data-geometry="evidence-anchor">
+          <header class="slide-header"><p class="eyebrow">07 / EVIDENCE</p><span class="mono-label">PROOF BEFORE EXPLANATION</span></header>
           <div class="evidence-layout">
             <figure class="evidence-visual" aria-label="Illustrative chart showing increasing audience recall">
               <figcaption>Audience recall / illustrative</figcaption>
@@ -194,223 +135,168 @@
                 <div class="mini-bar" style="--bar: 58%"><span>Mixed</span><i></i><b>58</b></div>
                 <div class="mini-bar mini-bar--accent" style="--bar: 82%"><span>Purposeful</span><i></i><b>82</b></div>
               </div>
-              <p class="source-note">Replace illustrative data with a verified source and date.</p>
+              <p class="source-note">Replace illustrative data with a verified source, date, and definition.</p>
             </figure>
-
             <div class="evidence-copy">
               <span class="eyebrow">THE CLAIM</span>
               <h2>Evidence becomes memorable when the page gives it visual priority.</h2>
-              <p>Keep the explanation adjacent, but let the chart, screenshot, quote, or example remain the anchor.</p>
+              <p>Keep explanation adjacent, but let the chart, screenshot, quotation, or artifact remain the anchor.</p>
             </div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>07</span></footer>
-          <aside class="notes">This sample chart is explicitly illustrative. Production decks must replace it with verified evidence and a readable source note.</aside>
-        </section>
-
-        <section class="slide" data-title="Infographic story" data-layout="infographic-story">
-          <header class="slide-header">
-            <p class="eyebrow">07 / INFOGRAPHIC</p>
-            <span class="mono-label">PROBLEM → METHOD → RESULT</span>
-          </header>
-
-          <div class="infographic-layout">
-            <div class="infographic-copy">
-              <h2>Make the whole argument visible in one glance.</h2>
-              <p class="body-copy">Use a visual handoff when the audience needs to understand the problem, the method, and the deliverable before the detail.</p>
-              <div class="takeaway"><span aria-hidden="true">↳</span> Python creates the vector asset; the slide keeps the story editable.</div>
-            </div>
-            <figure class="infographic-art">
-              <img src="assets/infographic-story.svg" alt="Diagram showing a problem moving through a method into a result" />
-              <figcaption>Generated SVG art is an anchor, not a replacement for the slide structure.</figcaption>
-            </figure>
-          </div>
-
           <footer class="slide-footer"><span>{{SLUG}}</span><span>08</span></footer>
-          <aside class="notes">Use this layout for a one-slide explainer. Keep the problem, method, and result labels concrete and short.</aside>
+          <aside class="notes">This sample chart is illustrative and must be replaced with verified evidence.</aside>
         </section>
 
-        <section class="slide" data-title="Data journey" data-layout="data-journey">
-          <header class="slide-header">
-            <p class="eyebrow">08 / DATA JOURNEY</p>
-            <span class="mono-label">STATE + MOVEMENT</span>
-          </header>
+        <section class="slide" data-title="Flow architecture" data-layout="flow-architecture" data-geometry="node-flow">
+          <header class="slide-header"><p class="eyebrow">08 / FLOW ARCHITECTURE</p><span class="mono-label">LABEL THE ARROWS</span></header>
+          <div class="flow-title"><h2>Show what moves, who owns it, and why the next step exists.</h2><p>Direct labels beat legends. Every arrow should name data, protocol, identity, or decision.</p></div>
+          <div class="flow-path" role="img" aria-label="Four-step flow from source material through orchestration and validation to audience action">
+            <div class="flow-spine" aria-hidden="true"></div>
+            <article class="flow-stop"><span>01</span><h3>Source</h3><p>Brief, data, code, research.</p></article>
+            <article class="flow-stop flow-stop--low"><span>02</span><h3>Orchestrate</h3><p>Plan the story and call tools.</p></article>
+            <article class="flow-stop flow-stop--accent"><span>03</span><h3>Validate</h3><p>Check claims, export, and risk.</p></article>
+            <article class="flow-stop flow-stop--low"><span>04</span><h3>Act</h3><p>Decision, owner, next step.</p></article>
+            <span class="flow-label flow-label--one">context</span><span class="flow-label flow-label--two">artifacts</span><span class="flow-label flow-label--three">evidence</span>
+          </div>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>09</span></footer>
+          <aside class="notes">Replace this generic path with the real request, data, or agent flow.</aside>
+        </section>
 
-          <div class="data-journey-layout">
-            <div class="data-journey-copy">
-              <p class="metric-kicker">CURRENT SIGNAL</p>
-              <strong class="data-journey-value">82%</strong>
-              <h2>Show the state first, then explain the movement.</h2>
-              <p class="body-copy">A dominant metric earns attention; a small trend gives it meaning and makes the next action easier to discuss.</p>
-            </div>
-            <figure class="data-journey-art">
-              <img src="assets/data-journey.svg" alt="Chart showing progress increasing from Q1 to Q5" />
-              <figcaption>Replace the sample trend with a verified source, date, and definition.</figcaption>
+        <section class="slide" data-title="Annotated visual" data-layout="annotated-visual" data-geometry="full-visual-callouts">
+          <header class="slide-header"><p class="eyebrow">09 / ANNOTATED VISUAL</p><span class="mono-label">ONE ARTIFACT · THREE REASONS</span></header>
+          <div class="annotated-layout">
+            <div class="annotated-copy"><h2>Let one real artifact dominate—then explain only what changes the decision.</h2><p>Use two to four callouts. The audience should still be able to see the underlying interface or architecture.</p></div>
+            <figure class="artifact-frame" aria-label="Illustrative slide editor interface with numbered callouts">
+              <div class="artifact-toolbar"><span>architecture-review.deck</span><span>Preview · Export</span></div>
+              <div class="artifact-body">
+                <div class="artifact-sidebar"><i></i><i></i><i></i><i></i></div>
+                <div class="artifact-canvas"><span class="artifact-kicker">SYSTEM MAP</span><strong>One visual anchor</strong><div class="artifact-diagram"><i></i><i></i><i></i><i></i></div></div>
+                <div class="artifact-assistant"><span>AI DIRECTOR</span><p>Use a boundary because policy changes here.</p><p>Move caveats to speaker notes.</p></div>
+              </div>
+              <span class="callout callout--one">1</span><span class="callout-line callout-line--one"></span><p class="callout-copy callout-copy--one"><b>Hierarchy</b> keeps the canvas dominant.</p>
+              <span class="callout callout--two">2</span><span class="callout-line callout-line--two"></span><p class="callout-copy callout-copy--two"><b>Context</b> stays adjacent to the artifact.</p>
+              <span class="callout callout--three">3</span><span class="callout-line callout-line--three"></span><p class="callout-copy callout-copy--three"><b>Action</b> remains visible without another card grid.</p>
             </figure>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>09</span></footer>
-          <aside class="notes">Do not use a large number without a definition. Pair the metric with its direction, source, and decision implication.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>10</span></footer>
+          <aside class="notes">Use a real screenshot or architecture artifact in production. Avoid covering it with labels.</aside>
         </section>
 
-        <section class="slide" data-title="Code walkthrough" data-layout="code-walkthrough">
-          <header class="slide-header">
-            <p class="eyebrow">09 / BUILD</p>
-            <span class="mono-label">COMMAND AS EVIDENCE</span>
-          </header>
+        <section class="slide slide--visual" data-title="Infographic story" data-layout="infographic-story" data-geometry="scene-journey">
+          <header class="slide-header"><p class="eyebrow">10 / INFOGRAPHIC STORY</p><span class="mono-label">CHAOS → HUMAN + AGENT → OUTCOME</span></header>
+          <div class="visual-title visual-title--wide"><h2>Turn the argument into a scene.</h2><p>The result should be tangible: a decision, dashboard, shipped asset, or changed behavior—not a generic “result” box.</p></div>
+          <figure class="visual-stage visual-stage--story"><img src="assets/infographic-story.svg" alt="Sketch-style scene showing scattered files moving through GitHub, an AI agent, and a human into a progress dashboard" /></figure>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>11</span></footer>
+          <aside class="notes">This visual is inspired by a hand-drawn three-act story, but keeps the human in control and the outcome concrete.</aside>
+        </section>
 
-          <div class="terminal-layout">
-            <div>
-              <h2>Use code to prove the workflow—not to decorate the page.</h2>
-              <p class="body-copy">Crop to the lines the audience needs and pair them with the visible outcome.</p>
-              <div class="takeaway"><span aria-hidden="true">↳</span> The command is evidence; the result is the story.</div>
-            </div>
-
+        <section class="slide" data-title="Code walkthrough" data-layout="code-walkthrough" data-geometry="terminal-stage">
+          <header class="slide-header"><p class="eyebrow">11 / BUILD</p><span class="mono-label">COMMAND AS EVIDENCE</span></header>
+          <div class="terminal-stage">
+            <div class="terminal-copy"><h2>Use code to prove the workflow—not to decorate the page.</h2><p class="body-copy">Crop to the lines the audience needs and pair them with the visible outcome.</p><div class="takeaway"><span>↳</span>The command is evidence; the result is the story.</div></div>
             <div class="terminal" aria-label="Terminal command example">
-              <div class="terminal-bar">
-                <span class="terminal-dot"></span>
-                <span class="terminal-dot"></span>
-                <span class="terminal-dot"></span>
-                <span>~/project</span>
-              </div>
+              <div class="terminal-bar"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span>~/project</span></div>
               <pre><code><span class="terminal-prompt">$</span> codex-slides init "Architecture Review" \
   --format pptx \
   --template claude-editorial
 
-<span class="terminal-success">✓ 15 layout starters created</span>
-<span class="terminal-success">✓ editable PPTX source generated</span>
-<span class="terminal-success">✓ validation passed</span></code></pre>
+<span class="terminal-success">✓ 20 layout starters created</span>
+<span class="terminal-success">✓ geometry audit passed</span>
+<span class="terminal-success">✓ editable PPTX source generated</span></code></pre>
             </div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>10</span></footer>
-          <aside class="notes">Use a live command only when the demo is reliable. Keep a screenshot or recorded fallback.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>12</span></footer>
+          <aside class="notes">Keep a screenshot or recorded fallback for live demos.</aside>
         </section>
 
-        <section class="slide" data-title="Comparison matrix" data-layout="comparison-matrix">
-          <header class="slide-header">
-            <p class="eyebrow">10 / TRADE-OFF</p>
-            <span class="mono-label">SHARED AXIS</span>
-          </header>
+        <section class="slide slide--visual" data-title="Data journey" data-layout="data-journey" data-geometry="metric-to-trend">
+          <header class="slide-header"><p class="eyebrow">12 / DATA JOURNEY</p><span class="mono-label">STATE + MOVEMENT + DECISION</span></header>
+          <div class="visual-title"><h2>Show the state, movement, and next action.</h2><p>A large metric earns attention; the trend and definition make it trustworthy.</p></div>
+          <figure class="visual-stage visual-stage--data"><img src="assets/data-journey.svg" alt="Metric and line trend connected to a decision implication" /></figure>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>13</span></footer>
+          <aside class="notes">Pair the metric with source, date, definition, direction, and decision implication.</aside>
+        </section>
 
+        <section class="slide slide--quote" data-title="Quote evidence" data-layout="quote-evidence" data-geometry="quote-stage">
+          <header class="slide-header"><p class="eyebrow">13 / VOICE OF EVIDENCE</p><span class="mono-label">QUOTE → CONTEXT → IMPLICATION</span></header>
+          <div class="quote-layout">
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <blockquote>We stopped debating slide decoration and started discussing the architecture decision.</blockquote>
+            <div class="quote-source"><strong>Verified participant or customer</strong><span>Role · organization · interview date</span></div>
+            <div class="quote-implication"><span class="state-label">WHY IT MATTERS</span><p>A quotation is evidence only when the source is real, the context is clear, and the interpretation is explicit.</p></div>
+          </div>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>14</span></footer>
+          <aside class="notes">Never fabricate a quotation. Replace this placeholder with an authorized, verifiable source.</aside>
+        </section>
+
+        <section class="slide" data-title="Comparison matrix" data-layout="comparison-matrix" data-geometry="matrix">
+          <header class="slide-header"><p class="eyebrow">14 / TRADE-OFF</p><span class="mono-label">SHARED AXIS</span></header>
           <div class="comparison-layout">
             <h2>Compare options on the criteria that determine the decision.</h2>
             <div class="comparison-table" role="table" aria-label="Comparison of repeated and content-aware layout approaches">
-              <div class="comparison-row comparison-row--header" role="row">
-                <span role="columnheader">Criterion</span><span role="columnheader">Repeated template</span><span role="columnheader">Content-aware system</span>
-              </div>
-              <div class="comparison-row" role="row"><strong role="rowheader">Speed</strong><span>Fast first draft</span><span>Fast with reusable archetypes</span></div>
-              <div class="comparison-row" role="row"><strong role="rowheader">Clarity</strong><span>Depends on one generic frame</span><span>Composition follows the message</span></div>
-              <div class="comparison-row" role="row"><strong role="rowheader">Rhythm</strong><span>Flat across the deck</span><span class="recommended">Varied but visually consistent</span></div>
-              <div class="comparison-row" role="row"><strong role="rowheader">Maintenance</strong><span>Many one-off fixes</span><span>Shared layout vocabulary</span></div>
+              <div class="comparison-row comparison-row--header" role="row"><span>Criterion</span><span>Repeated template</span><span>Visual Grammar v2</span></div>
+              <div class="comparison-row" role="row"><strong>Speed</strong><span>Fast first draft</span><span>Fast with reusable archetypes</span></div>
+              <div class="comparison-row" role="row"><strong>Clarity</strong><span>Depends on one generic frame</span><span>Geometry follows the message</span></div>
+              <div class="comparison-row" role="row"><strong>Rhythm</strong><span>Different labels, similar thumbnails</span><span class="recommended">Audited by geometry and density</span></div>
+              <div class="comparison-row" role="row"><strong>Maintenance</strong><span>Many one-off fixes</span><span>Shared visual primitives and tests</span></div>
             </div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>11</span></footer>
-          <aside class="notes">Use the same criteria for both options. Highlight the recommendation only after the comparison is fair.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>15</span></footer>
+          <aside class="notes">Use the same criteria for every option before highlighting the recommendation.</aside>
         </section>
 
-        <section class="slide" data-title="Decision path" data-layout="decision-path">
-          <header class="slide-header">
-            <p class="eyebrow">11 / DECISION</p>
-            <span class="mono-label">SIGNAL → EVALUATE → ACTION</span>
-          </header>
-
-          <div class="decision-path-layout">
-            <div class="decision-path-copy">
-              <h2>Turn choices into a path the room can act on.</h2>
-              <p class="body-copy">Make the evaluation point explicit, then show the consequence of proceeding, pausing, or collecting evidence.</p>
-              <div class="decision-callout"><span class="state-label">RECOMMENDATION</span><strong>Make the next action visible.</strong></div>
-            </div>
-            <figure class="decision-path-art">
-              <img src="assets/decision-path.svg" alt="Decision path from signal to proceed or pause" />
-              <figcaption>Use a clear branch only when the criteria are named.</figcaption>
-            </figure>
-          </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>12</span></footer>
-          <aside class="notes">End decision slides with an owner, next action, and timing. Do not leave the audience with a menu of options only.</aside>
+        <section class="slide slide--visual" data-title="Decision path" data-layout="decision-path" data-geometry="branch-path">
+          <header class="slide-header"><p class="eyebrow">15 / DECISION</p><span class="mono-label">SIGNAL → CRITERIA → ACTION</span></header>
+          <div class="visual-title"><h2>Turn choices into an actionable path.</h2><p>Make the evaluation point explicit, then show the consequence of proceeding or collecting evidence.</p></div>
+          <figure class="visual-stage visual-stage--decision"><img src="assets/decision-path.svg" alt="Decision path from a changed signal through named criteria to proceed or pause" /></figure>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>16</span></footer>
+          <aside class="notes">End with an owner, next action, timing, and stop conditions.</aside>
         </section>
 
-        <section class="slide" data-title="Timeline" data-layout="timeline">
-          <header class="slide-header">
-            <p class="eyebrow">12 / ADOPTION</p>
-            <span class="mono-label">NOW → NEXT</span>
-          </header>
+        <section class="slide slide--visual" data-title="Operating loop" data-layout="operating-loop" data-geometry="circular-loop">
+          <header class="slide-header"><p class="eyebrow">16 / OPERATING MODEL</p><span class="mono-label">OBSERVE · DECIDE · ACT · LEARN</span></header>
+          <div class="visual-title"><h2>Use loops only when feedback changes the outcome.</h2><p>Anchor the loop on one measurable outcome, then name cadence, guardrails, and ownership.</p></div>
+          <figure class="visual-stage visual-stage--loop"><img src="assets/operating-loop.svg" alt="Closed operating loop around an outcome with metric, cadence, and guardrail details" /></figure>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>17</span></footer>
+          <aside class="notes">A circular arrow is not enough; explain what feedback changes and who acts on it.</aside>
+        </section>
 
+        <section class="slide" data-title="Timeline" data-layout="timeline" data-geometry="linear-spine">
+          <header class="slide-header"><p class="eyebrow">17 / ADOPTION</p><span class="mono-label">NOW → NEXT</span></header>
           <div class="timeline-layout">
-            <h2>Roll out the layout system without rewriting the visual brand.</h2>
-            <div class="timeline" role="img" aria-label="Four-phase layout system rollout">
-              <article class="timeline-step"><span class="timeline-marker">01</span><h3>Catalog</h3><p>Name the archetypes and their jobs.</p></article>
+            <h2>Roll out the visual grammar without rewriting the brand.</h2>
+            <div class="timeline" role="img" aria-label="Four-phase visual grammar rollout">
+              <article class="timeline-step"><span class="timeline-marker">01</span><h3>Catalog</h3><p>Name archetypes, geometry, and purpose.</p></article>
               <article class="timeline-step timeline-step--current"><span class="timeline-marker">02</span><h3>Scaffold</h3><p>Ship diverse starters in every format.</p></article>
-              <article class="timeline-step"><span class="timeline-marker">03</span><h3>Validate</h3><p>Check repetition and layout coverage.</p></article>
+              <article class="timeline-step"><span class="timeline-marker">03</span><h3>Validate</h3><p>Audit sequence, geometry, density, and export.</p></article>
               <article class="timeline-step"><span class="timeline-marker">04</span><h3>Learn</h3><p>Add patterns from real presentation work.</p></article>
             </div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>13</span></footer>
-          <aside class="notes">Mark the current phase clearly. A roadmap should show changing capability, not just dates.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>18</span></footer>
+          <aside class="notes">Mark the current phase. A roadmap should show changing capability, not just dates.</aside>
         </section>
 
-        <section class="slide" data-title="Risk matrix" data-layout="risk-matrix">
-          <header class="slide-header">
-            <p class="eyebrow">13 / RISK</p>
-            <span class="mono-label">PROBABILITY × IMPACT</span>
-          </header>
-
+        <section class="slide" data-title="Risk matrix" data-layout="risk-matrix" data-geometry="quadrant-plus-register">
+          <header class="slide-header"><p class="eyebrow">18 / RISK</p><span class="mono-label">PROBABILITY × IMPACT</span></header>
           <div class="risk-layout">
-            <div>
-              <h2>Variation without rules becomes noise.</h2>
-              <div class="risk-matrix" role="img" aria-label="Risk matrix with probability and impact quadrants">
-                <div class="risk-quadrant"><span>Low impact</span><strong>Cosmetic drift</strong></div>
-                <div class="risk-quadrant"><span>High impact</span><strong>Unreadable density</strong></div>
-                <div class="risk-quadrant"><span>Low probability</span><strong>Export edge case</strong></div>
-                <div class="risk-quadrant risk-quadrant--hot"><span>High probability</span><strong>Random layout choice</strong></div>
-              </div>
-            </div>
-            <div class="risk-register">
-              <div class="risk-row"><span>01</span><div><strong>Novelty over meaning</strong><p>Mitigate with slide-role selection.</p></div></div>
-              <div class="risk-row"><span>02</span><div><strong>Too many cards</strong><p>Cap card-based pages near 20%.</p></div></div>
-              <div class="risk-row"><span>03</span><div><strong>Theme drift</strong><p>Keep shared tokens and page chrome.</p></div></div>
-            </div>
+            <div><h2>Variation without rules becomes noise.</h2><div class="risk-matrix" role="img" aria-label="Risk matrix with probability and impact quadrants"><div class="risk-quadrant"><span>Low impact</span><strong>Cosmetic drift</strong></div><div class="risk-quadrant"><span>High impact</span><strong>Unreadable density</strong></div><div class="risk-quadrant"><span>Low probability</span><strong>Export edge case</strong></div><div class="risk-quadrant risk-quadrant--hot"><span>High probability</span><strong>Different names, same geometry</strong></div></div></div>
+            <div class="risk-register"><div class="risk-row"><span>01</span><div><strong>Novelty over meaning</strong><p>Mitigate with role and dominant-element selection.</p></div></div><div class="risk-row"><span>02</span><div><strong>Split-screen default</strong><p>Cap generic split pages near 35%.</p></div></div><div class="risk-row"><span>03</span><div><strong>Theme drift</strong><p>Keep shared tokens and page chrome.</p></div></div></div>
           </div>
-
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>14</span></footer>
-          <aside class="notes">Name the mitigation and owner for real risks. The matrix should prioritize action, not merely classify problems.</aside>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>19</span></footer>
+          <aside class="notes">Name the mitigation and owner for real risks. The matrix should prioritize action.</aside>
         </section>
 
-        <section class="slide slide--closing" data-title="Close" data-layout="closing-manifesto">
-          <div class="topline">
-            <span class="prompt-mark" aria-hidden="true">&gt;</span>
-            <span>NEXT ACTION</span>
-          </div>
-
-          <div class="closing-copy">
-            <p class="eyebrow">THE DECISION</p>
-            <h2>Keep the style.<br /><em>Expand the vocabulary.</em></h2>
-            <p>Choose the layout by communication purpose, then let the design system keep the deck coherent.</p>
-          </div>
-
+        <section class="slide slide--closing" data-title="Close" data-layout="closing-manifesto" data-geometry="dark-full-bleed">
+          <div class="topline"><span class="prompt-mark" aria-hidden="true">&gt;</span><span>NEXT ACTION</span></div>
+          <div class="closing-copy"><p class="eyebrow">THE DECISION</p><h2>Keep the style.<br /><em>Expand the visual grammar.</em></h2><p>Choose geometry by communication purpose, then let the design system keep the deck coherent.</p></div>
           <div class="closing-command"><span>$</span> build with purpose</div>
-          <aside class="notes">Ask for one concrete action, then stop speaking.</aside>
+          <aside class="notes">Ask for one concrete action, owner, and timing. Stop after the ask.</aside>
         </section>
       </main>
     </div>
 
-    <div class="deck-ui" aria-hidden="true">
-      <div class="progress"><span id="progressBar"></span></div>
-      <span id="pageCounter">1 / 15</span>
-      <span class="key-hint">← → · F fullscreen · N notes · P print</span>
-    </div>
-
-    <aside id="notesPanel" class="notes-panel" aria-label="Speaker notes" hidden>
-      <div class="notes-panel__header">
-        <strong>Speaker notes</strong>
-        <button id="closeNotes" type="button">Close</button>
-      </div>
-      <div id="notesContent"></div>
-    </aside>
-
+    <div class="deck-ui" aria-hidden="true"><div class="progress"><span id="progressBar"></span></div><span id="pageCounter">1 / 20</span><span class="key-hint">← → · F fullscreen · N notes · P print</span></div>
+    <aside id="notesPanel" class="notes-panel" aria-label="Speaker notes" hidden><div class="notes-panel__header"><strong>Speaker notes</strong><button id="closeNotes" type="button">Close</button></div><div id="notesContent"></div></aside>
     <script src="slides.js"></script>
   </body>
 </html>
