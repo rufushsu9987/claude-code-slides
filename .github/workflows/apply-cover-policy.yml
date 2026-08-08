@@ -1,0 +1,40 @@
+name: Apply meaningful cover policy
+
+on:
+  push:
+    branches:
+      - fix/meaningful-cover-visuals
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/meaningful-cover-visuals
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply cover policy
+        run: |
+          python3 scripts/apply-cover-policy.py
+          npm ci
+          npm run sync:skills
+          npm run check
+
+      - name: Commit applied changes
+        run: |
+          rm -f scripts/apply-cover-policy.py
+          rm -f .github/workflows/apply-cover-policy.yml
+          git config user.name "Rufus Hsu"
+          git config user.email "nick20010827@gmail.com"
+          git add -A
+          git commit -m "fix: require meaningful cover visuals"
+          git push origin HEAD:fix/meaningful-cover-visuals
