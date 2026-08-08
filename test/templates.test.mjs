@@ -4,7 +4,7 @@ import test from 'node:test';
 
 const catalog = JSON.parse(await readFile(new URL('../templates/catalog.json', import.meta.url), 'utf8'));
 const layouts = JSON.parse(await readFile(new URL('../templates/layouts.json', import.meta.url), 'utf8'));
-const starterSequence = ['editorial-cover','hero-statement','before-after','layered-architecture','flow-architecture','metric-spotlight','evidence-claim','code-walkthrough','comparison-matrix','timeline','risk-matrix','closing-manifesto'];
+const starterSequence = ['editorial-cover','hero-statement','before-after','layered-architecture','flow-architecture','metric-spotlight','evidence-claim','infographic-story','data-journey','code-walkthrough','comparison-matrix','decision-path','timeline','risk-matrix','closing-manifesto'];
 
 test('template catalog is unique, complete, and portable', () => {
   assert.equal(catalog.version, 2);
@@ -36,7 +36,7 @@ test('template catalog is unique, complete, and portable', () => {
 test('layout catalog defines a diverse content-aware design system', () => {
   assert.equal(layouts.version, 1);
   assert.equal(layouts.name, 'claude-editorial-layout-system');
-  assert.ok(layouts.archetypes.length >= 16);
+  assert.ok(layouts.archetypes.length >= 19);
   assert.deepEqual(layouts.starterSequence, starterSequence);
   assert.ok(layouts.rules.minimumUniqueForTenSlides >= 8);
   assert.equal(layouts.rules.maximumConsecutiveSame, 1);
@@ -53,7 +53,7 @@ test('layout catalog defines a diverse content-aware design system', () => {
   }
 });
 
-test('starter decks demonstrate twelve distinct layout archetypes', async () => {
+test('starter decks demonstrate fifteen distinct layout archetypes', async () => {
   const [html, marp, pptx] = await Promise.all([
     readFile(new URL('../templates/html/index.html', import.meta.url), 'utf8'),
     readFile(new URL('../templates/marp/deck.md', import.meta.url), 'utf8'),

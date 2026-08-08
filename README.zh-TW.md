@@ -29,7 +29,7 @@ Claude Code Slides 不是一次性地把文件切成十頁，而是封裝一套�
 
 Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Codex 與 Claude Code 的原生安裝與呼叫體驗。
 
-## 7 種視覺主題，16 種內容導向版型
+## 7 種視覺主題，19 種內容導向版型
 
 **主題 Theme** 負責色彩、字體、背景與元件風格；**版型 Layout Archetype** 負責資訊架構、視線移動與主要視覺重心。
 
@@ -45,7 +45,7 @@ Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Cod
 | `dark-terminal` | Live Demo、程式碼導讀、工程深度分享 |
 | `incident-review` | Postmortem、事件時間軸、根因與改善 |
 
-版型系統包含 16 種 Archetypes，例如：
+版型系統包含 19 種 Archetypes，例如：
 
 ```text
 editorial-cover
@@ -55,14 +55,17 @@ layered-architecture
 flow-architecture
 metric-spotlight
 evidence-claim
+infographic-story
+data-journey
 code-walkthrough
 comparison-matrix
+decision-path
 timeline
 risk-matrix
 closing-manifesto
 ```
 
-新的 Starter Deck 會直接展示 **12 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
+新的 Starter Deck 會直接展示 **15 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
 
 - 至少使用 8 種不同版型。
 - 不連續重複相同版型。
@@ -90,6 +93,20 @@ codex-slides init "季度策略回顧" \
 
 每份產出都會包含 `template.json`，記錄主題、相容別名、色票、字體、版型規則、Starter Sequence 與輸出格式。
 
+
+## Python 輔助繪圖
+
+需要小型圖解時，可以使用只依賴 Python 標準函式庫的 SVG 產生器：
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind infographic \
+  --title "從分散輸入到可交付簡報" \
+  --output slides/example/assets/infographic-story.svg
+```
+
+目前支援 `infographic`、`data-journey` 與 `decision-path`。輸出是固定 `viewBox` 的 deterministic SVG，可嵌入 HTML／Marp，也可以作為 PPTX 的圖形資產；投影片本身的標題、文案、講稿與 Layout marker 仍保持可編輯。
+
 ## Skills
 
 | 能力 | Codex | Claude Code |
@@ -101,34 +118,6 @@ codex-slides init "季度策略回顧" \
 | 規劃故事線 | `$deck-architect` | Skill 或 `deck-architect` Subagent |
 | 規劃視覺 | `$visual-director` | Skill 或 `visual-director` Subagent |
 | 獨立審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
-| 統一推廣 Pipeline | `$promo-video` | `/claude-code-slides:promo-video` |
-
-## 統一推廣 Pipeline
-
-`promo-video` 是唯一的頂層編排入口，內部依序整合 Repository 掃描、既有 deck 與 speaker-notes、旁白／TTS、HTML-first 影片、Media QA 與發布封裝；不需要手動操作六個頂層 Agent。
-
-```text
-$promo-video Turn this repository into a verified project introduction package.
-
-/claude-code-slides:promo-video Turn this repository into a verified project introduction package.
-```
-
-也可以直接執行 deterministic pipeline：
-
-```bash
-node scripts/promo-pipeline.mjs run . \
-  --out promo \
-  --deck promo/deck/index.html \
-  --html promo/deck/index.html \
-  --speaker-notes NARRATION.md \
-  --narration NARRATION.md \
-  --source-url https://github.com/example/project \
-  --frames promo/video/html-frames \
-  --capture \
-  --json
-```
-
-需要 HTML-derived 影片時，HTML deck 是唯一視覺來源。若缺少 capture runtime、音訊、字幕、frames 或 QA 證據，Pipeline 會標記 deferred／unverified，不會假稱完成；外部發布會停在可審查草稿，必須經人工核准。
 
 ## 安裝到 Codex
 
@@ -201,7 +190,6 @@ codex-slides init "AI Platform" --format html
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
 codex-slides check slides/cloud-review
 codex-slides doctor
-codex-slides promo run . --out promo --deck promo/deck/index.html --speaker-notes NARRATION.md --json
 ```
 
 `claude-slides` 提供相同介面。
@@ -219,8 +207,7 @@ templates/layouts.json      版型 Archetype 目錄
 .agents/skills/             Repository-scoped Codex Discovery
 .claude-plugin/             Claude Code Manifest 與 Marketplace
 agents/                     Claude Code Subagents
-bin/ + lib/                 零依賴 Scaffold、驗證與推廣 CLI
-scripts/                    確定性的 intake、旁白、渲染、QA 與封裝階段
+bin/ + lib/                 零依賴 Scaffold 與驗證 CLI
 templates/                  HTML、Marp、PptxGenJS Base
 ```
 
@@ -234,7 +221,7 @@ npm run sync:skills
 npm run check
 ```
 
-測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 16 種版型目錄、12 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter、deterministic 推廣 Pipeline 與範例簡報。
+測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 19 種版型目錄、15 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
 
 ## 獨立性聲明
 

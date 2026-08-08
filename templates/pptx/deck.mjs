@@ -18,11 +18,12 @@ const C = {
   success: '7FB08A', warning: 'A56A32',
 };
 const F = { display: 'Georgia', body: 'Aptos', mono: 'Aptos Mono' };
-const TOTAL = 12;
+const TOTAL = 15;
 const LAYOUT_SEQUENCE = Object.freeze([
   'editorial-cover', 'hero-statement', 'before-after', 'layered-architecture',
-  'flow-architecture', 'metric-spotlight', 'evidence-claim', 'code-walkthrough',
-  'comparison-matrix', 'timeline', 'risk-matrix', 'closing-manifesto',
+  'flow-architecture', 'metric-spotlight', 'evidence-claim', 'infographic-story',
+  'data-journey', 'code-walkthrough', 'comparison-matrix', 'decision-path',
+  'timeline', 'risk-matrix', 'closing-manifesto',
 ]);
 
 function text(slide, value, options = {}) {
@@ -54,7 +55,7 @@ function cover() {
   title(s, '{{TITLE}}', { y: 1.88, h: 2.2, fontSize: 54 });
   body(s, 'Replace this sentence with the one promise your audience should remember.', { y: 4.45, w: 8.8, h: .7, fontSize: 21 });
   shape(s, pptx.ShapeType.line, { x: .72, y: 6.76, w: 11.9, h: 0, line: { color: C.border, width: 1 } });
-  text(s, '{{TEMPLATE_NAME}} · 12 LAYOUT STARTERS', { x: .72, y: 6.92, w: 5.4, h: .2, fontFace: F.mono, fontSize: 8.8, color: C.muted, charSpacing: .9 });
+  text(s, '{{TEMPLATE_NAME}} · 15 LAYOUT STARTERS', { x: .72, y: 6.92, w: 5.4, h: .2, fontFace: F.mono, fontSize: 8.8, color: C.muted, charSpacing: .9 });
   text(s, '→', { x: 11.9, y: 6.84, w: .7, h: .32, align: 'right', fontFace: F.mono, fontSize: 19, color: C.accent });
   s.addNotes('Open with the audience problem, then state the one promise this deck will prove.');
 }
@@ -63,7 +64,7 @@ function hero() {
   title(s, 'The layout should change when the communication job changes.', { w: 8.1, h: 2.55, fontSize: 47 });
   body(s, 'Keep the visual language stable while varying composition, density, and eye path.', { y: 4.15, w: 7.7 });
   shape(s, pptx.ShapeType.line, { x: 9.02, y: 1.25, w: 0, h: 4.7, line: { color: C.border, width: 1 } });
-  [['16','AVAILABLE ARCHETYPES'],['8+','UNIQUE LAYOUTS IN TEN PAGES'],['0','CONSECUTIVE REPEATS']].forEach(([v,l],i)=>{
+  [['19','AVAILABLE ARCHETYPES'],['8+','UNIQUE LAYOUTS IN TEN PAGES'],['0','CONSECUTIVE REPEATS']].forEach(([v,l],i)=>{
     const y=1.32+i*1.48; text(s,v,{x:9.4,y,w:2.6,h:.62,fontFace:F.display,fontSize:37,color:C.accent});
     text(s,l,{x:9.4,y:y+.72,w:2.7,h:.3,fontFace:F.mono,fontSize:8.3,charSpacing:.8,color:C.muted});
   });
@@ -110,45 +111,85 @@ function evidence() {
   text(s,'THE CLAIM',{x:6.65,y:1.48,w:1.8,h:.2,fontFace:F.mono,fontSize:9,bold:true,charSpacing:1.3,color:C.accent});title(s,'Evidence becomes memorable when the page gives it visual priority.',{x:6.65,y:1.9,w:5.7,h:2.3,fontSize:38});body(s,'Keep explanation adjacent, but let the chart, screenshot, quote, or example remain the anchor.',{x:6.65,y:4.65,w:5.1,h:.8,fontSize:17});
   s.addNotes('This chart is illustrative and must be replaced with verified evidence and a readable source note.');
 }
+function asset(name) {
+  return path.join(process.cwd(), 'assets', name);
+}
+
+function infographicStory() {
+  const s = pptx.addSlide(); base(s, 8, '07 / Infographic');
+  title(s, 'Make the whole argument visible in one glance.', { x: .72, y: 1.02, w: 4.35, h: 1.85, fontSize: 35 });
+  body(s, 'Use a visual handoff when the audience needs to understand the problem, method, and result before the detail.', { x: .72, y: 3.18, w: 4.2, h: 1.2, fontSize: 16 });
+  text(s, '↳ Python creates the vector asset; the slide keeps the story editable.', { x: .72, y: 5.08, w: 4.2, h: .55, fontFace: F.mono, fontSize: 10.5, color: C.ink, breakLine: true });
+  panel(s, 5.18, 1.18, 7.04, 5.44, false);
+  s.addImage({ path: asset('infographic-story.svg'), x: 5.38, y: 1.42, w: 6.64, h: 3.87 });
+  text(s, 'Generated SVG art is an anchor, not a replacement for the slide structure.', { x: 5.42, y: 5.66, w: 6.5, h: .28, fontFace: F.mono, fontSize: 8.5, color: C.muted });
+  s.addNotes('Use this layout for a one-slide explainer. Keep problem, method, and result labels concrete and short.');
+}
+
+function dataJourney() {
+  const s = pptx.addSlide(); base(s, 9, '08 / Data Journey');
+  text(s, 'CURRENT SIGNAL', { x: .72, y: 1.25, w: 2.4, h: .22, fontFace: F.mono, fontSize: 9.5, bold: true, charSpacing: 1.3, color: C.accent });
+  text(s, '82%', { x: .66, y: 1.72, w: 4.5, h: 1.45, fontFace: F.display, fontSize: 104, color: C.accent });
+  title(s, 'Show the state first, then explain the movement.', { x: .72, y: 3.3, w: 4.25, h: 1.3, fontSize: 33 });
+  body(s, 'A dominant metric earns attention; a small trend gives it meaning and makes the next action easier to discuss.', { x: .72, y: 4.88, w: 4.25, h: .9, fontSize: 15.5 });
+  panel(s, 5.18, 1.18, 7.04, 5.44, false);
+  s.addImage({ path: asset('data-journey.svg'), x: 5.38, y: 1.42, w: 6.64, h: 3.87 });
+  text(s, 'Replace the sample trend with a verified source, date, and definition.', { x: 5.42, y: 5.66, w: 6.5, h: .28, fontFace: F.mono, fontSize: 8.5, color: C.muted });
+  s.addNotes('Pair the metric with its direction, source, and decision implication.');
+}
+
+function decisionPath() {
+  const s = pptx.addSlide(); base(s, 12, '11 / Decision');
+  title(s, 'Turn choices into a path the room can act on.', { x: .72, y: 1.02, w: 4.35, h: 1.85, fontSize: 35 });
+  body(s, 'Make the evaluation point explicit, then show the consequence of proceeding, pausing, or collecting evidence.', { x: .72, y: 3.18, w: 4.2, h: 1.25, fontSize: 16 });
+  panel(s, .72, 5.14, 4.4, .9, true);
+  text(s, 'RECOMMENDATION', { x: .98, y: 5.4, w: 1.8, h: .18, fontFace: F.mono, fontSize: 8.5, bold: true, charSpacing: .8, color: C.accent });
+  text(s, 'Make the next action visible.', { x: .98, y: 5.72, w: 3.5, h: .2, fontSize: 15.5, bold: true });
+  panel(s, 5.18, 1.18, 7.04, 5.44, false);
+  s.addImage({ path: asset('decision-path.svg'), x: 5.38, y: 1.42, w: 6.64, h: 3.87 });
+  text(s, 'Use a clear branch only when the criteria are named.', { x: 5.42, y: 5.66, w: 6.5, h: .28, fontFace: F.mono, fontSize: 8.5, color: C.muted });
+  s.addNotes('End decision slides with an owner, next action, and timing.');
+}
+
 function codeWalkthrough() {
-  const s = pptx.addSlide(); base(s, 8, '07 / Build');
+  const s = pptx.addSlide(); base(s, 10, '09 / Build');
   title(s, 'Use code to prove the workflow—not to decorate the page.', { w: 5.1, h: 1.8, fontSize: 37 });
   body(s,'Crop to the lines the audience needs and pair them with the visible outcome.',{y:3.12,w:4.75,h:.8,fontSize:16});
   text(s,'↳ The command is evidence; the result is the story.',{x:.72,y:4.45,w:4.7,h:.35,fontFace:F.mono,fontSize:11.5,color:C.ink});
   shape(s,pptx.ShapeType.roundRect,{x:6.15,y:1.28,w:6.05,h:4.9,rectRadius:.06,fill:{color:C.code},line:{color:'3B3730',width:1}});shape(s,pptx.ShapeType.line,{x:6.15,y:1.83,w:6.05,h:0,line:{color:'3D3932',width:1}});text(s,'~/project',{x:6.46,y:1.5,w:2,h:.2,fontFace:F.mono,fontSize:8.5,color:'AAA197'});
-  text(s,'$ codex-slides init "Architecture Review" \\\n  --format pptx \\\n  --template claude-editorial\n\n✓ 12 layout starters created\n✓ editable PPTX source generated\n✓ validation passed',{x:6.48,y:2.15,w:5.3,h:3.45,fontFace:F.mono,fontSize:13.3,color:C.codeText,valign:'top'});
+  text(s,'$ codex-slides init "Architecture Review" \\\n  --format pptx \\\n  --template claude-editorial\n\n✓ 15 layout starters created\n✓ editable PPTX source generated\n✓ validation passed',{x:6.48,y:2.15,w:5.3,h:3.45,fontFace:F.mono,fontSize:13.3,color:C.codeText,valign:'top'});
   s.addNotes('Use a live command only when the demo is reliable. Keep a screenshot or recorded fallback.');
 }
 function comparison() {
-  const s = pptx.addSlide(); base(s, 9, '08 / Trade-off');
+  const s = pptx.addSlide(); base(s, 11, '10 / Trade-off');
   title(s,'Compare options on the criteria that determine the decision.',{y:.88,h:1.2,fontSize:38});
   const rows=[['CRITERION','REPEATED TEMPLATE','CONTENT-AWARE SYSTEM'],['Speed','Fast first draft','Fast with reusable archetypes'],['Clarity','One generic frame','Composition follows the message'],['Rhythm','Flat across the deck','Varied but visually consistent'],['Maintenance','Many one-off fixes','Shared layout vocabulary']];
   rows.forEach((row,r)=>{const y=2.45+r*.74;[.72,3.55,7.95].forEach((x,c)=>{const w=[2.83,4.4,4.67][c];const rec=r===3&&c===2;panel(s,x,y,w,.74,rec);text(s,row[c],{x:x+.18,y:y+.22,w:w-.36,h:.28,fontFace:r===0?F.mono:F.body,fontSize:r===0?8.5:12.5,bold:r===0||c===0||rec,charSpacing:r===0?.8:0,color:r===0?C.muted:(c===0||rec?C.ink:C.muted)});});});
   s.addNotes('Use the same criteria for both options before highlighting the recommendation.');
 }
 function timeline() {
-  const s = pptx.addSlide(); base(s, 10, '09 / Adoption');
+  const s = pptx.addSlide(); base(s, 13, '12 / Adoption');
   title(s,'Roll out the layout system without rewriting the visual brand.',{y:.92,h:1.3,fontSize:39});
   shape(s,pptx.ShapeType.line,{x:1,y:3.45,w:11.25,h:0,line:{color:C.border,width:1.2}});
   [['01','Catalog','Name the archetypes and their jobs.'],['02','Scaffold','Ship diverse starters in every format.'],['03','Validate','Check repetition and layout coverage.'],['04','Learn','Add patterns from real presentation work.']].forEach(([n,h,b],i)=>{const x=.92+i*3.02;shape(s,pptx.ShapeType.rect,{x,y:3.13,w:.64,h:.64,fill:{color:i===1?C.accent:C.canvas},line:{color:i===1?C.accent:C.border,width:1}});text(s,n,{x,y:3.36,w:.64,h:.16,align:'center',fontFace:F.mono,fontSize:8.3,color:i===1?C.surface:C.muted});text(s,h,{x,y:4.08,w:2.5,h:.36,fontSize:19,bold:true});text(s,b,{x,y:4.64,w:2.45,h:.76,fontSize:13.5,color:C.muted});});
   s.addNotes('Mark the current phase clearly. A roadmap should show changing capability, not just dates.');
 }
 function risk() {
-  const s = pptx.addSlide(); base(s, 11, '10 / Risk');
+  const s = pptx.addSlide(); base(s, 14, '13 / Risk');
   title(s,'Variation without rules becomes noise.',{x:.72,y:1,w:6.3,h:1.35,fontSize:39});
   [['Low impact','Cosmetic drift',false],['High impact','Unreadable density',false],['Low probability','Export edge case',false],['High probability','Random layout choice',true]].forEach(([l,h,hot],i)=>{const x=.72+(i%2)*2.94,y=2.7+Math.floor(i/2)*1.42;panel(s,x,y,2.94,1.42,hot);text(s,l.toUpperCase(),{x:x+.22,y:y+.22,w:2.5,h:.18,fontFace:F.mono,fontSize:7.7,charSpacing:.7,color:C.muted});text(s,h,{x:x+.22,y:y+.76,w:2.46,h:.34,fontSize:15.5,bold:true});});
   [['01','Novelty over meaning','Mitigate with slide-role selection.'],['02','Too many cards','Cap card-based pages near 20%.'],['03','Theme drift','Keep shared tokens and page chrome.']].forEach(([n,h,b],i)=>{const y=1.72+i*1.38;text(s,n,{x:7.32,y,w:.42,h:.2,fontFace:F.mono,fontSize:8.8,color:C.accent});text(s,h,{x:8,y:y-.02,w:3.8,h:.34,fontSize:18,bold:true});text(s,b,{x:8,y:y+.45,w:3.8,h:.42,fontSize:13.2,color:C.muted});shape(s,pptx.ShapeType.line,{x:7.32,y:y+1.02,w:4.72,h:0,line:{color:C.border,width:1}});});
   s.addNotes('Name the mitigation and owner for real risks. The matrix should prioritize action.');
 }
 function closing() {
-  const s = pptx.addSlide(); base(s, 12, 'The decision', true);
+  const s = pptx.addSlide(); base(s, 15, 'The decision', true);
   title(s,'Keep the style.\nExpand the vocabulary.',{y:1.35,w:11,h:2.6,fontSize:51,color:C.codeText});
   body(s,'Choose the layout by communication purpose, then let the design system keep the deck coherent.',{y:4.35,w:9.2,h:.9,fontSize:20,color:'B9B0A5'});
   shape(s,pptx.ShapeType.rect,{x:.72,y:5.75,w:3.25,h:.58,fill:{color:C.code,transparency:100},line:{color:'4B463E',width:1}});text(s,'$  build with purpose',{x:.94,y:5.94,w:2.8,h:.18,fontFace:F.mono,fontSize:11,color:C.codeText});
   s.addNotes('Ask for one concrete action, owner, and timing. Stop after the ask.');
 }
 
-cover(); hero(); beforeAfter(); layered(); flow(); metric(); evidence(); codeWalkthrough(); comparison(); timeline(); risk(); closing();
+cover(); hero(); beforeAfter(); layered(); flow(); metric(); evidence(); infographicStory(); dataJourney(); codeWalkthrough(); comparison(); decisionPath(); timeline(); risk(); closing();
 if (LAYOUT_SEQUENCE.length !== TOTAL) throw new Error('LAYOUT_SEQUENCE must match the generated slide count.');
 const outputDirectory = path.resolve(process.cwd(), 'dist');
 await mkdir(outputDirectory, { recursive: true });

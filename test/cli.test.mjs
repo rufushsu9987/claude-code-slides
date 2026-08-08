@@ -9,7 +9,6 @@ import {
   doctor,
   initDeck,
   listLayouts,
-  main,
   listTemplates,
   slugify,
 } from '../lib/cli.mjs';
@@ -38,8 +37,8 @@ test('template and layout discovery expose the Claude Editorial defaults', async
   assert.ok(defaultTemplate.aliases.includes('terminal-editorial'));
 
   const layouts = await listLayouts();
-  assert.equal(layouts.archetypes.length >= 16, true);
-  assert.equal(layouts.starterSequence.length, 12);
+  assert.equal(layouts.archetypes.length >= 19, true);
+  assert.equal(layouts.starterSequence.length, 15);
   assert.equal(new Set(layouts.starterSequence).size, layouts.starterSequence.length);
 
   const systemLayouts = await listLayouts({ family: 'system' });
@@ -61,12 +60,12 @@ for (const format of ['html', 'marp', 'pptx']) {
     assert.equal(created.template, 'claude-editorial');
     const result = await checkDeck(destination);
     assert.equal(result.ok, true, JSON.stringify(result, null, 2));
-    assert.ok(result.metrics.slides >= 12);
+    assert.ok(result.metrics.slides >= 15);
 
     const metadata = JSON.parse(await readFile(path.join(destination, 'template.json'), 'utf8'));
     assert.equal(metadata.name, 'claude-editorial');
-    assert.equal(metadata.layoutSystem.starterSequence.length, 12);
-    assert.ok(metadata.layoutSystem.archetypes.length >= 16);
+    assert.equal(metadata.layoutSystem.starterSequence.length, 15);
+    assert.ok(metadata.layoutSystem.archetypes.length >= 19);
   });
 }
 
@@ -148,28 +147,4 @@ test('checkDeck reports accessibility and runtime warnings', async (t) => {
   assert.ok(result.warnings.some((item) => item.code === 'hash-navigation'));
   assert.ok(result.warnings.some((item) => item.code === 'print-css'));
   assert.ok(result.warnings.some((item) => item.code === 'reduced-motion'));
-});
-
-test('promo command exposes the unified pipeline help', async () => {
-  let output = '';
-  const io = { stdout: { write: (value) => { output += value; } }, stderr: { write: () => {} } };
-  const code = await main(['promo', 'help'], io);
-  assert.equal(code, 0);
-  assert.match(output, /promo run <repository-path>/);
-  assert.match(output, /--capture/);
-});
-
-test('promo command runs the deterministic intake stage and records skipped stages', async (t) => {
-  const temporary = await mkdtemp(path.join(os.tmpdir(), 'code-slides-promo-'));
-  t.after(() => rm(temporary, { recursive: true, force: true }));
-  let output = '';
-  const io = { stdout: { write: (value) => { output += value; } }, stderr: { write: () => {} } };
-  const code = await main(['promo', 'run', 'test/fixtures/promo-source', '--out', temporary, '--json'], io);
-  assert.equal(code, 0);
-  const result = JSON.parse(output);
-  assert.equal(result.status, 'PARTIAL');
-  assert.equal(result.stages.intake.status, 'completed');
-  assert.equal(result.stages.narration.status, 'skipped');
-  assert.match(await readFile(path.join(temporary, 'project-facts.json'), 'utf8'), /demo-project/);
-  assert.match(await readFile(path.join(temporary, 'pipeline-status.json'), 'utf8'), /manual-approval-required/);
 });

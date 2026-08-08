@@ -20,8 +20,7 @@ After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the tem
 - `/claude-code-slides:review-deck`
 - `/claude-code-slides:speaker-notes`
 - `/claude-code-slides:claude-code-style`
-- `/claude-code-slides:promo-video` (single top-level promotion orchestrator)
-- subagents: `deck-architect`, `visual-director`, `deck-reviewer`, `promo-video`
+- subagents: `deck-architect`, `visual-director`, `deck-reviewer`
 - Bash CLI alias: `claude-slides`
 - theme discovery: `claude-slides templates`
 - layout discovery: `claude-slides layouts`
@@ -34,13 +33,11 @@ After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the tem
 - A 10+ slide deck should normally use at least eight distinct archetypes, avoid consecutive repeats, limit card-based pages, and change rhythm every three to four slides.
 - HTML uses `data-layout`, Marp uses slide classes, and PPTX keeps `LAYOUT_SEQUENCE`.
 
-The six promotion stages are internal Skills/scripts coordinated by `promo-video`; they are not six Memory Hub Agents. The Memory Hub integration uses one persistent `Promo Pipeline Agent`.
-
 ## Portability rules
 
 - Root `skills/` are authoritative and must remain host-neutral.
-- Skill resources are local to each skill under `references/`, `scripts/`, and `lib/`.
-- Root `references/`, `lib/promo.mjs`, and deterministic pipeline scripts are canonical; run `npm run sync:skills` after edits.
+- Skill resources are local to each skill under `references/` and `scripts/`.
+- Root `references/` and `scripts/skill-cli-wrapper.mjs` are canonical; run `npm run sync:skills` after edits.
 - Claude-specific behavior belongs in `.claude-plugin/`, `agents/`, or this guide.
 - Codex-specific behavior belongs in `.codex-plugin/` and `.agents/`.
 - Keep versions synchronized across `plugin.json`, both native manifests, both marketplaces, `package.json`, `package-lock.json`, and `lib/runtime.mjs`.

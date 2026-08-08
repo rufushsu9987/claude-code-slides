@@ -47,10 +47,13 @@ Every generated deck includes `template.json`, which records the selected theme,
 | `split-narrative` | Explanation | Claim plus evidence or visual |
 | `metric-spotlight` | Evidence | KPI, outcome, or scale |
 | `evidence-claim` | Evidence | Research, benchmark, quotation, screenshot |
+| `infographic-story` | Evidence | One-glance problem → method → result story |
+| `data-journey` | Evidence | Dominant metric plus progress trend |
 | `layered-architecture` | System | Platform layers, ownership, trust boundaries |
 | `flow-architecture` | System | Data flow, request path, agent workflow |
 | `before-after` | Comparison | Migration, transformation, current versus target |
 | `comparison-matrix` | Comparison | Technology selection and trade-offs |
+| `decision-path` | Decision | Signal → evaluation → proceed or pause |
 | `timeline` | Sequence | Roadmap, migration, incident chronology |
 | `process-steps` | Sequence | CI/CD, operating model, delivery process |
 | `code-walkthrough` | Demonstration | CLI, API, or implementation evidence |
@@ -80,8 +83,11 @@ editorial-cover
 → flow-architecture
 → metric-spotlight
 → evidence-claim
+→ infographic-story
+→ data-journey
 → code-walkthrough
 → comparison-matrix
+→ decision-path
 → timeline
 → risk-matrix
 → closing-manifesto
@@ -111,3 +117,16 @@ npm run check
 ```
 
 The smoke test scaffolds every theme in HTML, Marp, and PPTX, verifies layout metadata, and rejects repetitive starter sequences.
+
+## Python-assisted SVG assets
+
+The repository includes a standard-library-only generator for small vector illustrations used by the three new layouts:
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind data-journey \
+  --title "Make progress visible" \
+  --output slides/example/assets/data-journey.svg
+```
+
+The generator supports `infographic`, `data-journey`, and `decision-path`. It emits deterministic SVG with no local paths or external runtime dependencies. Keep the SVG as a visual asset and keep the slide's semantic title, copy, notes, and layout marker in the target format.

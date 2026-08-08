@@ -14,7 +14,7 @@ footer: "{{TITLE}}"
 
 Replace this sentence with the one promise your audience should remember.
 
-<div class="prompt-line"><span>&gt;</span> {{TEMPLATE_NAME}} · 12 layout starters</div>
+<div class="prompt-line"><span>&gt;</span> {{TEMPLATE_NAME}} · 15 layout starters</div>
 
 <!-- Open with the audience problem, then state the one promise this deck will prove. -->
 
@@ -33,7 +33,7 @@ Keep the visual language stable while varying composition, density, and eye path
 
 </div>
 <div class="proof-rail">
-<div><strong>16</strong><span>available archetypes</span></div>
+<div><strong>19</strong><span>available archetypes</span></div>
 <div><strong>8+</strong><span>unique layouts in ten pages</span></div>
 <div><strong>0</strong><span>consecutive repeats</span></div>
 </div>
@@ -159,9 +159,56 @@ Keep explanation adjacent, but let the chart, screenshot, quote, or example rema
 
 ---
 
+<!-- _class: infographic-story -->
+
+<span class="eyebrow">07 / INFOGRAPHIC</span>
+
+<div class="infographic-grid">
+<div class="infographic-copy">
+
+## Make the whole argument visible in one glance.
+
+Use a visual handoff when the audience needs to understand the problem, method, and result before the detail.
+
+<div class="annotation">↳ Python creates the vector asset; the slide keeps the story editable.</div>
+
+</div>
+<div class="infographic-art">
+<img src="assets/infographic-story.svg" alt="Problem, method, and result diagram" />
+<small>Generated SVG art is an anchor, not a replacement for the slide structure.</small>
+</div>
+</div>
+
+<!-- Keep problem, method, and result concrete and short. -->
+
+---
+
+<!-- _class: data-journey -->
+
+<span class="eyebrow">08 / DATA JOURNEY</span>
+
+<div class="data-journey-grid">
+<div class="data-journey-copy">
+<span class="eyebrow">CURRENT SIGNAL</span>
+<strong class="data-value">82%</strong>
+
+## Show the state first, then explain the movement.
+
+A dominant metric earns attention; a small trend gives it meaning and makes the next action easier to discuss.
+</div>
+<div class="data-journey-art">
+<img src="assets/data-journey.svg" alt="Progress trend chart" />
+<small>Replace the sample trend with a verified source, date, and definition.</small>
+</div>
+</div>
+
+<!-- Pair the metric with its direction, source, and decision implication. -->
+
+---
+
 <!-- _class: code-walkthrough -->
 
-<span class="eyebrow">07 / BUILD</span>
+<span class="eyebrow">09 / BUILD</span>
 
 <div class="code-grid">
 <div>
@@ -179,7 +226,7 @@ Crop to the lines the audience needs and pair them with the visible outcome.
   --format pptx \
   --template claude-editorial
 
-<span class="success">✓ 12 layout starters created</span>
+<span class="success">✓ 15 layout starters created</span>
 <span class="success">✓ editable PPTX source generated</span>
 <span class="success">✓ validation passed</span></code></pre>
 </div>
@@ -191,7 +238,7 @@ Crop to the lines the audience needs and pair them with the visible outcome.
 
 <!-- _class: comparison-matrix -->
 
-<span class="eyebrow">08 / TRADE-OFF</span>
+<span class="eyebrow">10 / TRADE-OFF</span>
 
 ## Compare options on the criteria that determine the decision.
 
@@ -207,9 +254,33 @@ Crop to the lines the audience needs and pair them with the visible outcome.
 
 ---
 
+<!-- _class: decision-path -->
+
+<span class="eyebrow">11 / DECISION</span>
+
+<div class="decision-grid">
+<div class="decision-copy">
+
+## Turn choices into a path the room can act on.
+
+Make the evaluation point explicit, then show the consequence of proceeding, pausing, or collecting evidence.
+
+<div class="annotation">↳ Recommendation: make the next action visible.</div>
+
+</div>
+<div class="decision-art">
+<img src="assets/decision-path.svg" alt="Decision path from signal to proceed or pause" />
+<small>Use a clear branch only when the criteria are named.</small>
+</div>
+</div>
+
+<!-- End with an owner, next action, and timing. -->
+
+---
+
 <!-- _class: timeline -->
 
-<span class="eyebrow">09 / ADOPTION</span>
+<span class="eyebrow">12 / ADOPTION</span>
 
 ## Roll out the layout system without rewriting the visual brand.
 
@@ -226,7 +297,7 @@ Crop to the lines the audience needs and pair them with the visible outcome.
 
 <!-- _class: risk-matrix -->
 
-<span class="eyebrow">10 / RISK</span>
+<span class="eyebrow">13 / RISK</span>
 
 <div class="risk-grid">
 <div>

@@ -23,7 +23,7 @@
           </div>
 
           <div class="cover-meta">
-            <span>{{TEMPLATE_NAME}} · 12 layout starters</span>
+            <span>{{TEMPLATE_NAME}} · 15 layout starters</span>
             <span aria-hidden="true">→</span>
           </div>
 
@@ -42,7 +42,7 @@
               <p class="body-copy">Keep the visual language stable while varying composition, density, and eye path.</p>
             </div>
             <div class="proof-rail" aria-label="Layout diversity proof points">
-              <div class="proof-item"><strong>16</strong><span>available archetypes</span></div>
+              <div class="proof-item"><strong>19</strong><span>available archetypes</span></div>
               <div class="proof-item"><strong>8+</strong><span>unique layouts in a 10-page deck</span></div>
               <div class="proof-item"><strong>0</strong><span>consecutive repeats</span></div>
             </div>
@@ -208,9 +208,54 @@
           <aside class="notes">This sample chart is explicitly illustrative. Production decks must replace it with verified evidence and a readable source note.</aside>
         </section>
 
+        <section class="slide" data-title="Infographic story" data-layout="infographic-story">
+          <header class="slide-header">
+            <p class="eyebrow">07 / INFOGRAPHIC</p>
+            <span class="mono-label">PROBLEM → METHOD → RESULT</span>
+          </header>
+
+          <div class="infographic-layout">
+            <div class="infographic-copy">
+              <h2>Make the whole argument visible in one glance.</h2>
+              <p class="body-copy">Use a visual handoff when the audience needs to understand the problem, the method, and the deliverable before the detail.</p>
+              <div class="takeaway"><span aria-hidden="true">↳</span> Python creates the vector asset; the slide keeps the story editable.</div>
+            </div>
+            <figure class="infographic-art">
+              <img src="assets/infographic-story.svg" alt="Diagram showing a problem moving through a method into a result" />
+              <figcaption>Generated SVG art is an anchor, not a replacement for the slide structure.</figcaption>
+            </figure>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>08</span></footer>
+          <aside class="notes">Use this layout for a one-slide explainer. Keep the problem, method, and result labels concrete and short.</aside>
+        </section>
+
+        <section class="slide" data-title="Data journey" data-layout="data-journey">
+          <header class="slide-header">
+            <p class="eyebrow">08 / DATA JOURNEY</p>
+            <span class="mono-label">STATE + MOVEMENT</span>
+          </header>
+
+          <div class="data-journey-layout">
+            <div class="data-journey-copy">
+              <p class="metric-kicker">CURRENT SIGNAL</p>
+              <strong class="data-journey-value">82%</strong>
+              <h2>Show the state first, then explain the movement.</h2>
+              <p class="body-copy">A dominant metric earns attention; a small trend gives it meaning and makes the next action easier to discuss.</p>
+            </div>
+            <figure class="data-journey-art">
+              <img src="assets/data-journey.svg" alt="Chart showing progress increasing from Q1 to Q5" />
+              <figcaption>Replace the sample trend with a verified source, date, and definition.</figcaption>
+            </figure>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>09</span></footer>
+          <aside class="notes">Do not use a large number without a definition. Pair the metric with its direction, source, and decision implication.</aside>
+        </section>
+
         <section class="slide" data-title="Code walkthrough" data-layout="code-walkthrough">
           <header class="slide-header">
-            <p class="eyebrow">07 / BUILD</p>
+            <p class="eyebrow">09 / BUILD</p>
             <span class="mono-label">COMMAND AS EVIDENCE</span>
           </header>
 
@@ -232,19 +277,19 @@
   --format pptx \
   --template claude-editorial
 
-<span class="terminal-success">✓ 12 layout starters created</span>
+<span class="terminal-success">✓ 15 layout starters created</span>
 <span class="terminal-success">✓ editable PPTX source generated</span>
 <span class="terminal-success">✓ validation passed</span></code></pre>
             </div>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>08</span></footer>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>10</span></footer>
           <aside class="notes">Use a live command only when the demo is reliable. Keep a screenshot or recorded fallback.</aside>
         </section>
 
         <section class="slide" data-title="Comparison matrix" data-layout="comparison-matrix">
           <header class="slide-header">
-            <p class="eyebrow">08 / TRADE-OFF</p>
+            <p class="eyebrow">10 / TRADE-OFF</p>
             <span class="mono-label">SHARED AXIS</span>
           </header>
 
@@ -261,13 +306,35 @@
             </div>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>09</span></footer>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>11</span></footer>
           <aside class="notes">Use the same criteria for both options. Highlight the recommendation only after the comparison is fair.</aside>
+        </section>
+
+        <section class="slide" data-title="Decision path" data-layout="decision-path">
+          <header class="slide-header">
+            <p class="eyebrow">11 / DECISION</p>
+            <span class="mono-label">SIGNAL → EVALUATE → ACTION</span>
+          </header>
+
+          <div class="decision-path-layout">
+            <div class="decision-path-copy">
+              <h2>Turn choices into a path the room can act on.</h2>
+              <p class="body-copy">Make the evaluation point explicit, then show the consequence of proceeding, pausing, or collecting evidence.</p>
+              <div class="decision-callout"><span class="state-label">RECOMMENDATION</span><strong>Make the next action visible.</strong></div>
+            </div>
+            <figure class="decision-path-art">
+              <img src="assets/decision-path.svg" alt="Decision path from signal to proceed or pause" />
+              <figcaption>Use a clear branch only when the criteria are named.</figcaption>
+            </figure>
+          </div>
+
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>12</span></footer>
+          <aside class="notes">End decision slides with an owner, next action, and timing. Do not leave the audience with a menu of options only.</aside>
         </section>
 
         <section class="slide" data-title="Timeline" data-layout="timeline">
           <header class="slide-header">
-            <p class="eyebrow">09 / ADOPTION</p>
+            <p class="eyebrow">12 / ADOPTION</p>
             <span class="mono-label">NOW → NEXT</span>
           </header>
 
@@ -281,13 +348,13 @@
             </div>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>10</span></footer>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>13</span></footer>
           <aside class="notes">Mark the current phase clearly. A roadmap should show changing capability, not just dates.</aside>
         </section>
 
         <section class="slide" data-title="Risk matrix" data-layout="risk-matrix">
           <header class="slide-header">
-            <p class="eyebrow">10 / RISK</p>
+            <p class="eyebrow">13 / RISK</p>
             <span class="mono-label">PROBABILITY × IMPACT</span>
           </header>
 
@@ -308,7 +375,7 @@
             </div>
           </div>
 
-          <footer class="slide-footer"><span>{{SLUG}}</span><span>11</span></footer>
+          <footer class="slide-footer"><span>{{SLUG}}</span><span>14</span></footer>
           <aside class="notes">Name the mitigation and owner for real risks. The matrix should prioritize action, not merely classify problems.</aside>
         </section>
 
@@ -332,7 +399,7 @@
 
     <div class="deck-ui" aria-hidden="true">
       <div class="progress"><span id="progressBar"></span></div>
-      <span id="pageCounter">1 / 12</span>
+      <span id="pageCounter">1 / 15</span>
       <span class="key-hint">← → · F fullscreen · N notes · P print</span>
     </div>
 

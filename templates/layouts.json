@@ -16,6 +16,9 @@
       "flow-architecture",
       "code-walkthrough",
       "metric-spotlight",
+      "infographic-story",
+      "data-journey",
+      "decision-path",
       "risk-matrix",
       "timeline",
       "closing-manifesto"
@@ -29,8 +32,11 @@
     "flow-architecture",
     "metric-spotlight",
     "evidence-claim",
+    "infographic-story",
+    "data-journey",
     "code-walkthrough",
     "comparison-matrix",
+    "decision-path",
     "timeline",
     "risk-matrix",
     "closing-manifesto"
@@ -85,6 +91,22 @@
       "formats": ["html", "marp", "pptx"]
     },
     {
+      "name": "infographic-story",
+      "family": "evidence",
+      "description": "A one-glance problem, method, and result narrative with a clear visual handoff.",
+      "bestFor": ["executive summary", "technical explainer", "one-slide overview"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "data-journey",
+      "family": "evidence",
+      "description": "A dominant metric connected to a simple trend so the audience sees both state and movement.",
+      "bestFor": ["progress update", "KPI story", "measurement narrative"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
       "name": "layered-architecture",
       "family": "system",
       "description": "Stacked system layers with ownership, trust, or operational boundaries.",
@@ -113,6 +135,14 @@
       "family": "comparison",
       "description": "Options evaluated on a shared axis with a clearly justified recommendation.",
       "bestFor": ["technology selection", "build versus buy", "trade-off review"],
+      "cardBased": false,
+      "formats": ["html", "marp", "pptx"]
+    },
+    {
+      "name": "decision-path",
+      "family": "decision",
+      "description": "A signal moves through an evaluation point into an explicit proceed or pause recommendation.",
+      "bestFor": ["approval", "architecture decision", "operating choice"],
       "cardBased": false,
       "formats": ["html", "marp", "pptx"]
     },

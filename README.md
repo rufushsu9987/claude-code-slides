@@ -29,7 +29,7 @@ source material
 
 The portable core follows [Agent Plugins 1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and Agent Skills conventions. Native adapters preserve the best installation and invocation experience in Codex and Claude Code.
 
-## Seven visual themes, sixteen layout archetypes
+## Seven visual themes, nineteen layout archetypes
 
 A **theme** controls color, typography, surfaces, and background treatment. A **layout archetype** controls information architecture: what dominates the page, how the eye moves, and how the content is compared or sequenced.
 
@@ -45,9 +45,9 @@ The default theme is `claude-editorial`. The previous name `terminal-editorial` 
 | `dark-terminal` | Live demos, code walkthroughs and engineering deep dives |
 | `incident-review` | Postmortems, impact timelines, root cause and remediation |
 
-The layout system includes 16 archetypes such as `hero-statement`, `before-after`, `layered-architecture`, `flow-architecture`, `metric-spotlight`, `evidence-claim`, `comparison-matrix`, `timeline`, `risk-matrix`, and `closing-manifesto`.
+The layout system includes 19 archetypes such as `hero-statement`, `before-after`, `layered-architecture`, `flow-architecture`, `metric-spotlight`, `evidence-claim`, `infographic-story`, `data-journey`, `decision-path`, `comparison-matrix`, `timeline`, `risk-matrix`, and `closing-manifesto`.
 
-The starter deck now demonstrates **12 distinct layouts instead of repeating 3–4 structures**. For decks of 10 or more slides, the workflow targets at least eight distinct archetypes, prevents consecutive repeats, limits card-grid pages to roughly 20%, and introduces a visible rhythm change every three to four slides.
+The starter deck now demonstrates **15 distinct layouts instead of repeating 3–4 structures**. For decks of 10 or more slides, the workflow targets at least eight distinct archetypes, prevents consecutive repeats, limits card-grid pages to roughly 20%, and introduces a visible rhythm change every three to four slides.
 
 List the installed themes and layouts:
 
@@ -69,6 +69,19 @@ Omitting `--template` uses `claude-editorial`.
 
 Each generated deck includes `template.json`, which records the selected theme, aliases, design tokens, layout-system rules, starter sequence, and output format.
 
+## Python-assisted slide graphics
+
+Use the dependency-free Python generator when a slide needs a small reusable vector illustration rather than a screenshot:
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind infographic \
+  --title "From scattered inputs to a ready deck" \
+  --output slides/example/assets/infographic-story.svg
+```
+
+Available drawing kinds are `infographic`, `data-journey`, and `decision-path`. The output is deterministic SVG with a stable `viewBox`, so it can be embedded in HTML or Marp and inserted as an editable-deck asset without turning the whole slide into a raster image.
+
 ## Skills
 
 | Capability | Codex | Claude Code |
@@ -80,34 +93,6 @@ Each generated deck includes `template.json`, which records the selected theme, 
 | Plan the narrative | `$deck-architect` | Skill or `deck-architect` subagent |
 | Direct the visuals | `$visual-director` | Skill or `visual-director` subagent |
 | Run an independent audit | `$deck-reviewer` | Skill or `deck-reviewer` subagent |
-| Run the promotion pipeline | `$promo-video` | `/claude-code-slides:promo-video` |
-
-## Unified promotion pipeline
-
-`promo-video` is the single top-level orchestration entry point. It coordinates repository intake, the existing deck and speaker-notes workflows, narration/TTS, HTML-first video rendering, media QA, and release packaging internally. Users do not need to operate six separate agents.
-
-```text
-$promo-video Turn this repository into a verified project introduction package.
-
-/claude-code-slides:promo-video Turn this repository into a verified project introduction package.
-```
-
-The deterministic pipeline command is also available directly:
-
-```bash
-node scripts/promo-pipeline.mjs run . \
-  --out promo \
-  --deck promo/deck/index.html \
-  --html promo/deck/index.html \
-  --speaker-notes NARRATION.md \
-  --narration NARRATION.md \
-  --source-url https://github.com/example/project \
-  --frames promo/video/html-frames \
-  --capture \
-  --json
-```
-
-For HTML-derived video, the HTML deck is the visual source of truth. If capture runtime, audio, subtitles, frames, or QA evidence is missing, the pipeline reports the stage as deferred or unverified instead of claiming completion. External publishing stops at a reviewable draft and requires human approval.
 
 ## Install in Codex
 
@@ -181,7 +166,6 @@ codex-slides init "AI Platform" --format html
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
 codex-slides check slides/cloud-review
 codex-slides doctor
-codex-slides promo run . --out promo --deck promo/deck/index.html --speaker-notes NARRATION.md --json
 ```
 
 `claude-slides` exposes the same interface.
@@ -199,8 +183,7 @@ templates/layouts.json      layout archetype catalog
 .agents/skills/             repository-scoped Codex discovery
 .claude-plugin/             Claude Code manifest and marketplace
 agents/                     Claude Code subagents
-bin/ + lib/                 zero-dependency scaffolding, validation, and promotion CLI
-scripts/                    deterministic intake, narration, rendering, QA, and packaging stages
+bin/ + lib/                 zero-dependency scaffolding and validation CLI
 templates/                  HTML, Marp and PptxGenJS bases
 ```
 
@@ -214,7 +197,7 @@ npm run sync:skills
 npm run check
 ```
 
-The test suite scaffolds every theme in all three formats, validates portable and native manifests, verifies the 16-layout catalog, confirms 12 unique starter layouts, checks skill-resource synchronization, exercises the deterministic promotion pipeline, and validates the runnable example deck.
+The test suite scaffolds every theme in all three formats, validates portable and native manifests, verifies the 19-layout catalog, confirms 15 unique starter layouts, checks skill-resource synchronization, and validates the runnable example deck.
 
 ## Independence
 
