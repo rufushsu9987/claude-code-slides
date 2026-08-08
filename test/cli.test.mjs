@@ -37,14 +37,14 @@ test('template and layout discovery expose the Claude Editorial defaults', async
   assert.ok(defaultTemplate.aliases.includes('terminal-editorial'));
 
   const layouts = await listLayouts();
-  assert.equal(layouts.archetypes.length >= 19, true);
-  assert.equal(layouts.starterSequence.length, 15);
+  assert.equal(layouts.archetypes.length >= 28, true);
+  assert.equal(layouts.starterSequence.length, 20);
   assert.equal(new Set(layouts.starterSequence).size, layouts.starterSequence.length);
 
   const systemLayouts = await listLayouts({ family: 'system' });
   assert.deepEqual(
     systemLayouts.archetypes.map((layout) => layout.name).sort(),
-    ['flow-architecture', 'layered-architecture'],
+    ['architecture-boundary', 'flow-architecture', 'layered-architecture', 'system-map'],
   );
 });
 
@@ -60,12 +60,12 @@ for (const format of ['html', 'marp', 'pptx']) {
     assert.equal(created.template, 'claude-editorial');
     const result = await checkDeck(destination);
     assert.equal(result.ok, true, JSON.stringify(result, null, 2));
-    assert.ok(result.metrics.slides >= 15);
+    assert.ok(result.metrics.slides >= 20);
 
     const metadata = JSON.parse(await readFile(path.join(destination, 'template.json'), 'utf8'));
     assert.equal(metadata.name, 'claude-editorial');
-    assert.equal(metadata.layoutSystem.starterSequence.length, 15);
-    assert.ok(metadata.layoutSystem.archetypes.length >= 19);
+    assert.equal(metadata.layoutSystem.starterSequence.length, 20);
+    assert.ok(metadata.layoutSystem.archetypes.length >= 28);
   });
 }
 
