@@ -14,10 +14,13 @@ Do not solve layout repetition by randomly moving boxes. Choose a layout because
 | `split-narrative` | Explanation plus evidence | Claim on one side, proof or visual on the other |
 | `metric-spotlight` | KPI, outcome, scale | One dominant number with two contextual measures |
 | `evidence-claim` | Research, benchmark, quotation, screenshot | Evidence anchored next to the conclusion it proves |
+| `infographic-story` | One-glance explainer, technical summary | Problem → method → result with one visual handoff |
+| `data-journey` | Progress, KPI story, measurement narrative | Dominant metric connected to a simple trend |
 | `layered-architecture` | Platform, control plane, layer model | Stacked layers with ownership and boundaries |
 | `flow-architecture` | Data flow, request path, agent workflow | Directional nodes with direct labels |
 | `before-after` | Migration, transformation, current versus target | Matched states with one explicit delta |
 | `comparison-matrix` | Technology selection and trade-offs | Options evaluated on a shared axis |
+| `decision-path` | Approval, operating choice, architecture decision | Signal → evaluation → proceed or pause |
 | `timeline` | Roadmap, migration, incident chronology | Milestones on one spine with current phase marked |
 | `process-steps` | CI/CD, operating model, delivery process | Ordered stages with changing responsibility or state |
 | `code-walkthrough` | CLI, API, implementation evidence | Projection-safe code paired with its outcome |
@@ -55,7 +58,10 @@ editorial-cover
 → flow-architecture
 → code-walkthrough
 → metric-spotlight
+→ infographic-story
+→ data-journey
 → risk-matrix
+→ decision-path
 → timeline
 → closing-manifesto
 ```

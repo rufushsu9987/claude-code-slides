@@ -29,7 +29,7 @@ source material
 
 The portable core follows [Agent Plugins 1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and Agent Skills conventions. Native adapters preserve the best installation and invocation experience in Codex and Claude Code.
 
-## Seven visual themes, sixteen layout archetypes
+## Seven visual themes, nineteen layout archetypes
 
 A **theme** controls color, typography, surfaces, and background treatment. A **layout archetype** controls information architecture: what dominates the page, how the eye moves, and how the content is compared or sequenced.
 
@@ -45,9 +45,9 @@ The default theme is `claude-editorial`. The previous name `terminal-editorial` 
 | `dark-terminal` | Live demos, code walkthroughs and engineering deep dives |
 | `incident-review` | Postmortems, impact timelines, root cause and remediation |
 
-The layout system includes 16 archetypes such as `hero-statement`, `before-after`, `layered-architecture`, `flow-architecture`, `metric-spotlight`, `evidence-claim`, `comparison-matrix`, `timeline`, `risk-matrix`, and `closing-manifesto`.
+The layout system includes 19 archetypes such as `hero-statement`, `before-after`, `layered-architecture`, `flow-architecture`, `metric-spotlight`, `evidence-claim`, `infographic-story`, `data-journey`, `decision-path`, `comparison-matrix`, `timeline`, `risk-matrix`, and `closing-manifesto`.
 
-The starter deck now demonstrates **12 distinct layouts instead of repeating 3–4 structures**. For decks of 10 or more slides, the workflow targets at least eight distinct archetypes, prevents consecutive repeats, limits card-grid pages to roughly 20%, and introduces a visible rhythm change every three to four slides.
+The starter deck now demonstrates **15 distinct layouts instead of repeating 3–4 structures**. For decks of 10 or more slides, the workflow targets at least eight distinct archetypes, prevents consecutive repeats, limits card-grid pages to roughly 20%, and introduces a visible rhythm change every three to four slides.
 
 List the installed themes and layouts:
 
@@ -68,6 +68,19 @@ codex-slides init "Quarterly Strategy Review" \
 Omitting `--template` uses `claude-editorial`.
 
 Each generated deck includes `template.json`, which records the selected theme, aliases, design tokens, layout-system rules, starter sequence, and output format.
+
+## Python-assisted slide graphics
+
+Use the dependency-free Python generator when a slide needs a small reusable vector illustration rather than a screenshot:
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind infographic \
+  --title "From scattered inputs to a ready deck" \
+  --output slides/example/assets/infographic-story.svg
+```
+
+Available drawing kinds are `infographic`, `data-journey`, and `decision-path`. The output is deterministic SVG with a stable `viewBox`, so it can be embedded in HTML or Marp and inserted as an editable-deck asset without turning the whole slide into a raster image.
 
 ## Skills
 
@@ -184,7 +197,7 @@ npm run sync:skills
 npm run check
 ```
 
-The test suite scaffolds every theme in all three formats, validates portable and native manifests, verifies the 16-layout catalog, confirms 12 unique starter layouts, checks skill-resource synchronization, and validates the runnable example deck.
+The test suite scaffolds every theme in all three formats, validates portable and native manifests, verifies the 19-layout catalog, confirms 15 unique starter layouts, checks skill-resource synchronization, and validates the runnable example deck.
 
 ## Independence
 

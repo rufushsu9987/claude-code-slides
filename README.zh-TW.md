@@ -29,7 +29,7 @@ Claude Code Slides 不是一次性地把文件切成十頁，而是封裝一套�
 
 Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Codex 與 Claude Code 的原生安裝與呼叫體驗。
 
-## 7 種視覺主題，16 種內容導向版型
+## 7 種視覺主題，19 種內容導向版型
 
 **主題 Theme** 負責色彩、字體、背景與元件風格；**版型 Layout Archetype** 負責資訊架構、視線移動與主要視覺重心。
 
@@ -45,7 +45,7 @@ Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Cod
 | `dark-terminal` | Live Demo、程式碼導讀、工程深度分享 |
 | `incident-review` | Postmortem、事件時間軸、根因與改善 |
 
-版型系統包含 16 種 Archetypes，例如：
+版型系統包含 19 種 Archetypes，例如：
 
 ```text
 editorial-cover
@@ -55,14 +55,17 @@ layered-architecture
 flow-architecture
 metric-spotlight
 evidence-claim
+infographic-story
+data-journey
 code-walkthrough
 comparison-matrix
+decision-path
 timeline
 risk-matrix
 closing-manifesto
 ```
 
-新的 Starter Deck 會直接展示 **12 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
+新的 Starter Deck 會直接展示 **15 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
 
 - 至少使用 8 種不同版型。
 - 不連續重複相同版型。
@@ -89,6 +92,20 @@ codex-slides init "季度策略回顧" \
 沒有指定 `--template` 時，預設使用 `claude-editorial`。
 
 每份產出都會包含 `template.json`，記錄主題、相容別名、色票、字體、版型規則、Starter Sequence 與輸出格式。
+
+
+## Python 輔助繪圖
+
+需要小型圖解時，可以使用只依賴 Python 標準函式庫的 SVG 產生器：
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind infographic \
+  --title "從分散輸入到可交付簡報" \
+  --output slides/example/assets/infographic-story.svg
+```
+
+目前支援 `infographic`、`data-journey` 與 `decision-path`。輸出是固定 `viewBox` 的 deterministic SVG，可嵌入 HTML／Marp，也可以作為 PPTX 的圖形資產；投影片本身的標題、文案、講稿與 Layout marker 仍保持可編輯。
 
 ## Skills
 
@@ -204,7 +221,7 @@ npm run sync:skills
 npm run check
 ```
 
-測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 16 種版型目錄、12 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
+測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 19 種版型目錄、15 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
 
 ## 獨立性聲明
 

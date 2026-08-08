@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+- Keep `claude-code-slides` focused on presentation creation; video rendering, narration, and media packaging remain outside this repository.
+- Add `infographic-story`, `data-journey`, and `decision-path` layout archetypes with HTML, Marp, and editable PPTX starters.
+- Add a dependency-free Python SVG generator for reusable infographic, trend, and decision-path assets.
+- Add deterministic generator tests, portable asset fixtures, and documentation for Python-assisted slide graphics.
+
 ## 0.6.0 - 2026-08-08
 
 - Rename the default visual preset to `claude-editorial` while preserving `terminal-editorial` as a backward-compatible alias.
