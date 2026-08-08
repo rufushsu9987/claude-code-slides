@@ -14,9 +14,9 @@ footer: "{{TITLE}}"
 
 Replace this sentence with the one promise your audience should remember.
 
-<div class="prompt-line"><span>&gt;</span> {{TEMPLATE_NAME}} · 15 layout starters</div>
+<div class="prompt-line"><span>&gt;</span> {{TEMPLATE_NAME}} · 20 layout starters</div>
 
-<!-- Open with the audience problem, then state the one promise this deck will prove. -->
+<!-- Open with the audience problem, not with a table of contents. -->
 
 ---
 
@@ -29,12 +29,12 @@ Replace this sentence with the one promise your audience should remember.
 
 ## The layout should change when the communication job changes.
 
-Keep the visual language stable while varying composition, density, and eye path.
+Keep the visual language stable while varying composition, geometry, density, and eye path.
 
 </div>
 <div class="proof-rail">
-<div><strong>19</strong><span>available archetypes</span></div>
-<div><strong>8+</strong><span>unique layouts in ten pages</span></div>
+<div><strong>28</strong><span>semantic archetypes</span></div>
+<div><strong>20</strong><span>starter geometries</span></div>
 <div><strong>0</strong><span>consecutive repeats</span></div>
 </div>
 </div>
@@ -43,24 +43,41 @@ Keep the visual language stable while varying composition, density, and eye path
 
 ---
 
+<!-- _class: chapter-index -->
+
+<span class="eyebrow">02 / STORY MAP</span>
+
+<div class="index-grid">
+<div class="index-number">04</div>
+<div>
+
+## A deck needs a rhythm, not a pile of interchangeable pages.
+
+Use the index as a promise of movement rather than a list of every topic.
+
+</div>
+<ol class="index-list">
+<li><span>01</span><strong>Frame</strong><small>Context and tension</small></li>
+<li><span>02</span><strong>Reveal</strong><small>System and evidence</small></li>
+<li><span>03</span><strong>Decide</strong><small>Trade-offs and risk</small></li>
+<li><span>04</span><strong>Act</strong><small>Owner and next step</small></li>
+</ol>
+</div>
+
+<!-- Keep the chapter map to three to five meaningful moves. -->
+
+---
+
 <!-- _class: before-after -->
 
-<span class="eyebrow">02 / TRANSFORMATION</span>
+<span class="eyebrow">03 / TRANSFORMATION</span>
 
-## Move from repeated cards to content-aware composition.
+## Move from repeated containers to content-aware composition.
 
 <div class="before-after-grid">
-<div class="state">
-<span>BEFORE</span>
-<strong>One structure for every page</strong>
-<ul><li>Repeated split layout</li><li>Cards for unrelated content</li><li>Flat visual rhythm</li></ul>
-</div>
-<div class="delta">→</div>
-<div class="state target">
-<span>TARGET</span>
-<strong>Layout selected by slide role</strong>
-<ul><li>Architecture uses layers or flows</li><li>Evidence gets visual priority</li><li>Decisions end with a clear ask</li></ul>
-</div>
+<div class="state"><span>BEFORE</span><strong>Different labels, same geometry</strong><ul><li>Left copy and right card</li><li>Cards for unrelated content</li><li>Flat thumbnail rhythm</li></ul></div>
+<div class="delta"><b>Δ</b><small>meaning drives form</small></div>
+<div class="state target"><span>TARGET</span><strong>Geometry selected by the slide's job</strong><ul><li>Systems use boundaries or hubs</li><li>Evidence becomes the anchor</li><li>Decisions end with an action</li></ul></div>
 </div>
 
 <!-- Compare the current and target state using the same criteria. -->
@@ -69,16 +86,16 @@ Keep the visual language stable while varying composition, density, and eye path
 
 <!-- _class: layered-architecture -->
 
-<span class="eyebrow">03 / LAYERED ARCHITECTURE</span>
+<span class="eyebrow">04 / LAYERED ARCHITECTURE</span>
 
 <div class="architecture-grid">
 <div>
 
-## Use layers when responsibility changes by boundary.
+## Use layers only when responsibility changes by boundary.
 
 Label who owns each layer, what it exposes, and where policy is enforced.
 
-<div class="annotation">↳ A boundary must explain a responsibility, not just draw a box.</div>
+<div class="annotation">↳ A boundary must explain responsibility—not just draw a box.</div>
 
 </div>
 <div class="architecture-stack">
@@ -93,65 +110,47 @@ Label who owns each layer, what it exposes, and where policy is enforced.
 
 ---
 
-<!-- _class: flow-architecture -->
-
-<span class="eyebrow">04 / FLOW ARCHITECTURE</span>
-
-## Show what moves, who owns it, and why the next step exists.
-
-<div class="flow">
-<div class="node"><span>01</span><strong>Source</strong><small>Brief, data, code, or evidence</small></div>
-<div class="arrow">→</div>
-<div class="node accent"><span>02</span><strong>Argument</strong><small>One coherent narrative</small></div>
-<div class="arrow">→</div>
-<div class="node"><span>03</span><strong>Action</strong><small>A decision the room can make</small></div>
-</div>
-
-<!-- Replace the generic flow with the real request path, data flow, or decision model. -->
-
----
-
 <!-- _class: metric-spotlight -->
 
 <span class="eyebrow">05 / OUTCOME</span>
 
 <div class="metric-stage">
-<div class="metric-primary">
-<span>LAYOUT DIVERSITY</span>
-<strong>80%</strong>
-<p>of a ten-slide deck should use a distinct composition before any layout repeats.</p>
-</div>
-<div class="metric-secondary">
-<div><strong>≤20%</strong><span>card-based pages</span></div>
-<div><strong>3–4</strong><span>slides between rhythm changes</span></div>
-<div><strong>1</strong><span>dominant idea per page</span></div>
-</div>
+<div class="metric-primary"><span>GEOMETRY DIVERSITY</span><strong>80%</strong><p>of a ten-slide deck should use a distinct composition before any geometry repeats.</p></div>
+<div class="metric-secondary"><div><strong>≤20%</strong><span>card-based pages</span></div><div><strong>≤35%</strong><span>generic split screens</span></div><div><strong>3</strong><span>slides between rhythm changes</span></div></div>
 </div>
 
-<!-- Replace these design-system metrics with verified evidence in a production deck. -->
+<!-- Replace these design-system measures with verified evidence in production. -->
+
+---
+
+<!-- _class: system-map -->
+
+<span class="eyebrow">06 / SYSTEM MAP</span>
+
+<div class="visual-head">
+
+## Map access, trust, and policy boundaries.
+
+Use a hub when orchestration is central; use the boundary to show trust and ownership.
+</div>
+
+<img class="visual-art" src="assets/system-map.svg" alt="Hub-and-boundary system map" />
+
+<!-- Every connection should name access, data, protocol, or responsibility. -->
 
 ---
 
 <!-- _class: evidence-claim -->
 
-<span class="eyebrow">06 / EVIDENCE</span>
+<span class="eyebrow">07 / EVIDENCE</span>
 
 <div class="evidence-grid">
-<div class="chart">
-<span class="chart-title">AUDIENCE RECALL / ILLUSTRATIVE</span>
-<div class="bars">
-<div><span>Repeated</span><i style="--bar:34%"></i><b>34</b></div>
-<div><span>Mixed</span><i style="--bar:58%"></i><b>58</b></div>
-<div class="accent"><span>Purposeful</span><i style="--bar:82%"></i><b>82</b></div>
-</div>
-<small>Replace illustrative data with a verified source and date.</small>
-</div>
-<div class="evidence-copy">
-<span class="eyebrow">THE CLAIM</span>
+<div class="chart"><span class="chart-title">AUDIENCE RECALL / ILLUSTRATIVE</span><div class="bars"><div><span>Repeated</span><i style="--bar:34%"></i><b>34</b></div><div><span>Mixed</span><i style="--bar:58%"></i><b>58</b></div><div class="accent"><span>Purposeful</span><i style="--bar:82%"></i><b>82</b></div></div><small>Replace illustrative data with a verified source, date, and definition.</small></div>
+<div class="evidence-copy"><span class="eyebrow">THE CLAIM</span>
 
 ## Evidence becomes memorable when the page gives it visual priority.
 
-Keep explanation adjacent, but let the chart, screenshot, quote, or example remain the anchor.
+Keep explanation adjacent, but let the chart, screenshot, quotation, or artifact remain the anchor.
 </div>
 </div>
 
@@ -159,56 +158,65 @@ Keep explanation adjacent, but let the chart, screenshot, quote, or example rema
 
 ---
 
-<!-- _class: infographic-story -->
+<!-- _class: flow-architecture -->
 
-<span class="eyebrow">07 / INFOGRAPHIC</span>
+<span class="eyebrow">08 / FLOW ARCHITECTURE</span>
 
-<div class="infographic-grid">
-<div class="infographic-copy">
+## Show what moves, who owns it, and why the next step exists.
 
-## Make the whole argument visible in one glance.
-
-Use a visual handoff when the audience needs to understand the problem, method, and result before the detail.
-
-<div class="annotation">↳ Python creates the vector asset; the slide keeps the story editable.</div>
-
-</div>
-<div class="infographic-art">
-<img src="assets/infographic-story.svg" alt="Problem, method, and result diagram" />
-<small>Generated SVG art is an anchor, not a replacement for the slide structure.</small>
-</div>
+<div class="flow-track">
+<div><span>01</span><strong>Source</strong><small>Brief, data, code, research</small></div>
+<div class="low"><span>02</span><strong>Orchestrate</strong><small>Plan the story and call tools</small></div>
+<div class="accent"><span>03</span><strong>Validate</strong><small>Check claims, export, and risk</small></div>
+<div class="low"><span>04</span><strong>Act</strong><small>Decision, owner, next step</small></div>
 </div>
 
-<!-- Keep problem, method, and result concrete and short. -->
+<!-- Direct labels beat legends. Replace this with the real request or data path. -->
 
 ---
 
-<!-- _class: data-journey -->
+<!-- _class: annotated-visual -->
 
-<span class="eyebrow">08 / DATA JOURNEY</span>
+<span class="eyebrow">09 / ANNOTATED VISUAL</span>
 
-<div class="data-journey-grid">
-<div class="data-journey-copy">
-<span class="eyebrow">CURRENT SIGNAL</span>
-<strong class="data-value">82%</strong>
+<div class="annotated-grid">
+<div>
 
-## Show the state first, then explain the movement.
+## Let one real artifact dominate—then explain only what changes the decision.
 
-A dominant metric earns attention; a small trend gives it meaning and makes the next action easier to discuss.
+Use two to four callouts. The audience should still be able to see the underlying interface or architecture.
 </div>
-<div class="data-journey-art">
-<img src="assets/data-journey.svg" alt="Progress trend chart" />
-<small>Replace the sample trend with a verified source, date, and definition.</small>
+<div class="artifact-mock">
+<div class="artifact-bar">architecture-review.deck <span>Preview · Export</span></div>
+<div class="artifact-content"><aside></aside><main><small>SYSTEM MAP</small><strong>One visual anchor</strong><div class="mock-diagram"><i></i><i></i><i></i><i></i></div></main><section><b>AI DIRECTOR</b><p>Use a boundary because policy changes here.</p><p>Move caveats to notes.</p></section></div>
+<b class="pin p1">1</b><b class="pin p2">2</b><b class="pin p3">3</b>
 </div>
 </div>
 
-<!-- Pair the metric with its direction, source, and decision implication. -->
+<!-- Use a real artifact in production and keep callouts below four. -->
+
+---
+
+<!-- _class: infographic-story -->
+
+<span class="eyebrow">10 / INFOGRAPHIC STORY</span>
+
+<div class="visual-head">
+
+## Turn the argument into a scene.
+
+The result should be a tangible decision, dashboard, shipped asset, or changed behavior—not a generic “result” box.
+</div>
+
+<img class="visual-art story" src="assets/infographic-story.svg" alt="Sketch scene from scattered files through a human-directed agent workflow to visible progress" />
+
+<!-- Keep the human in control and make the result concrete. -->
 
 ---
 
 <!-- _class: code-walkthrough -->
 
-<span class="eyebrow">09 / BUILD</span>
+<span class="eyebrow">11 / BUILD</span>
 
 <div class="code-grid">
 <div>
@@ -220,34 +228,61 @@ Crop to the lines the audience needs and pair them with the visible outcome.
 <div class="annotation">↳ The command is evidence; the result is the story.</div>
 
 </div>
-<div class="terminal">
-<div class="terminal-bar">~/project</div>
-<pre><code><span class="prompt">$</span> codex-slides init "Architecture Review" \
+<div class="terminal"><div class="terminal-bar">~/project</div><pre><code><span class="prompt">$</span> codex-slides init "Architecture Review" \
   --format pptx \
   --template claude-editorial
 
-<span class="success">✓ 15 layout starters created</span>
-<span class="success">✓ editable PPTX source generated</span>
-<span class="success">✓ validation passed</span></code></pre>
-</div>
+<span class="success">✓ 20 layout starters created</span>
+<span class="success">✓ geometry audit passed</span>
+<span class="success">✓ editable PPTX source generated</span></code></pre></div>
 </div>
 
 <!-- Use a live command only when the demo is reliable. -->
 
 ---
 
+<!-- _class: data-journey -->
+
+<span class="eyebrow">12 / DATA JOURNEY</span>
+
+<div class="visual-head">
+
+## Show the state, movement, and next action.
+
+A large metric earns attention; the trend and definition make it trustworthy.
+</div>
+
+<img class="visual-art data" src="assets/data-journey.svg" alt="Metric and trend connected to a decision" />
+
+<!-- Pair the metric with source, date, definition, direction, and implication. -->
+
+---
+
+<!-- _class: quote-evidence -->
+
+<span class="eyebrow">13 / VOICE OF EVIDENCE</span>
+
+<div class="quote-grid">
+<blockquote>“We stopped debating slide decoration and started discussing the architecture decision.”</blockquote>
+<div class="quote-meta"><strong>Verified participant or customer</strong><span>Role · organization · interview date</span><hr /><b>WHY IT MATTERS</b><p>A quotation is evidence only when the source is real, the context is clear, and the interpretation is explicit.</p></div>
+</div>
+
+<!-- Never fabricate a quotation. Replace this with an authorized source. -->
+
+---
+
 <!-- _class: comparison-matrix -->
 
-<span class="eyebrow">10 / TRADE-OFF</span>
+<span class="eyebrow">14 / TRADE-OFF</span>
 
 ## Compare options on the criteria that determine the decision.
 
 <div class="compare-table">
-<div class="compare-row header"><span>Criterion</span><span>Repeated template</span><span>Content-aware system</span></div>
+<div class="compare-row header"><span>Criterion</span><span>Repeated template</span><span>Visual Grammar v2</span></div>
 <div class="compare-row"><strong>Speed</strong><span>Fast first draft</span><span>Fast with reusable archetypes</span></div>
-<div class="compare-row"><strong>Clarity</strong><span>One generic frame</span><span>Composition follows the message</span></div>
-<div class="compare-row"><strong>Rhythm</strong><span>Flat across the deck</span><span class="recommended">Varied but visually consistent</span></div>
-<div class="compare-row"><strong>Maintenance</strong><span>Many one-off fixes</span><span>Shared layout vocabulary</span></div>
+<div class="compare-row"><strong>Clarity</strong><span>One generic frame</span><span>Geometry follows the message</span></div>
+<div class="compare-row"><strong>Rhythm</strong><span>Different labels, similar thumbnails</span><span class="recommended">Audited by geometry and density</span></div>
+<div class="compare-row"><strong>Maintenance</strong><span>Many one-off fixes</span><span>Shared primitives and tests</span></div>
 </div>
 
 <!-- Use the same criteria for both options before highlighting the recommendation. -->
@@ -256,66 +291,67 @@ Crop to the lines the audience needs and pair them with the visible outcome.
 
 <!-- _class: decision-path -->
 
-<span class="eyebrow">11 / DECISION</span>
+<span class="eyebrow">15 / DECISION</span>
 
-<div class="decision-grid">
-<div class="decision-copy">
+<div class="visual-head">
 
-## Turn choices into a path the room can act on.
+## Turn choices into an actionable path.
 
-Make the evaluation point explicit, then show the consequence of proceeding, pausing, or collecting evidence.
-
-<div class="annotation">↳ Recommendation: make the next action visible.</div>
-
-</div>
-<div class="decision-art">
-<img src="assets/decision-path.svg" alt="Decision path from signal to proceed or pause" />
-<small>Use a clear branch only when the criteria are named.</small>
-</div>
+Make the evaluation point explicit, then show the consequence of proceeding or collecting evidence.
 </div>
 
-<!-- End with an owner, next action, and timing. -->
+<img class="visual-art decision" src="assets/decision-path.svg" alt="Decision path from signal through criteria to proceed or pause" />
+
+<!-- End with an owner, next action, timing, and stop conditions. -->
+
+---
+
+<!-- _class: operating-loop -->
+
+<span class="eyebrow">16 / OPERATING MODEL</span>
+
+<div class="visual-head">
+
+## Use loops only when feedback changes the outcome.
+
+Anchor the loop on one measurable outcome, then name cadence, guardrails, and ownership.
+</div>
+
+<img class="visual-art loop" src="assets/operating-loop.svg" alt="Closed operating loop around a measurable outcome" />
+
+<!-- Explain what feedback changes and who acts on it. -->
 
 ---
 
 <!-- _class: timeline -->
 
-<span class="eyebrow">12 / ADOPTION</span>
+<span class="eyebrow">17 / ADOPTION</span>
 
-## Roll out the layout system without rewriting the visual brand.
+## Roll out the visual grammar without rewriting the brand.
 
 <div class="timeline-track">
-<div><span>01</span><strong>Catalog</strong><small>Name the archetypes and their jobs.</small></div>
+<div><span>01</span><strong>Catalog</strong><small>Name archetypes, geometry, and purpose.</small></div>
 <div class="current"><span>02</span><strong>Scaffold</strong><small>Ship diverse starters in every format.</small></div>
-<div><span>03</span><strong>Validate</strong><small>Check repetition and layout coverage.</small></div>
-<div><span>04</span><strong>Learn</strong><small>Add patterns from real presentation work.</small></div>
+<div><span>03</span><strong>Validate</strong><small>Audit sequence, density, and export.</small></div>
+<div><span>04</span><strong>Learn</strong><small>Add patterns from real decks.</small></div>
 </div>
 
-<!-- Mark the current phase and describe changing capability, not just dates. -->
+<!-- Mark the current phase and describe changing capability, not only dates. -->
 
 ---
 
 <!-- _class: risk-matrix -->
 
-<span class="eyebrow">13 / RISK</span>
+<span class="eyebrow">18 / RISK</span>
 
 <div class="risk-grid">
 <div>
 
 ## Variation without rules becomes noise.
 
-<div class="risk-quadrants">
-<div><span>Low impact</span><strong>Cosmetic drift</strong></div>
-<div><span>High impact</span><strong>Unreadable density</strong></div>
-<div><span>Low probability</span><strong>Export edge case</strong></div>
-<div class="hot"><span>High probability</span><strong>Random layout choice</strong></div>
+<div class="risk-quadrants"><div><span>Low impact</span><strong>Cosmetic drift</strong></div><div><span>High impact</span><strong>Unreadable density</strong></div><div><span>Low probability</span><strong>Export edge case</strong></div><div class="hot"><span>High probability</span><strong>Different names, same geometry</strong></div></div>
 </div>
-</div>
-<div class="risk-list">
-<div><span>01</span><strong>Novelty over meaning</strong><small>Mitigate with slide-role selection.</small></div>
-<div><span>02</span><strong>Too many cards</strong><small>Cap card-based pages near 20%.</small></div>
-<div><span>03</span><strong>Theme drift</strong><small>Keep shared tokens and page chrome.</small></div>
-</div>
+<div class="risk-list"><div><span>01</span><strong>Novelty over meaning</strong><small>Use role and dominant-element selection.</small></div><div><span>02</span><strong>Split-screen default</strong><small>Cap generic splits near 35%.</small></div><div><span>03</span><strong>Theme drift</strong><small>Keep shared tokens and page chrome.</small></div></div>
 </div>
 
 <!-- Name the mitigation and owner for real risks. -->
@@ -327,10 +363,10 @@ Make the evaluation point explicit, then show the consequence of proceeding, pau
 <span class="eyebrow">THE DECISION</span>
 
 ## Keep the style.
-## *Expand the vocabulary.*
+## *Expand the visual grammar.*
 
-Choose the layout by communication purpose, then let the design system keep the deck coherent.
+Choose geometry by communication purpose, then let the design system keep the deck coherent.
 
 <div class="prompt-line"><span>$</span> build with purpose</div>
 
-<!-- Ask for one concrete action, then stop. -->
+<!-- Ask for one concrete action, owner, and timing. -->
