@@ -1,0 +1,57 @@
+name: Apply Visual Grammar v2
+
+on:
+  push:
+    branches:
+      - feat/visual-grammar-v2
+
+permissions:
+  contents: write
+
+concurrency:
+  group: visual-grammar-v2-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/visual-grammar-v2
+          fetch-depth: 0
+
+      - name: Reconstruct and apply Visual Grammar v2
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .visual-v2-payload/part-* | base64 --decode > /tmp/visual-v2-payload.tar.xz
+          tar -xJf /tmp/visual-v2-payload.tar.xz -C "$GITHUB_WORKSPACE"
+
+          for format in marp pptx; do
+            mkdir -p "templates/${format}/assets"
+            cp templates/html/assets/*.svg "templates/${format}/assets/"
+          done
+
+          rm -rf .visual-v2-payload
+          rm -f .github/workflows/apply-visual-v2.yml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate repository
+        run: |
+          npm ci
+          npm run check
+
+      - name: Commit applied changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: add Visual Grammar v2 layouts and SVG art"
+          git push origin HEAD:feat/visual-grammar-v2
