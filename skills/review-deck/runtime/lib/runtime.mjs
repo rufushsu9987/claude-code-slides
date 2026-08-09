@@ -6,7 +6,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-export const VERSION = '0.6.0';
+export const VERSION = '0.7.0';
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const pluginRoot = path.resolve(moduleDir, '..');

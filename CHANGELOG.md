@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+## 0.7.0 - 2026-08-09
+
 - Keep `claude-code-slides` focused on presentation creation; video rendering, narration, and media packaging remain outside this repository.
 - Add `infographic-story`, `data-journey`, and `decision-path` layout archetypes with HTML, Marp, and editable PPTX starters.
 - Add a dependency-free Python SVG generator for reusable infographic, trend, and decision-path assets.
