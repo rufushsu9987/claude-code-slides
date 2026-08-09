@@ -26,10 +26,16 @@ jobs:
           from pathlib import Path
           path = Path('.github/scripts/apply_mechanism_loop.py')
           text = path.read_text(encoding='utf-8')
-          text = text.replace(
-              'Are decorative orbit, concentric-circle, logo-cloud, or unreadable micro-label diagrams absent from the cover?',
-              'Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?',
-          )
+          replacements = {
+              'Are decorative orbit, concentric-circle, logo-cloud, or unreadable micro-label diagrams absent from the cover?':
+                  'Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?',
+              'Treat a decorative or meaningless cover-right diagram as a Major finding. Prefer whitespace when the right-side module lacks a source, clear communication job, or two-second readability.':
+                  'Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.',
+              'Treat a decorative or meaningless cover-right diagram as Major. Prefer whitespace when the module lacks a source, clear communication job, or two-second readability.':
+                  'Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.',
+          }
+          for old, new in replacements.items():
+              text = text.replace(old, new)
           path.write_text(text, encoding='utf-8', newline='\n')
           PY
           python3 .github/scripts/apply_mechanism_loop.py
