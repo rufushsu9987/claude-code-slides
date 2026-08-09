@@ -25,26 +25,15 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
+          slash = chr(92)
           replacements = {
               'README.md': (
-                  '''cp templates/python-svg-plan.md   slides/mstr/assets/capital-engine.visual.md
-
-python3 slides/mstr/assets/capital-engine.py   --output slides/mstr/assets/capital-engine.svg''',
-                  '''cp templates/python-svg-plan.md \\
-  slides/mstr/assets/capital-engine.visual.md
-
-python3 slides/mstr/assets/capital-engine.py \\
-  --output slides/mstr/assets/capital-engine.svg''',
+                  'cp templates/python-svg-plan.md   slides/mstr/assets/capital-engine.visual.md\n\npython3 slides/mstr/assets/capital-engine.py   --output slides/mstr/assets/capital-engine.svg',
+                  'cp templates/python-svg-plan.md ' + slash + '\n  slides/mstr/assets/capital-engine.visual.md\n\npython3 slides/mstr/assets/capital-engine.py ' + slash + '\n  --output slides/mstr/assets/capital-engine.svg',
               ),
               'references/layout-system.md': (
-                  '''cp templates/python-svg-plan.md   slides/example/assets/capital-engine.visual.md
-
-python3 slides/example/assets/capital-engine.py   --output slides/example/assets/capital-engine.svg''',
-                  '''cp templates/python-svg-plan.md \\
-  slides/example/assets/capital-engine.visual.md
-
-python3 slides/example/assets/capital-engine.py \\
-  --output slides/example/assets/capital-engine.svg''',
+                  'cp templates/python-svg-plan.md   slides/example/assets/capital-engine.visual.md\n\npython3 slides/example/assets/capital-engine.py   --output slides/example/assets/capital-engine.svg',
+                  'cp templates/python-svg-plan.md ' + slash + '\n  slides/example/assets/capital-engine.visual.md\n\npython3 slides/example/assets/capital-engine.py ' + slash + '\n  --output slides/example/assets/capital-engine.svg',
               ),
           }
 
