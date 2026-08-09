@@ -1,0 +1,517 @@
+name: Apply agent-authored Python SVG workflow
+
+on:
+  push:
+    branches:
+      - feat/agent-authored-python-svg
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/agent-authored-python-svg
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply dynamic SVG authoring changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path: str) -> str:
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path: str, content: str) -> None:
+              Path(path).write_text(content, encoding='utf-8', newline='\n')
+
+          def replace_once(text: str, old: str, new: str, path: str) -> str:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one replacement anchor, found {count}')
+              return text.replace(old, new, 1)
+
+          # ------------------------------------------------------------------
+          # Synchronize the new canonical reference into portable skills.
+          # ------------------------------------------------------------------
+          path = 'scripts/sync-skill-resources.mjs'
+          text = read(path)
+          anchor = '''  {
+            source: 'references/output-formats.md',
+'''
+          mapping = '''  {
+            source: 'references/python-svg-authoring.md',
+            destinations: [
+              'skills/create-deck/references/python-svg-authoring.md',
+              'skills/review-deck/references/python-svg-authoring.md',
+              'skills/visual-director/references/python-svg-authoring.md',
+              'skills/deck-reviewer/references/python-svg-authoring.md',
+            ],
+          },
+'''
+          text = replace_once(text, anchor, mapping + anchor, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Create-deck workflow: plan first, then author a deck-local script.
+          # ------------------------------------------------------------------
+          path = 'skills/create-deck/SKILL.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              '- [Layout system](references/layout-system.md)\n',
+              '- [Layout system](references/layout-system.md)\n- [Python SVG authoring protocol](references/python-svg-authoring.md)\n',
+              path,
+          )
+          old = '''When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`. Use the Python `mechanism-loop` kind when four named stages revolve around one outcome. Do not make the cover proof rail carry both evidence and the full causal model.
+'''
+          new = '''When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan a dedicated explanatory page. When a content-specific SVG is the best medium, create a deck-local `<visual>.visual.md` plan before writing `<visual>.py`, then generate `<visual>.svg`. Built-in drawing kinds are examples and fallbacks, not a closed catalog; use one only when it already matches the communication job.
+'''
+          text = replace_once(text, old, new, path)
+          text = replace_once(
+              text,
+              'Keep assets inside the deck directory.\n',
+              '''Keep assets inside the deck directory.
+
+For every custom Python SVG, keep the plan, generator, and output together:
+
+```text
+assets/<visual>.visual.md
+assets/<visual>.py
+assets/<visual>.svg
+```
+
+The Markdown plan records the source of truth, semantic model, composition, eye path, accessibility, editable slide content, and validation contract. Keep it synchronized with the Python and generated SVG.
+''',
+              path,
+          )
+          anchor = '''Technical-deck rules:
+'''
+          custom_rules = '''Custom Python SVG rules:
+
+- Read the bundled Python SVG authoring protocol before implementing a content-specific visual.
+- Default to a custom deck-local Python script when the visual model is unique to the source material; do not force the story into a built-in `--kind`.
+- Write or update `<visual>.visual.md` before changing geometry in `<visual>.py`.
+- Keep the slide title, explanation, source note, footer, and speaker notes editable outside the SVG whenever possible.
+- Prefer standard-library, deterministic SVG with a stable `viewBox`, accessible `<title>` and `<desc>`, escaped text, and no external script or absolute local path.
+- Promote a one-off visual into the shared generator only after the pattern proves reusable across unrelated decks.
+
+'''
+          text = replace_once(text, anchor, custom_rules + anchor, path)
+          text = replace_once(
+              text,
+              '- PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename; explicit layout sequence.\n',
+              '''- PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename; explicit layout sequence.
+- Custom Python SVG: the `.visual.md`, `.py`, and `.svg` agree; the Python compiles; the SVG parses; regeneration is deterministic; labels, sources, dates, and units match the source of truth.
+''',
+              path,
+          )
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Visual-director workflow.
+          # ------------------------------------------------------------------
+          path = 'skills/visual-director/SKILL.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              'Read [the visual system](references/style-system.md) and [the layout system](references/layout-system.md), resolved relative to this skill directory.',
+              'Read [the visual system](references/style-system.md), [the layout system](references/layout-system.md), and [the Python SVG authoring protocol](references/python-svg-authoring.md), resolved relative to this skill directory.',
+              path,
+          )
+          old = '''5. For mechanism-led openings, a `mechanismHandoff`: the next-page archetype, four named stages when applicable, central outcome, and whether a Python `mechanism-loop` SVG should be generated.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          new = '''5. For each proposed custom Python SVG, a `pythonSvgPlan`: plan path, script path, output path, communication job, source of truth, semantic model, geometry, eye path, editable outside content, and validation requirements.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          text = replace_once(text, old, new, path)
+          text = replace_once(
+              text,
+              '- When the opening thesis is causal or cyclical, move the mechanism to the next page and use a content-specific `mechanism-loop`, `operating-loop`, or `infographic-story` rather than overloading the cover.\n',
+              '''- When the opening thesis is causal or cyclical, move the mechanism to the next page rather than overloading the cover.
+- Plan custom Python SVGs from the semantic model, not from a fixed drawing kind. Write `<visual>.visual.md` before implementation and treat built-in kinds as reference patterns or fallbacks only.
+- Specify why Python SVG is better than a screenshot, verified chart, native editable shapes, or whitespace for that page.
+''',
+              path,
+          )
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Review workflows.
+          # ------------------------------------------------------------------
+          path = 'skills/review-deck/SKILL.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              '- [Layout system](references/layout-system.md)\n',
+              '- [Layout system](references/layout-system.md)\n- [Python SVG authoring protocol](references/python-svg-authoring.md)\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              '1. Detect the format and locate source files, generated output, notes, and local assets.\n',
+              '1. Detect the format and locate source files, generated output, notes, local assets, and any `.visual.md` / `.py` / `.svg` visual source sets.\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              '- When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?\n',
+              '''- When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?
+- Does every custom SVG have a current `.visual.md` plan and deck-local Python source, or a documented reason for using a shared built-in renderer?
+- Does the plan describe the source of truth and semantic model before shapes, and does the SVG actually follow that plan?
+- Would a screenshot, verified chart, native editable shapes, or whitespace communicate the page more honestly or efficiently?
+- Can the custom SVG be regenerated deterministically, parsed as XML, and read at presentation and thumbnail distance?
+''',
+              path,
+          )
+          write(path, text)
+
+          path = 'skills/deck-reviewer/SKILL.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              '- [Layout system](references/layout-system.md)\n',
+              '- [Layout system](references/layout-system.md)\n- [Python SVG authoring protocol](references/python-svg-authoring.md)\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              '- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity.\n',
+              '- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity, and agreement between custom `.visual.md`, `.py`, and `.svg` files.\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              'For mechanism-led openings, require a dedicated explanatory handoff page when the causal model cannot be understood from the cover alone.\n',
+              '''For mechanism-led openings, require a dedicated explanatory handoff page when the causal model cannot be understood from the cover alone. Treat a custom SVG with no plan, stale plan, fabricated labels, non-reproducible output, or geometry that merely fills space as a Major finding. Built-in kinds are not required; judge whether the chosen medium and custom composition fit the source material.
+''',
+              path,
+          )
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Claude Code native agents.
+          # ------------------------------------------------------------------
+          path = 'agents/visual-director.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              'You are a presentation visual director. Read `${CLAUDE_PLUGIN_ROOT}/references/style-system.md` and `${CLAUDE_PLUGIN_ROOT}/references/layout-system.md`.',
+              'You are a presentation visual director. Read `${CLAUDE_PLUGIN_ROOT}/references/style-system.md`, `${CLAUDE_PLUGIN_ROOT}/references/layout-system.md`, and `${CLAUDE_PLUGIN_ROOT}/references/python-svg-authoring.md`.',
+              path,
+          )
+          old = '''5. For mechanism-led openings, a `mechanismHandoff`: next-page archetype, four named stages when applicable, central outcome, and whether to generate a Python `mechanism-loop` SVG.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          new = '''5. For each proposed custom Python SVG, a `pythonSvgPlan`: plan path, script path, output path, communication job, source of truth, semantic model, geometry, eye path, editable outside content, and validation requirements.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          text = replace_once(text, old, new, path)
+          text = replace_once(
+              text,
+              '- Move causal or cyclical explanations to the next page and prefer a content-specific `mechanism-loop`, `operating-loop`, or `infographic-story` over an overloaded cover.\n',
+              '''- Move causal or cyclical explanations to the next page instead of overloading the cover.
+- For a custom Python SVG, plan the semantic model in `<visual>.visual.md` before writing a deck-local `<visual>.py`; built-in kinds are examples and fallbacks, not a closed catalog.
+- State why Python SVG is the right medium instead of a screenshot, verified chart, native editable shapes, or whitespace.
+''',
+              path,
+          )
+          write(path, text)
+
+          path = 'agents/deck-reviewer.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              'You are an independent read-only presentation reviewer. Read `${CLAUDE_PLUGIN_ROOT}/references/review-checklist.md` and `${CLAUDE_PLUGIN_ROOT}/references/layout-system.md`.',
+              'You are an independent read-only presentation reviewer. Read `${CLAUDE_PLUGIN_ROOT}/references/review-checklist.md`, `${CLAUDE_PLUGIN_ROOT}/references/layout-system.md`, and `${CLAUDE_PLUGIN_ROOT}/references/python-svg-authoring.md`.',
+              path,
+          )
+          text = replace_once(
+              text,
+              '- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity.\n',
+              '- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity, and agreement between custom `.visual.md`, `.py`, and `.svg` files.\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              'When the opening thesis is mechanism-led, require a dedicated next-page causal model instead of a denser cover.\n',
+              'When the opening thesis is mechanism-led, require a dedicated next-page causal model instead of a denser cover. Flag custom SVGs with no current plan, fabricated labels, non-reproducible output, or geometry that merely fills space. Do not require a built-in drawing kind when a deck-local Python visual better fits the evidence.\n',
+              path,
+          )
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Canonical layout and review references.
+          # ------------------------------------------------------------------
+          path = 'references/layout-system.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              '- Use a content-specific Python SVG on the next page when a named four-stage mechanism explains the thesis faster than prose.\n- Use `--kind mechanism-loop` for a four-step cycle around one outcome. Keep the SVG off the cover unless the entire title is itself the mechanism and the diagram remains secondary.\n',
+              '''- Use a content-specific Python SVG on the next page when a mechanism, architecture, journey, or boundary explains the thesis faster than prose.
+- Write `<visual>.visual.md` before `<visual>.py`, then generate `<visual>.svg`. Use a built-in kind only when it already matches the communication job; do not force the content into a fixed renderer.
+''',
+              path,
+          )
+          new_section = '''## Agent-authored Python SVG assets
+
+When a page needs a content-specific vector visual, the default workflow is to let Codex or Claude Code plan and write a small deck-local Python generator. Read the [Python SVG authoring protocol](python-svg-authoring.md).
+
+Keep the source set together:
+
+```text
+slides/<deck>/assets/<visual>.visual.md
+slides/<deck>/assets/<visual>.py
+slides/<deck>/assets/<visual>.svg
+```
+
+The Markdown file defines the audience takeaway, source of truth, semantic model, composition, eye path, labels, accessibility, editable outside content, and validation contract. The Python file implements geometry. The SVG is generated output.
+
+Choose the medium before drawing:
+
+- use screenshots for real interfaces and artifacts
+- use charts for quantitative relationships backed by data
+- use native editable shapes for simple corporate diagrams
+- use agent-authored Python SVG for content-specific mechanisms, architectures, journeys, boundaries, or scenes
+- use whitespace when the proposed visual has no information job
+
+A typical workflow is:
+
+```bash
+cp templates/python-svg-plan.md \
+  slides/example/assets/capital-engine.visual.md
+
+python3 slides/example/assets/capital-engine.py \
+  --output slides/example/assets/capital-engine.svg
+```
+
+`scripts/generate-slide-art.py` remains a tested pattern library and fast fallback. Its built-in kinds demonstrate accessible metadata, deterministic sketch and clean strokes, arrows, loops, boundaries, paths, scenes, and layout-safe SVG output. They are examples, not an exhaustive catalog. Create a deck-local composition whenever the source material requires a different semantic model.
+
+Promote a custom visual into the shared generator only after the pattern proves reusable across multiple unrelated decks. Keep slide titles, explanation, source notes, layout markers, footers, and speaker notes editable in the target format; the SVG should remain the visual anchor rather than a flattened slide.
+
+'''
+          pattern = re.compile(r'## Python-assisted SVG assets\n.*?\n## Format mapping\n', re.S)
+          text, count = pattern.subn(lambda _match: new_section + '## Format mapping\n', text, count=1)
+          if count != 1:
+              raise SystemExit(f'{path}: Python SVG section replacement failed')
+          write(path, text)
+
+          path = 'references/review-checklist.md'
+          text = read(path)
+          custom_checklist = '''## Custom Python SVG
+
+- [ ] Every custom visual has a current `<visual>.visual.md`, `<visual>.py`, and `<visual>.svg` source set.
+- [ ] The plan states the audience takeaway, source of truth, semantic model, geometry, eye path, accessibility, editable outside content, and validation contract.
+- [ ] Python SVG was chosen because it communicates better than a screenshot, verified chart, native editable shapes, or whitespace.
+- [ ] The script compiles, the SVG parses, and regeneration is deterministic for the same inputs.
+- [ ] Factual labels, values, dates, units, and boundaries match the source material or are explicitly qualified.
+- [ ] The SVG includes accessible metadata, a stable `viewBox`, readable labels, and no external script, absolute local path, or unresolved placeholder.
+- [ ] Built-in drawing kinds are treated as examples or fallbacks rather than a mandatory catalog.
+
+'''
+          text = replace_once(text, '## Content\n', custom_checklist + '## Content\n', path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # README and gallery: dynamic-first, preset kinds as fallbacks.
+          # ------------------------------------------------------------------
+          path = 'README.md'
+          text = read(path)
+          text = replace_once(
+              text,
+              '- **10 deterministic SVG drawing kinds:** dependency-free Python visuals with `sketch` and `clean` styles.\n',
+              '- **Agent-authored Python SVG:** Codex and Claude Code can plan and generate a custom deterministic vector visual for each slide; 10 built-in kinds remain examples and fast fallbacks.\n',
+              path,
+          )
+          text = replace_once(
+              text,
+              '| **Visual asset** | Optional reusable SVG illustration or diagram | `agent-journey`, `operating-loop` |\n',
+              '| **Visual asset** | Optional plan-backed custom SVG or reusable reference renderer | `<visual>.visual.md` + `<visual>.py` + `<visual>.svg` |\n',
+              path,
+          )
+          readme_section = '''## Agent-authored Python SVG
+
+Claude Code Slides runs inside coding agents, so SVG generation is not limited to a fixed set of templates. When a slide needs a content-specific mechanism, architecture, journey, boundary, or scene, the agent should first write a Markdown visual plan, then create a small deck-local Python generator and produce the SVG.
+
+```text
+slides/<deck>/assets/<visual>.visual.md
+slides/<deck>/assets/<visual>.py
+slides/<deck>/assets/<visual>.svg
+```
+
+Start from [the Python SVG authoring protocol](./references/python-svg-authoring.md) and [the visual-plan template](./templates/python-svg-plan.md). The plan records the communication job, source of truth, semantic model, geometry, eye path, labels, accessibility, editable slide content, and validation requirements before geometry is implemented.
+
+Example workflow:
+
+```bash
+cp templates/python-svg-plan.md \
+  slides/mstr/assets/capital-engine.visual.md
+
+python3 slides/mstr/assets/capital-engine.py \
+  --output slides/mstr/assets/capital-engine.svg
+```
+
+Use the built-in generator as a pattern library or fallback, not as a closed catalog:
+
+```bash
+python3 scripts/generate-slide-art.py --list-kinds
+```
+
+The 10 reference kinds demonstrate deterministic `sketch` and `clean` strokes, accessible metadata, paths, loops, scenes, boundaries, and portable output. An agent may use one directly when it fits, inspect it for reusable techniques, or write a completely new composition when the content requires it. One-off visuals should remain deck-local; promote a pattern into the shared generator only after it proves reusable across unrelated decks.
+
+Keep slide titles, explanatory copy, citations, footers, and speaker notes editable outside the SVG. Validate the Python, parse the generated XML, inspect thumbnail and presentation readability, and run the normal deck checks before delivery.
+
+'''
+          pattern = re.compile(r'## Python-assisted SVG graphics\n.*?\n## Skills\n', re.S)
+          text, count = pattern.subn(lambda _match: readme_section + '## Skills\n', text, count=1)
+          if count != 1:
+              raise SystemExit(f'{path}: README SVG section replacement failed')
+          write(path, text)
+
+          path = 'docs/templates.md'
+          text = read(path)
+          gallery_section = '''## Agent-authored Python SVG assets
+
+Because the workflow runs inside Codex and Claude Code, the preferred SVG process is dynamic and plan-backed rather than limited to a fixed renderer catalog.
+
+For each custom visual, create:
+
+```text
+assets/<visual>.visual.md
+assets/<visual>.py
+assets/<visual>.svg
+```
+
+Copy [`templates/python-svg-plan.md`](../templates/python-svg-plan.md), complete the audience takeaway, source of truth, semantic model, composition, labels, accessibility, and validation sections, then write a dedicated Python generator. See [`references/python-svg-authoring.md`](../references/python-svg-authoring.md) for the full protocol.
+
+Use `scripts/generate-slide-art.py` when one of its 10 tested reference kinds already fits or when you need a fast starting point. The kinds are examples and fallbacks—not the boundary of the visual system. A content-specific architecture, mechanism, journey, or scene should normally remain a deck-local plan, script, and SVG until it proves broadly reusable.
+
+'''
+          pattern = re.compile(r'## Python-assisted SVG assets\n.*\Z', re.S)
+          text, count = pattern.subn(lambda _match: gallery_section, text, count=1)
+          if count != 1:
+              raise SystemExit(f'{path}: gallery SVG section replacement failed')
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Reposition the built-in Python generator in its own documentation.
+          # ------------------------------------------------------------------
+          path = 'scripts/generate-slide-art.py'
+          text = read(path)
+          anchor = '''Both modes are deterministic for a given seed and never depend on local files,
+web fonts, JavaScript, or raster images.
+'''
+          replacement = '''Both modes are deterministic for a given seed and never depend on local files,
+web fonts, JavaScript, or raster images.
+
+The built-in renderers are a tested pattern library and fast fallback. Codex and
+Claude Code may instead write a deck-local Python generator from a
+``<visual>.visual.md`` plan whenever the source material needs a custom semantic
+model or composition. Do not add a global renderer for every one-off visual.
+'''
+          text = replace_once(text, anchor, replacement, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Tests: sync coverage and dynamic-first policy.
+          # ------------------------------------------------------------------
+          path = 'test/skills.test.mjs'
+          text = read(path)
+          text = replace_once(
+              text,
+              "  'create-deck': ['references/storytelling.md','references/style-system.md','references/layout-system.md','references/output-formats.md','scripts/slides-cli.mjs'],",
+              "  'create-deck': ['references/storytelling.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/output-formats.md','scripts/slides-cli.mjs'],",
+              path,
+          )
+          text = replace_once(
+              text,
+              "  'deck-reviewer': ['references/review-checklist.md','references/layout-system.md','scripts/slides-cli.mjs'],",
+              "  'deck-reviewer': ['references/review-checklist.md','references/layout-system.md','references/python-svg-authoring.md','scripts/slides-cli.mjs'],",
+              path,
+          )
+          text = replace_once(
+              text,
+              "  'review-deck': ['references/review-checklist.md','references/style-system.md','references/layout-system.md','references/output-formats.md','scripts/slides-cli.mjs'],",
+              "  'review-deck': ['references/review-checklist.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/output-formats.md','scripts/slides-cli.mjs'],",
+              path,
+          )
+          text = replace_once(
+              text,
+              "  'visual-director': ['references/style-system.md','references/layout-system.md'],",
+              "  'visual-director': ['references/style-system.md','references/layout-system.md','references/python-svg-authoring.md'],",
+              path,
+          )
+          pair_anchor = "    ['references/output-formats.md','skills/create-deck/references/output-formats.md'],['references/output-formats.md','skills/review-deck/references/output-formats.md'],\n"
+          pair_addition = "    ['references/python-svg-authoring.md','skills/create-deck/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/review-deck/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/visual-director/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/deck-reviewer/references/python-svg-authoring.md'],\n"
+          text = replace_once(text, pair_anchor, pair_addition + pair_anchor, path)
+          text += '''
+
+test('agent-authored Python SVG workflow is plan-backed and dynamic-first', async () => {
+  const [protocol, planTemplate, generator, createDeck, visualDirector, reviewDeck, deckReviewer] = await Promise.all([
+    readFile('references/python-svg-authoring.md', 'utf8'),
+    readFile('templates/python-svg-plan.md', 'utf8'),
+    readFile('scripts/generate-slide-art.py', 'utf8'),
+    readFile('skills/create-deck/SKILL.md', 'utf8'),
+    readFile('skills/visual-director/SKILL.md', 'utf8'),
+    readFile('skills/review-deck/SKILL.md', 'utf8'),
+    readFile('skills/deck-reviewer/SKILL.md', 'utf8'),
+  ]);
+
+  for (const content of [protocol, planTemplate]) {
+    assert.match(content, /source of truth/i);
+    assert.match(content, /semantic model/i);
+    assert.match(content, /accessibility/i);
+    assert.match(content, /validation/i);
+  }
+  assert.match(protocol, /\.visual\.md/);
+  assert.match(protocol, /not.*closed catalog|not the limit|examples.*fallback/i);
+  assert.match(generator, /pattern library and fast fallback/i);
+  assert.match(createDeck, /deck-local.*\.visual\.md|<visual>\.visual\.md/i);
+  assert.match(visualDirector, /pythonSvgPlan/);
+  assert.match(reviewDeck, /\.visual\.md.*\.py.*\.svg|\.visual\.md/i);
+  assert.match(deckReviewer, /custom SVG.*plan|\.visual\.md/i);
+});
+'''
+          write(path, text)
+          PY
+
+      - name: Validate and synchronize
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run sync:skills
+          npm run check
+
+      - name: Commit applied changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/apply-agent-svg-authoring.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: make Python SVG authoring agent-driven"
+          git push origin HEAD:feat/agent-authored-python-svg
