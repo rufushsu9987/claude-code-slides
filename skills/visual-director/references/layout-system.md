@@ -176,9 +176,11 @@ Choose the medium before drawing:
 A typical workflow is:
 
 ```bash
-cp templates/python-svg-plan.md   slides/example/assets/capital-engine.visual.md
+cp templates/python-svg-plan.md \
+  slides/example/assets/capital-engine.visual.md
 
-python3 slides/example/assets/capital-engine.py   --output slides/example/assets/capital-engine.svg
+python3 slides/example/assets/capital-engine.py \
+  --output slides/example/assets/capital-engine.svg
 ```
 
 `scripts/generate-slide-art.py` remains a tested pattern library and fast fallback. Its built-in kinds demonstrate accessible metadata, deterministic sketch and clean strokes, arrows, loops, boundaries, paths, scenes, and layout-safe SVG output. They are examples, not an exhaustive catalog. Create a deck-local composition whenever the source material requires a different semantic model.

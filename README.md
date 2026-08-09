@@ -175,9 +175,11 @@ Start from [the Python SVG authoring protocol](./references/python-svg-authoring
 Example workflow:
 
 ```bash
-cp templates/python-svg-plan.md   slides/mstr/assets/capital-engine.visual.md
+cp templates/python-svg-plan.md \
+  slides/mstr/assets/capital-engine.visual.md
 
-python3 slides/mstr/assets/capital-engine.py   --output slides/mstr/assets/capital-engine.svg
+python3 slides/mstr/assets/capital-engine.py \
+  --output slides/mstr/assets/capital-engine.svg
 ```
 
 Use the built-in generator as a pattern library or fallback, not as a closed catalog:
