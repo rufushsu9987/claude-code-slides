@@ -1,0 +1,68 @@
+name: Fix Python SVG documentation formatting
+
+on:
+  push:
+    branches:
+      - feat/agent-authored-python-svg
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/agent-authored-python-svg
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Restore multiline shell examples
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              'README.md': (
+                  '''cp templates/python-svg-plan.md   slides/mstr/assets/capital-engine.visual.md
+
+python3 slides/mstr/assets/capital-engine.py   --output slides/mstr/assets/capital-engine.svg''',
+                  '''cp templates/python-svg-plan.md \\
+  slides/mstr/assets/capital-engine.visual.md
+
+python3 slides/mstr/assets/capital-engine.py \\
+  --output slides/mstr/assets/capital-engine.svg''',
+              ),
+              'references/layout-system.md': (
+                  '''cp templates/python-svg-plan.md   slides/example/assets/capital-engine.visual.md
+
+python3 slides/example/assets/capital-engine.py   --output slides/example/assets/capital-engine.svg''',
+                  '''cp templates/python-svg-plan.md \\
+  slides/example/assets/capital-engine.visual.md
+
+python3 slides/example/assets/capital-engine.py \\
+  --output slides/example/assets/capital-engine.svg''',
+              ),
+          }
+
+          for filename, (old, new) in replacements.items():
+              path = Path(filename)
+              text = path.read_text(encoding='utf-8')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{filename}: formatting anchor missing or duplicated')
+              path.write_text(text.replace(old, new, 1), encoding='utf-8', newline='\n')
+          PY
+          npm ci
+          npm run sync:skills
+          npm run check
+      - name: Commit fix
+        run: |
+          rm -f .github/workflows/fix-python-svg-doc-formatting.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "docs: preserve multiline Python SVG examples"
+          git push origin HEAD:feat/agent-authored-python-svg
