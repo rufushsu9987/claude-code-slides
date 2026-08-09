@@ -21,7 +21,18 @@ jobs:
           node-version: 22
           cache: npm
       - name: Apply repository changes
-        run: python3 .github/scripts/apply_mechanism_loop.py
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('.github/scripts/apply_mechanism_loop.py')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              'Are decorative orbit, concentric-circle, logo-cloud, or unreadable micro-label diagrams absent from the cover?',
+              'Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?',
+          )
+          path.write_text(text, encoding='utf-8', newline='\n')
+          PY
+          python3 .github/scripts/apply_mechanism_loop.py
       - name: Validate repository
         run: |
           npm ci
