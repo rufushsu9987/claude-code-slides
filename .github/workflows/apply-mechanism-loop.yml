@@ -33,6 +33,8 @@ jobs:
                   'Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.',
               'Treat a decorative or meaningless cover-right diagram as Major. Prefer whitespace when the module lacks a source, clear communication job, or two-second readability.':
                   'Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.',
+              '4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, including the source and why it earns its place.':
+                  '4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, with the source and why it earns its place.',
           }
           for old, new in replacements.items():
               text = text.replace(old, new)
