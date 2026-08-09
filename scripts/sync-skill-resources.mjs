@@ -35,6 +35,15 @@ const mappings = [
     ],
   },
   {
+    source: 'references/python-svg-authoring.md',
+    destinations: [
+      'skills/create-deck/references/python-svg-authoring.md',
+      'skills/review-deck/references/python-svg-authoring.md',
+      'skills/visual-director/references/python-svg-authoring.md',
+      'skills/deck-reviewer/references/python-svg-authoring.md',
+    ],
+  },
+  {
     source: 'references/output-formats.md',
     destinations: [
       'skills/create-deck/references/output-formats.md',

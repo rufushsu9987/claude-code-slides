@@ -72,8 +72,8 @@ A proof rail establishes stakes; it should not also carry the full causal model.
 
 - Use `proof-rail` on the cover for two to four source-backed signals with explicit roles such as asset base, liquidity, or per-share effect.
 - State how the signals relate. If they use different disclosure dates, label that clearly and do not imply a single synchronized snapshot.
-- Use a content-specific Python SVG on the next page when a named four-stage mechanism explains the thesis faster than prose.
-- Use `--kind mechanism-loop` for a four-step cycle around one outcome. Keep the SVG off the cover unless the entire title is itself the mechanism and the diagram remains secondary.
+- Use a content-specific Python SVG on the next page when a mechanism, architecture, journey, or boundary explains the thesis faster than prose.
+- Write `<visual>.visual.md` before `<visual>.py`, then generate `<visual>.svg`. Use a built-in kind only when it already matches the communication job; do not force the content into a fixed renderer.
 - Do not repeat the same proof rail on the mechanism page. The handoff should move from **evidence → causal model → implication**.
 
 ## Selection workflow
@@ -151,46 +151,39 @@ Prefer a small set of meaningful visual primitives:
 
 Use direct labels. An arrow should name data, identity, protocol, decision, or ownership. A box should represent a real boundary, state, or responsibility—not simply create visual order.
 
-## Python-assisted SVG assets
+## Agent-authored Python SVG assets
 
-Use `scripts/generate-slide-art.py` when a page benefits from a reusable vector scene instead of a screenshot or a cluster of editable cards.
+When a page needs a content-specific vector visual, the default workflow is to let Codex or Claude Code plan and write a small deck-local Python generator. Read the [Python SVG authoring protocol](python-svg-authoring.md).
 
-```bash
-python3 scripts/generate-slide-art.py \
-  --kind agent-journey \
-  --style sketch \
-  --title "From scattered context to visible progress" \
-  --output slides/example/assets/agent-journey.svg
-```
-
-Built-in kinds:
+Keep the source set together:
 
 ```text
-agent-journey · infographic · data-journey · decision-path
-mechanism-loop · system-map · architecture-boundary · operating-loop
-swimlane-process · roadmap-horizon
+slides/<deck>/assets/<visual>.visual.md
+slides/<deck>/assets/<visual>.py
+slides/<deck>/assets/<visual>.svg
 ```
 
-Use a configurable mechanism loop when the story is domain-specific:
+The Markdown file defines the audience takeaway, source of truth, semantic model, composition, eye path, labels, accessibility, editable outside content, and validation contract. The Python file implements geometry. The SVG is generated output.
+
+Choose the medium before drawing:
+
+- use screenshots for real interfaces and artifacts
+- use charts for quantitative relationships backed by data
+- use native editable shapes for simple corporate diagrams
+- use agent-authored Python SVG for content-specific mechanisms, architectures, journeys, boundaries, or scenes
+- use whitespace when the proposed visual has no information job
+
+A typical workflow is:
 
 ```bash
-python3 scripts/generate-slide-art.py \
-  --kind mechanism-loop \
-  --style clean \
-  --center-eyebrow "CAPITAL ENGINE" \
-  --center-label "BTC per share" \
-  --step "FINANCE|debt / equity" \
-  --step "BUY BTC|asset base" \
-  --step "RE-RATE|market access" \
-  --step "REFINANCE|repeat" \
-  --rail "Asset base|BTC holdings" \
-  --rail "Liquidity|cash reserve" \
-  --rail "Per-share effect|BTC yield" \
-  --takeaway "Capital access keeps the accumulation loop moving." \
-  --output slides/example/assets/capital-engine.svg
+cp templates/python-svg-plan.md   slides/example/assets/capital-engine.visual.md
+
+python3 slides/example/assets/capital-engine.py   --output slides/example/assets/capital-engine.svg
 ```
 
-`sketch` uses deterministic double strokes for an editorial workshop feel. `clean` uses exact single strokes for formal architecture decks. Keep slide titles, source notes, layout markers, and speaker notes editable in the target format; the SVG should remain the visual anchor, not the entire slide flattened into an image.
+`scripts/generate-slide-art.py` remains a tested pattern library and fast fallback. Its built-in kinds demonstrate accessible metadata, deterministic sketch and clean strokes, arrows, loops, boundaries, paths, scenes, and layout-safe SVG output. They are examples, not an exhaustive catalog. Create a deck-local composition whenever the source material requires a different semantic model.
+
+Promote a custom visual into the shared generator only after the pattern proves reusable across multiple unrelated decks. Keep slide titles, explanation, source notes, layout markers, footers, and speaker notes editable in the target format; the SVG should remain the visual anchor rather than a flattened slide.
 
 ## Format mapping
 

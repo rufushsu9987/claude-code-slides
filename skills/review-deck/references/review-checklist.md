@@ -21,6 +21,16 @@
 - [ ] Mixed disclosure dates are visible and are not presented as a synchronized snapshot.
 - [ ] If the opening thesis is mechanism-led, the next page explains the causal model instead of forcing the proof rail to do both jobs.
 
+## Custom Python SVG
+
+- [ ] Every custom visual has a current `<visual>.visual.md`, `<visual>.py`, and `<visual>.svg` source set.
+- [ ] The plan states the audience takeaway, source of truth, semantic model, geometry, eye path, accessibility, editable outside content, and validation contract.
+- [ ] Python SVG was chosen because it communicates better than a screenshot, verified chart, native editable shapes, or whitespace.
+- [ ] The script compiles, the SVG parses, and regeneration is deterministic for the same inputs.
+- [ ] Factual labels, values, dates, units, and boundaries match the source material or are explicitly qualified.
+- [ ] The SVG includes accessible metadata, a stable `viewBox`, readable labels, and no external script, absolute local path, or unresolved placeholder.
+- [ ] Built-in drawing kinds are treated as examples or fallbacks rather than a mandatory catalog.
+
 ## Content
 
 - [ ] One dominant idea per page.

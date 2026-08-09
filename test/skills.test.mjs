@@ -6,12 +6,12 @@ import test from 'node:test';
 const expected = ['claude-code-style','create-deck','deck-architect','deck-reviewer','review-deck','speaker-notes','visual-director'];
 const resources = {
   'claude-code-style': ['references/style-system.md'],
-  'create-deck': ['references/storytelling.md','references/style-system.md','references/layout-system.md','references/output-formats.md','scripts/slides-cli.mjs'],
+  'create-deck': ['references/storytelling.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/output-formats.md','scripts/slides-cli.mjs'],
   'deck-architect': ['references/storytelling.md'],
-  'deck-reviewer': ['references/review-checklist.md','references/layout-system.md','scripts/slides-cli.mjs'],
-  'review-deck': ['references/review-checklist.md','references/style-system.md','references/layout-system.md','references/output-formats.md','scripts/slides-cli.mjs'],
+  'deck-reviewer': ['references/review-checklist.md','references/layout-system.md','references/python-svg-authoring.md','scripts/slides-cli.mjs'],
+  'review-deck': ['references/review-checklist.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/output-formats.md','scripts/slides-cli.mjs'],
   'speaker-notes': [],
-  'visual-director': ['references/style-system.md','references/layout-system.md'],
+  'visual-director': ['references/style-system.md','references/layout-system.md','references/python-svg-authoring.md'],
 };
 function frontmatter(content) {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
@@ -46,6 +46,7 @@ test('generated skill resources match their canonical sources', async () => {
     ['references/storytelling.md','skills/create-deck/references/storytelling.md'],['references/storytelling.md','skills/deck-architect/references/storytelling.md'],
     ['references/style-system.md','skills/create-deck/references/style-system.md'],['references/style-system.md','skills/review-deck/references/style-system.md'],['references/style-system.md','skills/claude-code-style/references/style-system.md'],['references/style-system.md','skills/visual-director/references/style-system.md'],
     ['references/layout-system.md','skills/create-deck/references/layout-system.md'],['references/layout-system.md','skills/review-deck/references/layout-system.md'],['references/layout-system.md','skills/visual-director/references/layout-system.md'],['references/layout-system.md','skills/deck-reviewer/references/layout-system.md'],
+    ['references/python-svg-authoring.md','skills/create-deck/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/review-deck/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/visual-director/references/python-svg-authoring.md'],['references/python-svg-authoring.md','skills/deck-reviewer/references/python-svg-authoring.md'],
     ['references/output-formats.md','skills/create-deck/references/output-formats.md'],['references/output-formats.md','skills/review-deck/references/output-formats.md'],
     ['references/review-checklist.md','skills/review-deck/references/review-checklist.md'],['references/review-checklist.md','skills/deck-reviewer/references/review-checklist.md'],
     ['scripts/skill-cli-wrapper.mjs','skills/create-deck/scripts/slides-cli.mjs'],['scripts/skill-cli-wrapper.mjs','skills/review-deck/scripts/slides-cli.mjs'],['scripts/skill-cli-wrapper.mjs','skills/deck-reviewer/scripts/slides-cli.mjs'],
@@ -110,4 +111,31 @@ test('cover proof and mechanism explanation remain separate', async () => {
     assert.match(content, /mechanism|causal/i, file);
     assert.match(content, /next page|next-page|handoff/i, file);
   }
+});
+
+
+test('agent-authored Python SVG workflow is plan-backed and dynamic-first', async () => {
+  const [protocol, planTemplate, generator, createDeck, visualDirector, reviewDeck, deckReviewer] = await Promise.all([
+    readFile('references/python-svg-authoring.md', 'utf8'),
+    readFile('templates/python-svg-plan.md', 'utf8'),
+    readFile('scripts/generate-slide-art.py', 'utf8'),
+    readFile('skills/create-deck/SKILL.md', 'utf8'),
+    readFile('skills/visual-director/SKILL.md', 'utf8'),
+    readFile('skills/review-deck/SKILL.md', 'utf8'),
+    readFile('skills/deck-reviewer/SKILL.md', 'utf8'),
+  ]);
+
+  for (const content of [protocol, planTemplate]) {
+    assert.match(content, /source of truth/i);
+    assert.match(content, /semantic model/i);
+    assert.match(content, /accessibility/i);
+    assert.match(content, /validation/i);
+  }
+  assert.match(protocol, /\.visual\.md/);
+  assert.match(protocol, /not.*closed catalog|not the limit|examples.*fallback/i);
+  assert.match(generator, /pattern library and fast fallback/i);
+  assert.match(createDeck, /deck-local.*\.visual\.md|<visual>\.visual\.md/i);
+  assert.match(visualDirector, /pythonSvgPlan/);
+  assert.match(reviewDeck, /\.visual\.md.*\.py.*\.svg|\.visual\.md/i);
+  assert.match(deckReviewer, /custom SVG.*plan|\.visual\.md/i);
 });

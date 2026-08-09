@@ -13,6 +13,11 @@ Visual Grammar v2 adds two complementary rendering modes:
 
 Both modes are deterministic for a given seed and never depend on local files,
 web fonts, JavaScript, or raster images.
+
+The built-in renderers are a tested pattern library and fast fallback. Codex and
+Claude Code may instead write a deck-local Python generator from a
+``<visual>.visual.md`` plan whenever the source material needs a custom semantic
+model or composition. Do not add a global renderer for every one-off visual.
 """
 
 from __future__ import annotations
