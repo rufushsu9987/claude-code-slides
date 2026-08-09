@@ -90,6 +90,33 @@ jobs:
           path.write_text(text, encoding='utf-8', newline='\n')
           PY
           python3 .github/scripts/apply_mechanism_loop.py
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('test/python-art.test.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = "      const result = runGenerator(['--kind', kind, '--style', style, '--seed', '7', '--output', output]);"
+          new = """      const args = ['--kind', kind, '--style', style, '--seed', '7'];
+                if (kind === 'mechanism-loop') {
+                  args.push(
+                    '--center-label', 'Outcome',
+                    '--step', 'INPUT|signal',
+                    '--step', 'PROCESS|decision',
+                    '--step', 'OUTPUT|result',
+                    '--step', 'FEEDBACK|repeat',
+                  );
+                }
+                args.push('--output', output);
+                const result = runGenerator(args);"""
+          if old not in text:
+              raise SystemExit('test/python-art.test.mjs: built-in generator call anchor missing')
+          text = text.replace(old, new, 1)
+          text = text.replace(
+              "['CAPITAL ENGINE', 'BTC per share', 'FINANCE', 'BUY BTC', 'RE-RATE', 'REFINANCE', 'Capital access keeps the accumulation loop moving.']",
+              "['CAPITAL ENGINE', 'BTC per', 'share', 'FINANCE', 'BUY BTC', 'RE-RATE', 'REFINANCE', 'Capital access keeps the accumulation loop moving.']",
+              1,
+          )
+          path.write_text(text, encoding='utf-8', newline='\n')
+          PY
       - name: Validate repository
         run: |
           npm ci
