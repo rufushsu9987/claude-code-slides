@@ -1,0 +1,615 @@
+name: Apply configurable mechanism loop
+
+on:
+  push:
+    branches:
+      - feat/configurable-mechanism-loop
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/configurable-mechanism-loop
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply mechanism-loop generator and workflow guidance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, content):
+              Path(path).write_text(content, encoding='utf-8', newline='\n')
+
+          def replace_once(content, old, new, path):
+              if content.count(old) != 1:
+                  raise SystemExit(f'{path}: expected exactly one occurrence of replacement anchor, found {content.count(old)}')
+              return content.replace(old, new, 1)
+
+          # ------------------------------------------------------------------
+          # Python SVG generator: add a configurable mechanism-loop kind.
+          # ------------------------------------------------------------------
+          path = 'scripts/generate-slide-art.py'
+          text = read(path)
+          old = '''    def __init__(self, *, style: str, seed: int, palette: Palette, transparent: bool = False,
+                 show_caption: bool = True) -> None:
+        self.style = style
+        self.rng = random.Random(seed)
+        self.palette = palette
+        self.transparent = transparent
+        self.show_caption = show_caption
+        self.parts: list[str] = []
+'''
+          new = '''    def __init__(self, *, style: str, seed: int, palette: Palette, transparent: bool = False,
+                 show_caption: bool = True, content: dict[str, object] | None = None) -> None:
+        self.style = style
+        self.rng = random.Random(seed)
+        self.palette = palette
+        self.transparent = transparent
+        self.show_caption = show_caption
+        self.content = content or {}
+        self.parts: list[str] = []
+'''
+          text = replace_once(text, old, new, path)
+
+          mechanism_function = '''def operating_loop(d: Drawing, title: str, subtitle: str) -> tuple[str, str]:
+    p = d.palette
+    content = d.content
+    caption = str(content.get("caption") or "OPERATING MODEL / CLOSED LOOP")
+    d.add(_caption(d, title, subtitle, number=caption))
+
+    default_steps = [
+        ("OBSERVE", "signals"),
+        ("DECIDE", "policy"),
+        ("ACT", "workflow"),
+        ("LEARN", "feedback"),
+    ]
+    raw_steps = content.get("steps")
+    if isinstance(raw_steps, list) and raw_steps:
+        step_pairs = [(str(item[0]), str(item[1])) for item in raw_steps]
+    else:
+        step_pairs = default_steps
+
+    raw_rail = content.get("rail")
+    if isinstance(raw_rail, list) and raw_rail:
+        rail_pairs = [(str(item[0]), str(item[1])) for item in raw_rail]
+    elif content.get("kind") == "operating-loop":
+        rail_pairs = [
+            ("Metric", "One measurable result"),
+            ("Cadence", "Daily signal · weekly review"),
+            ("Guardrail", "Stop conditions + owner"),
+        ]
+    else:
+        rail_pairs = []
+
+    has_rail = bool(rail_pairs)
+    cx, cy, radius = (570 if has_rail else 600), 350, 198
+    angles = [-90, 0, 90, 180]
+    positions: list[tuple[float, float]] = []
+    for index, (label, detail) in enumerate(step_pairs):
+        angle = math.radians(angles[index])
+        x = cx + math.cos(angle) * radius
+        y = cy + math.sin(angle) * radius
+        positions.append((x, y))
+        accent = index in (1, 3)
+        d.add(d.circle(x, y, 64, fill=p.accent_soft if accent else p.surface,
+                       stroke=p.accent if accent else p.ink, width=2.5))
+        label_size = 15 if len(label) <= 10 else 12
+        d.add(d.text(label, x, y - 2, size=label_size, color=p.ink, weight=800, anchor="middle",
+                     family="SFMono-Regular, Consolas, monospace"))
+        d.add(d.multiline(detail, x, y + 24, width=108, size=13, color=p.muted,
+                          anchor="middle", max_lines=2))
+
+    # Connect tangent points rather than drawing arrows through the node labels.
+    for index, (x1, y1) in enumerate(positions):
+        x2, y2 = positions[(index + 1) % len(positions)]
+        dx, dy = x2 - x1, y2 - y1
+        length = max(1.0, math.hypot(dx, dy))
+        ux, uy = dx / length, dy / length
+        start_x, start_y = x1 + ux * 72, y1 + uy * 72
+        end_x, end_y = x2 - ux * 72, y2 - uy * 72
+        d.add(d.arrow(start_x, start_y, end_x, end_y,
+                      color=p.accent if index % 2 == 0 else p.muted,
+                      width=3.0, curve=52))
+
+    center_eyebrow = str(content.get("center_eyebrow") or "North star")
+    center_label = str(content.get("center_label") or "Outcome")
+    d.add(d.circle(cx, cy, 90, fill=p.code, stroke=p.code, width=0, roughness=0))
+    d.add(d.label(center_eyebrow, cx, cy - 24, color=p.accent_soft, anchor="middle"))
+    center_size = 29 if len(center_label) <= 14 else 21
+    d.add(d.multiline(center_label, cx, cy + 20, width=150, size=center_size,
+                      color=p.code_text, weight=700, anchor="middle",
+                      family="Georgia, Iowan Old Style, serif", max_lines=2))
+
+    if has_rail:
+        d.add(d.line(910, 170, 910, 552, stroke=p.border, width=2.0))
+        if len(rail_pairs) == 1:
+            rail_y = [310]
+        elif len(rail_pairs) == 2:
+            rail_y = [250, 410]
+        else:
+            rail_y = [205, 324, 443]
+        for index, ((heading, detail), y) in enumerate(zip(rail_pairs, rail_y), start=1):
+            d.add(d.text(f"{index:02d}", 942, y, size=14, color=p.accent, weight=700,
+                         family="SFMono-Regular, Consolas, monospace"))
+            d.add(d.text(heading, 986, y, size=20, color=p.ink, weight=700,
+                         family="Georgia, Iowan Old Style, serif"))
+            d.add(d.multiline(detail, 942, y + 31, width=208, size=14,
+                              color=p.muted, max_lines=2))
+
+    takeaway = str(content.get("takeaway") or "").strip()
+    if takeaway:
+        d.add(d.label("Takeaway", 54, 614))
+        d.add(d.multiline(takeaway, 54, 650, width=1080, size=23, weight=700,
+                          family="Georgia, Iowan Old Style, serif", max_lines=2))
+
+    return title, "A configurable four-stage mechanism loop around a central outcome, with optional proof details and a single takeaway."
+'''
+          pattern = re.compile(r'def operating_loop\(d: Drawing, title: str, subtitle: str\) -> tuple\[str, str\]:\n.*?\n\ndef swimlane_process', re.S)
+          text, count = pattern.subn(mechanism_function + '\n\ndef swimlane_process', text, count=1)
+          if count != 1:
+              raise SystemExit(f'{path}: operating_loop block replacement failed')
+
+          text = replace_once(
+              text,
+              '    "infographic": infographic,\n    "agent-journey": agent_journey,',
+              '    "infographic": infographic,\n    "mechanism-loop": operating_loop,\n    "agent-journey": agent_journey,',
+              path,
+          )
+
+          old = '''def valid_hex(value: str) -> str:
+    if not COLOR_RE.match(value):
+        raise argparse.ArgumentTypeError("expected a six-digit hex color such as #D97757")
+    return value.upper()
+
+
+def build_parser() -> argparse.ArgumentParser:
+'''
+          new = '''def valid_hex(value: str) -> str:
+    if not COLOR_RE.match(value):
+        raise argparse.ArgumentTypeError("expected a six-digit hex color such as #D97757")
+    return value.upper()
+
+
+def parse_pairs(values: Sequence[str], option: str) -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
+    for raw in values:
+        label, separator, detail = raw.partition("|")
+        label = label.strip()
+        detail = detail.strip() if separator else ""
+        if not label:
+            raise ValueError(f"{option} requires a non-empty label")
+        pairs.append((label, detail))
+    return pairs
+
+
+def build_parser() -> argparse.ArgumentParser:
+'''
+          text = replace_once(text, old, new, path)
+
+          old = '''    parser.add_argument("--title", default="Presentation visual")
+    parser.add_argument("--subtitle", default="A reusable vector asset for a content-aware slide layout.")
+    parser.add_argument("--style", choices=["sketch", "clean"], default="sketch")
+'''
+          new = '''    parser.add_argument("--title", default="Presentation visual")
+    parser.add_argument("--subtitle", default="A reusable vector asset for a content-aware slide layout.")
+    parser.add_argument("--center-eyebrow", help="Small label inside a mechanism or operating loop")
+    parser.add_argument("--center-label", help="Primary outcome inside a mechanism or operating loop")
+    parser.add_argument("--step", action="append", default=[], metavar="LABEL|DETAIL",
+                        help="Repeat exactly four times to define a mechanism loop")
+    parser.add_argument("--rail", action="append", default=[], metavar="HEADING|DETAIL",
+                        help="Optional proof rail item; repeat up to three times")
+    parser.add_argument("--takeaway", help="One sentence shown below a configurable loop")
+    parser.add_argument("--style", choices=["sketch", "clean"], default="sketch")
+'''
+          text = replace_once(text, old, new, path)
+
+          old = '''    if not args.kind or not args.output:
+        parser.error("--kind and --output are required unless --list-kinds is used")
+
+    colors = dict(DEFAULT_COLORS)
+'''
+          new = '''    if not args.kind or not args.output:
+        parser.error("--kind and --output are required unless --list-kinds is used")
+
+    try:
+        steps = parse_pairs(args.step, "--step")
+        rail = parse_pairs(args.rail, "--rail")
+    except ValueError as error:
+        parser.error(str(error))
+    if steps and len(steps) != 4:
+        parser.error("--step must be provided exactly four times")
+    if args.kind == "mechanism-loop" and len(steps) != 4:
+        parser.error("mechanism-loop requires exactly four --step LABEL|DETAIL values")
+    if args.kind == "mechanism-loop" and not args.center_label:
+        parser.error("mechanism-loop requires --center-label")
+    if len(rail) > 3:
+        parser.error("--rail may be provided at most three times")
+
+    content = {
+        "kind": args.kind,
+        "center_eyebrow": args.center_eyebrow,
+        "center_label": args.center_label,
+        "steps": steps,
+        "rail": rail,
+        "takeaway": args.takeaway,
+    }
+
+    colors = dict(DEFAULT_COLORS)
+'''
+          text = replace_once(text, old, new, path)
+
+          old = '''        transparent=args.transparent,
+        show_caption=not args.hide_caption,
+    )
+'''
+          new = '''        transparent=args.transparent,
+        show_caption=not args.hide_caption,
+        content=content,
+    )
+'''
+          text = replace_once(text, old, new, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Tests for configurable mechanism content.
+          # ------------------------------------------------------------------
+          path = 'test/python-art.test.mjs'
+          text = read(path)
+          text = replace_once(
+              text,
+              "import { mkdtemp, readFile } from 'node:fs/promises';",
+              "import { mkdtemp, readFile, writeFile } from 'node:fs/promises';",
+              path,
+          )
+          text = replace_once(
+              text,
+              "  'infographic',\n  'operating-loop',",
+              "  'infographic',\n  'mechanism-loop',\n  'operating-loop',",
+              path,
+          )
+          anchor = '''test('Python slide-art generator supports transparent caption-free assets and custom accent', async () => {
+'''
+          test_block = '''test('Python slide-art generator creates a content-specific mechanism loop', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-mechanism-'));
+  const output = path.join(directory, 'capital-engine.svg');
+  const result = runGenerator([
+    '--kind', 'mechanism-loop',
+    '--style', 'clean',
+    '--center-eyebrow', 'CAPITAL ENGINE',
+    '--center-label', 'BTC per share',
+    '--step', 'FINANCE|debt / equity',
+    '--step', 'BUY BTC|asset base',
+    '--step', 'RE-RATE|market access',
+    '--step', 'REFINANCE|repeat',
+    '--rail', 'Asset base|BTC holdings',
+    '--rail', 'Liquidity|cash reserve',
+    '--rail', 'Per-share effect|BTC yield',
+    '--takeaway', 'Capital access keeps the accumulation loop moving.',
+    '--output', output,
+  ]);
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const content = await readFile(output, 'utf8');
+  for (const expected of ['CAPITAL ENGINE', 'BTC per share', 'FINANCE', 'BUY BTC', 'RE-RATE', 'REFINANCE', 'Capital access keeps the accumulation loop moving.']) {
+    assert.match(content, new RegExp(expected.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')));
+  }
+  assert.doesNotMatch(content, />OBSERVE</);
+});
+
+test('Python slide-art generator validates mechanism-loop structure', () => {
+  const output = path.join(tmpdir(), 'invalid-mechanism.svg');
+  const missingSteps = runGenerator([
+    '--kind', 'mechanism-loop',
+    '--center-label', 'Outcome',
+    '--step', 'ONE|first',
+    '--output', output,
+  ]);
+  assert.notEqual(missingSteps.status, 0);
+  assert.match(`${missingSteps.stderr}${missingSteps.stdout}`, /exactly four|requires exactly four/i);
+
+  const missingCenter = runGenerator([
+    '--kind', 'mechanism-loop',
+    '--step', 'ONE|first', '--step', 'TWO|second', '--step', 'THREE|third', '--step', 'FOUR|fourth',
+    '--output', output,
+  ]);
+  assert.notEqual(missingCenter.status, 0);
+  assert.match(`${missingCenter.stderr}${missingCenter.stdout}`, /center-label/i);
+});
+
+'''
+          text = replace_once(text, anchor, test_block + anchor, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Layout guidance: proof on the cover, mechanism on the next page.
+          # ------------------------------------------------------------------
+          path = 'references/layout-system.md'
+          text = read(path)
+          anchor = '''- The cover should still read well in thumbnail view and in print.
+
+## Selection workflow
+'''
+          addition = '''- The cover should still read well in thumbnail view and in print.
+
+### Cover-to-mechanism handoff
+
+A proof rail establishes stakes; it should not also carry the full causal model. When the title asks **how**, **why**, or **what keeps the system moving**, keep the cover concise and plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`.
+
+- Use `proof-rail` on the cover for two to four source-backed signals with explicit roles such as asset base, liquidity, or per-share effect.
+- State how the signals relate. If they use different disclosure dates, label that clearly and do not imply a single synchronized snapshot.
+- Use a content-specific Python SVG on the next page when a named four-stage mechanism explains the thesis faster than prose.
+- Use `--kind mechanism-loop` for a four-step cycle around one outcome. Keep the SVG off the cover unless the entire title is itself the mechanism and the diagram remains secondary.
+- Do not repeat the same proof rail on the mechanism page. The handoff should move from **evidence → causal model → implication**.
+
+## Selection workflow
+'''
+          text = replace_once(text, anchor, addition, path)
+          text = replace_once(
+              text,
+              'agent-journey · infographic · data-journey · decision-path\nsystem-map · architecture-boundary · operating-loop',
+              'agent-journey · infographic · data-journey · decision-path\nmechanism-loop · system-map · architecture-boundary · operating-loop',
+              path,
+          )
+          svg_anchor = '''`sketch` uses deterministic double strokes for an editorial workshop feel. `clean` uses exact single strokes for formal architecture decks. Keep slide titles, source notes, layout markers, and speaker notes editable in the target format; the SVG should remain the visual anchor, not the entire slide flattened into an image.
+'''
+          svg_addition = '''Use a configurable mechanism loop when the story is domain-specific:
+
+```bash
+python3 scripts/generate-slide-art.py \\
+  --kind mechanism-loop \\
+  --style clean \\
+  --center-eyebrow "CAPITAL ENGINE" \\
+  --center-label "BTC per share" \\
+  --step "FINANCE|debt / equity" \\
+  --step "BUY BTC|asset base" \\
+  --step "RE-RATE|market access" \\
+  --step "REFINANCE|repeat" \\
+  --rail "Asset base|BTC holdings" \\
+  --rail "Liquidity|cash reserve" \\
+  --rail "Per-share effect|BTC yield" \\
+  --takeaway "Capital access keeps the accumulation loop moving." \\
+  --output slides/example/assets/capital-engine.svg
+```
+
+`sketch` uses deterministic double strokes for an editorial workshop feel. `clean` uses exact single strokes for formal architecture decks. Keep slide titles, source notes, layout markers, and speaker notes editable in the target format; the SVG should remain the visual anchor, not the entire slide flattened into an image.
+'''
+          text = replace_once(text, svg_anchor, svg_addition, path)
+          write(path, text)
+
+          path = 'references/review-checklist.md'
+          text = read(path)
+          anchor = '''- [ ] The cover remains clear at thumbnail scale, from presentation distance, and in print.
+
+## Content
+'''
+          addition = '''- [ ] The cover remains clear at thumbnail scale, from presentation distance, and in print.
+- [ ] Proof-rail numbers have explicit roles, sources, dates, and one sentence explaining how they relate.
+- [ ] Mixed disclosure dates are visible and are not presented as a synchronized snapshot.
+- [ ] If the opening thesis is mechanism-led, the next page explains the causal model instead of forcing the proof rail to do both jobs.
+
+## Content
+'''
+          text = replace_once(text, anchor, addition, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # Agent workflow guidance.
+          # ------------------------------------------------------------------
+          path = 'skills/create-deck/SKILL.md'
+          text = read(path)
+          anchor = '''For every `editorial-cover`, explicitly record `coverRight` as one of `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, plus the source or rationale. Choose `none` when no source-backed artifact, proof, or signal improves the opening.
+'''
+          addition = anchor + '''
+When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`. Use the Python `mechanism-loop` kind when four named stages revolve around one outcome. Do not make the cover proof rail carry both evidence and the full causal model.
+'''
+          text = replace_once(text, anchor, addition, path)
+          cover_anchor = '''- Prefer removing a weak visual over adding decorative complexity.
+'''
+          cover_addition = '''- Prefer removing a weak visual over adding decorative complexity.
+- A proof rail must give every number a semantic role and explain the relationship between the signals; mixed dates must remain explicit.
+- For mechanism-led topics, hand off to a dedicated next-page diagram rather than expanding the cover rail into a dashboard.
+'''
+          text = replace_once(text, cover_anchor, cover_addition, path)
+          write(path, text)
+
+          path = 'skills/visual-director/SKILL.md'
+          text = read(path)
+          anchor = '''4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, with the source and why it earns its place.
+5. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+6. Diagram or data-visualization specifications where relevant.
+7. Required assets and safe fallback treatments.
+8. Accessibility and export risks.
+'''
+          addition = '''4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, with the source and why it earns its place.
+5. For mechanism-led openings, a `mechanismHandoff`: the next-page archetype, four named stages when applicable, central outcome, and whether a Python `mechanism-loop` SVG should be generated.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          text = replace_once(text, anchor, addition, path)
+          rule_anchor = '''- Keep any cover-side module secondary to the title and no wider than roughly one-third of the canvas.
+'''
+          rule_addition = '''- Keep any cover-side module secondary to the title and no wider than roughly one-third of the canvas.
+- Treat a proof rail as evidence, not as the full explanation. Give each signal a role and state how the signals relate.
+- When the opening thesis is causal or cyclical, move the mechanism to the next page and use a content-specific `mechanism-loop`, `operating-loop`, or `infographic-story` rather than overloading the cover.
+'''
+          text = replace_once(text, rule_anchor, rule_addition, path)
+          write(path, text)
+
+          path = 'skills/review-deck/SKILL.md'
+          text = read(path)
+          anchor = '''- Does the cover use whitespace when no meaningful right-side module exists, or exactly one sourced artifact, proof rail, signal, or direct system cue when it does?
+- Are decorative orbit, concentric-circle, logo-cloud, or unreadable micro-label diagrams absent from the cover?
+'''
+          addition = '''- Does the cover use whitespace when no meaningful right-side module exists, or exactly one sourced artifact, proof rail, signal, or direct system cue when it does?
+- Are decorative orbit, concentric-circle, logo-cloud, or unreadable micro-label diagrams absent from the cover?
+- Does every proof-rail number have a semantic role, source, date, and an explicit relationship to the other signals?
+- When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?
+'''
+          text = replace_once(text, anchor, addition, path)
+          write(path, text)
+
+          path = 'skills/deck-reviewer/SKILL.md'
+          text = read(path)
+          anchor = '''Treat a decorative or meaningless cover-right diagram as a Major finding. Prefer whitespace when the right-side module lacks a source, clear communication job, or two-second readability.
+'''
+          addition = '''Treat a decorative or meaningless cover-right diagram as a Major finding. Prefer whitespace when the right-side module lacks a source, clear communication job, or two-second readability. Also flag proof rails that mix unrelated signals without roles, relationship, and visible disclosure dates. For mechanism-led openings, require a dedicated explanatory handoff page when the causal model cannot be understood from the cover alone.
+'''
+          text = replace_once(text, anchor, addition, path)
+          write(path, text)
+
+          path = 'agents/visual-director.md'
+          text = read(path)
+          anchor = '''4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, including the source and why it earns its place.
+5. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+6. Diagram or data-visualization specifications where relevant.
+7. Required assets and safe fallback treatments.
+8. Accessibility and export risks.
+'''
+          addition = '''4. For each cover or section opener, a `coverRight` decision: `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, including the source and why it earns its place.
+5. For mechanism-led openings, a `mechanismHandoff`: next-page archetype, four named stages when applicable, central outcome, and whether to generate a Python `mechanism-loop` SVG.
+6. A layout-diversity audit: unique archetype count, consecutive repeats, visual-family rhythm, card-page share, and planned rhythm changes.
+7. Diagram or data-visualization specifications where relevant.
+8. Required assets and safe fallback treatments.
+9. Accessibility and export risks.
+'''
+          text = replace_once(text, anchor, addition, path)
+          rule_anchor = '''- Keep any cover-side module secondary to the title and no wider than roughly one-third of the canvas.
+'''
+          rule_addition = '''- Keep any cover-side module secondary to the title and no wider than roughly one-third of the canvas.
+- Treat proof rails as evidence: name each signal's role and relationship, and keep mixed disclosure dates visible.
+- Move causal or cyclical explanations to the next page and prefer a content-specific `mechanism-loop`, `operating-loop`, or `infographic-story` over an overloaded cover.
+'''
+          text = replace_once(text, rule_anchor, rule_addition, path)
+          write(path, text)
+
+          path = 'agents/deck-reviewer.md'
+          text = read(path)
+          anchor = '''Treat a decorative or meaningless cover-right diagram as Major. Prefer whitespace when the module lacks a source, clear communication job, or two-second readability.
+'''
+          addition = '''Treat a decorative or meaningless cover-right diagram as Major. Prefer whitespace when the module lacks a source, clear communication job, or two-second readability. Flag proof rails that mix unrelated signals without semantic roles, relationship, and visible dates. When the opening thesis is mechanism-led, require a dedicated next-page causal model instead of a denser cover.
+'''
+          text = replace_once(text, anchor, addition, path)
+          write(path, text)
+
+          # ------------------------------------------------------------------
+          # README and gallery documentation.
+          # ------------------------------------------------------------------
+          path = 'README.md'
+          text = read(path)
+          text = replace_once(text, '- **9 deterministic SVG drawing kinds:**', '- **10 deterministic SVG drawing kinds:**', path)
+          text = replace_once(text, 'infographic\noperating-loop', 'infographic\nmechanism-loop\noperating-loop', path)
+          anchor = '''`infographic` remains a compatible entry point for the `agent-journey` visual story.
+'''
+          addition = '''`infographic` remains a compatible entry point for the `agent-journey` visual story. `mechanism-loop` is a configurable four-stage causal loop intended for an explanatory page after the cover—not as automatic cover decoration.
+
+Create a content-specific mechanism loop:
+
+```bash
+python3 scripts/generate-slide-art.py \\
+  --kind mechanism-loop \\
+  --style clean \\
+  --center-eyebrow "CAPITAL ENGINE" \\
+  --center-label "BTC per share" \\
+  --step "FINANCE|debt / equity" \\
+  --step "BUY BTC|asset base" \\
+  --step "RE-RATE|market access" \\
+  --step "REFINANCE|repeat" \\
+  --rail "Asset base|BTC holdings" \\
+  --rail "Liquidity|cash reserve" \\
+  --rail "Per-share effect|BTC yield" \\
+  --takeaway "Capital access keeps the accumulation loop moving." \\
+  --output slides/example/assets/capital-engine.svg
+```
+'''
+          text = replace_once(text, anchor, addition, path)
+          write(path, text)
+
+          path = 'docs/templates.md'
+          text = read(path)
+          old = '''The repository includes a standard-library-only generator for small vector illustrations used by the three new layouts:
+
+```bash
+python3 scripts/generate-slide-art.py \\
+  --kind data-journey \\
+  --title "Make progress visible" \\
+  --output slides/example/assets/data-journey.svg
+```
+
+The generator supports `infographic`, `data-journey`, and `decision-path`. It emits deterministic SVG with no local paths or external runtime dependencies. Keep the SVG as a visual asset and keep the slide's semantic title, copy, notes, and layout marker in the target format.
+'''
+          new = '''The repository includes a standard-library-only generator for ten deterministic vector visuals. Use `mechanism-loop` when the cover establishes evidence but the next page needs to explain a four-stage causal model:
+
+```bash
+python3 scripts/generate-slide-art.py \\
+  --kind mechanism-loop \\
+  --style clean \\
+  --center-eyebrow "CAPITAL ENGINE" \\
+  --center-label "BTC per share" \\
+  --step "FINANCE|debt / equity" \\
+  --step "BUY BTC|asset base" \\
+  --step "RE-RATE|market access" \\
+  --step "REFINANCE|repeat" \\
+  --rail "Asset base|BTC holdings" \\
+  --rail "Liquidity|cash reserve" \\
+  --rail "Per-share effect|BTC yield" \\
+  --takeaway "Capital access keeps the accumulation loop moving." \\
+  --output slides/example/assets/capital-engine.svg
+```
+
+The generator also supports `agent-journey`, `architecture-boundary`, `data-journey`, `decision-path`, `infographic`, `operating-loop`, `roadmap-horizon`, `swimlane-process`, and `system-map`. It emits deterministic SVG with no local paths or external runtime dependencies. Keep the SVG as a visual anchor on an explanatory slide; keep the semantic title, copy, sources, notes, and layout marker editable in the target format.
+'''
+          text = replace_once(text, old, new, path)
+          write(path, text)
+
+          # Regression guard for the handoff policy.
+          path = 'test/skills.test.mjs'
+          text = read(path)
+          text += '''
+
+test('cover proof and mechanism explanation remain separate', async () => {
+  const files = [
+    'skills/create-deck/SKILL.md',
+    'skills/visual-director/SKILL.md',
+    'skills/review-deck/SKILL.md',
+    'skills/deck-reviewer/SKILL.md',
+  ];
+  for (const file of files) {
+    const content = await readFile(file, 'utf8');
+    assert.match(content, /proof rail|proof-rail/i, file);
+    assert.match(content, /mechanism|causal/i, file);
+    assert.match(content, /next page|next-page|handoff/i, file);
+  }
+});
+'''
+          write(path, text)
+          PY
+
+          npm ci
+          npm run sync:skills
+          npm run check
+
+      - name: Commit applied changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/apply-mechanism-loop.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: add configurable mechanism-loop SVG"
+          git push origin HEAD:feat/configurable-mechanism-loop
