@@ -25,6 +25,14 @@ try {
       if (created.template !== template.name) throw new Error(`Expected ${template.name}, received ${created.template}`);
       const result = await checkDeck(target);
       if (!result.ok) throw new Error(`${template.name}/${format} failed validation: ${JSON.stringify(result.errors)}`);
+      const unexpectedLayoutWarnings = result.warnings.filter((finding) =>
+        ['layout-archetype', 'layout-marker'].includes(finding.code),
+      );
+      if (unexpectedLayoutWarnings.length) {
+        throw new Error(
+          `${template.name}/${format} emitted unexpected layout warnings: ${JSON.stringify(unexpectedLayoutWarnings)}`,
+        );
+      }
       const metadata = JSON.parse(await readFile(path.join(target, 'template.json'), 'utf8'));
       if (metadata.name !== template.name || metadata.format !== format) throw new Error(`${template.name}/${format} wrote invalid template metadata`);
       if (metadata.layoutSystem?.name !== layoutCatalog.name) throw new Error(`${template.name}/${format} omitted layout-system metadata`);

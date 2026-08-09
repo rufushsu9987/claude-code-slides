@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags: ['claude-code-slides--v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: npm ci
+      - run: npm run check
+      - name: Verify tag and changelog freshness
+        run: npm run validate:release -- --tag "$GITHUB_REF_NAME"
+
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: npm ci
+      - run: npm run check
+      - run: npm run validate:release -- --tag "$GITHUB_REF_NAME"
+      - name: Build portable archive and checksum
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          mkdir -p dist
+          git archive \
+            --format=tar.gz \
+            --prefix="claude-code-slides-${version}/" \
+            --output="dist/claude-code-slides-${version}.tar.gz" \
+            HEAD
+          cd dist
+          sha256sum "claude-code-slides-${version}.tar.gz" > SHA256SUMS
+          sha256sum -c SHA256SUMS
+      - name: Verify the extracted release artifact
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          mkdir -p dist/verify
+          tar -xzf "dist/claude-code-slides-${version}.tar.gz" -C dist/verify
+          cd "dist/verify/claude-code-slides-${version}"
+          npm ci
+          npm run check
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.tar.gz dist/SHA256SUMS --generate-notes --verify-tag

@@ -19,7 +19,7 @@ This is an independent, unofficial presentation system. It borrows the mood of a
 | Ink | `#211F1B` | Primary text |
 | Muted | `#6F6962` | Secondary copy and metadata |
 | Border | `#D8D0C6` | Hairlines and quiet structure |
-| Accent | `#D97757` | Key phrase, active state, important number |
+| Accent | `#AD563A` | Key phrase, active state, important number; AA text contrast on the canvas and surface tokens |
 | Accent soft | `#F1D9CD` | Low-emphasis accent surface |
 | Code | `#27241F` | Terminal or code background |
 | Code text | `#F8F3EA` | Terminal text |

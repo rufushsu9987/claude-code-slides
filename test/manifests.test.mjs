@@ -68,8 +68,7 @@ test('root plugin.json conforms to the Agent Plugins v1 portable manifest shape'
     Object.keys(plugin).filter((key) => !allowed.has(key)),
     [],
   );
-  assert.equal(typeof plugin.extensions['io.github.rufushsu9987.codex'], 'object');
-  assert.equal(typeof plugin.extensions['io.github.rufushsu9987.claudecode'], 'object');
+  assert.equal(plugin.extensions, undefined);
 });
 
 test('Codex marketplace loads the root plugin with searchable fallback metadata', async () => {

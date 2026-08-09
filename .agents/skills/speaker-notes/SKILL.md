@@ -5,4 +5,4 @@ description: Write or improve speaker notes for an existing presentation, includ
 
 # Repository skill forwarder
 
-Read and follow `../../../skills/speaker-notes/SKILL.md` as the authoritative workflow. Resolve all relative plugin paths from the repository root.
+Read and follow `../../../skills/speaker-notes/SKILL.md` as the authoritative workflow. Resolve bundled references and scripts relative to that authoritative skill directory.

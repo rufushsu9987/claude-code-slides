@@ -8,6 +8,12 @@ All notable changes to this project are documented here.
 - Add `infographic-story`, `data-journey`, and `decision-path` layout archetypes with HTML, Marp, and editable PPTX starters.
 - Add a dependency-free Python SVG generator for reusable infographic, trend, and decision-path assets.
 - Add deterministic generator tests, portable asset fixtures, and documentation for Python-assisted slide graphics.
+- Harden scaffolding with context-aware title encoding, canonicalized locale metadata, strict typed CLI arguments, template-source overlap protection, and atomic generated-file replacement.
+- Validate layout and geometry diversity from the authoritative catalog, with explicit format selection, per-slide Marp headings, safe local-asset boundaries, and an optional warning-free `--strict` mode.
+- Make portable skills self-contained and caller-directory independent by bundling a neutral local CLI runtime, with exact synchronization and isolated execution tests.
+- Keep general visual guidance brand-neutral while retaining the Claude-inspired style as an explicit opt-in workflow.
+- Apply theme palettes to shared SVG assets, derive accessible accent and terminal foregrounds, remove dark-theme light-panel leakage, and add cross-format contrast tests.
+- Synchronize release metadata across portable and native manifests; gate releases on Node 18/22/24, tag and changelog freshness, archive checksums, and checks rerun from the extracted artifact.
 
 ## 0.6.0 - 2026-08-08
 

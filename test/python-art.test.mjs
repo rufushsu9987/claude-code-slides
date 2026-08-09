@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const generator = new URL('../scripts/generate-slide-art.py', import.meta.url);
+const generator = fileURLToPath(new URL('../scripts/generate-slide-art.py', import.meta.url));
 const python = process.env.PYTHON || 'python3';
 const builtInKinds = [
   'agent-journey',
@@ -21,14 +22,15 @@ const builtInKinds = [
 ];
 
 function runGenerator(args) {
-  return spawnSync(python, [generator.pathname, ...args], {
+  return spawnSync(python, [generator, ...args], {
     encoding: 'utf8',
     maxBuffer: 1024 * 1024,
   });
 }
 
-test('Python slide-art generator creates deterministic, portable sketch SVG', async () => {
+test('Python slide-art generator creates deterministic, portable sketch SVG', async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-art-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
   const output = path.join(directory, 'agent-journey.svg');
   const args = [
     '--kind', 'agent-journey',
@@ -53,8 +55,9 @@ test('Python slide-art generator creates deterministic, portable sketch SVG', as
   assert.equal(await readFile(output, 'utf8'), firstContent);
 });
 
-test('Python slide-art generator supports all Visual Grammar v2 kinds and styles', async () => {
+test('Python slide-art generator supports all Visual Grammar v2 kinds and styles', async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-art-kinds-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
   for (const kind of builtInKinds) {
     const sketch = path.join(directory, `${kind}-sketch.svg`);
     const clean = path.join(directory, `${kind}-clean.svg`);
@@ -88,8 +91,9 @@ test('Python slide-art generator lists every built-in kind', () => {
   assert.deepEqual(result.stdout.trim().split(/\r?\n/), builtInKinds);
 });
 
-test('Python slide-art generator creates a content-specific mechanism loop', async () => {
+test('Python slide-art generator creates a content-specific mechanism loop', async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-mechanism-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
   const output = path.join(directory, 'capital-engine.svg');
   const result = runGenerator([
     '--kind', 'mechanism-loop',
@@ -131,8 +135,9 @@ test('Python slide-art generator validates mechanism-loop structure', () => {
   assert.match(`${missingCenter.stderr}${missingCenter.stdout}`, /center-label/i);
 });
 
-test('Python slide-art generator supports transparent caption-free assets and custom accent', async () => {
+test('Python slide-art generator supports transparent caption-free assets and custom accent', async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-art-options-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
   const output = path.join(directory, 'custom.svg');
   const result = runGenerator([
     '--kind', 'infographic',

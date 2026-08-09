@@ -12,13 +12,16 @@ Create the presentation requested in the current user message. Treat it as a del
 Resolve these paths relative to this skill directory:
 
 - [Storytelling system](references/storytelling.md)
-- [Visual system](references/style-system.md)
+- [Brand-neutral visual quality](references/visual-quality.md) — read for every deck
+- [Claude Code-inspired visual system](references/style-system.md) — read only after selecting `claude-editorial` / `terminal-editorial`, or when the user explicitly requests Claude styling
 - [Layout system](references/layout-system.md)
 - [Python SVG authoring protocol](references/python-svg-authoring.md)
+- [Python SVG plan template](references/python-svg-plan.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for the bundled deck CLI
+- `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
 
-Keep the user's project or workspace as the shell working directory. Resolve the script from the skill directory; do not `cd` into the installed skill before running it.
+Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. In commands below, replace `<absolute-skill-dir>` with that real absolute directory; never type the placeholder literally.
 
 ## 1. Choose the delivery format
 
@@ -38,8 +41,8 @@ Honor an explicit template name. Otherwise select the closest match to the audie
 List the installed presets when needed:
 
 ```bash
-node scripts/slides-cli.mjs templates
-node scripts/slides-cli.mjs templates --format pptx --json
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" templates
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" templates --format pptx --json
 ```
 
 Recommended selection:
@@ -55,6 +58,8 @@ Recommended selection:
 | `incident-review` | Postmortems, impact timelines, root cause, remediation |
 
 A supplied brand system or existing company template always takes precedence over a bundled preset.
+
+Apply the brand-neutral visual-quality reference to every selection. Load the Claude Code-inspired visual system only when the selected template is `claude-editorial` / `terminal-editorial`, or when the user explicitly requests that style.
 
 ## 3. Inspect the source material
 
@@ -96,16 +101,16 @@ Before implementation, produce a layout sequence and check it against these rule
 - Introduce a visible rhythm change every three to four slides through scale, density, background, or dominant visual.
 - Interleave editorial claim pages with evidence, architecture, sequence, risk, and decision pages.
 
-Use `node scripts/slides-cli.mjs layouts` to inspect the available archetypes.
+Use `node "<absolute-skill-dir>/scripts/slides-cli.mjs" layouts` to inspect the available archetypes.
 
 ## 6. Scaffold the output
 
 Run the bundled helper from the user's workspace:
 
 ```bash
-node scripts/slides-cli.mjs init "Deck title" --format html --template claude-editorial
-node scripts/slides-cli.mjs init "Deck title" --format marp --template data-story
-node scripts/slides-cli.mjs init "Deck title" --format pptx --template executive-brief
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" init "Deck title" --format html --template claude-editorial
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" init "Deck title" --format marp --template data-story
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" init "Deck title" --format pptx --template executive-brief
 ```
 
 The default destination is `slides/<slug>/`. Respect an explicit path or established repository convention. The generated `template.json` records the selected preset, palette, typography, pattern, layout system, and output format.
@@ -181,7 +186,7 @@ Format markers:
 Run:
 
 ```bash
-node scripts/slides-cli.mjs check <deck-path>
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" check <deck-path>
 ```
 
 Then use the sibling `deck-reviewer` skill when available. Fix high-confidence Critical and Major findings and re-run validation.

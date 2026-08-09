@@ -6,8 +6,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const scriptsDirectory = path.dirname(fileURLToPath(import.meta.url));
-const pluginRoot = path.resolve(scriptsDirectory, '../../..');
-const cliPath = path.join(pluginRoot, 'bin', 'codex-slides.mjs');
+const skillRoot = path.resolve(scriptsDirectory, '..');
+const cliPath = path.join(skillRoot, 'runtime', 'bin', 'slides.mjs');
 
 const result = spawnSync(process.execPath, [cliPath, ...process.argv.slice(2)], {
   cwd: process.cwd(),

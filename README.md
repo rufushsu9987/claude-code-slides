@@ -44,10 +44,21 @@ The portable core follows [Agent Plugins 1.0.0](https://agent-plugins.org/schema
 
 ## Quick start
 
+The commands below are available after linking a repository checkout with `npm link`. Installed
+plugin skills call the bundled CLI through their skill-local wrapper, so normal plugin use does not
+require a global CLI installation. From an unlinked checkout, replace `codex-slides` with
+`node bin/codex-slides.mjs`.
+
 Create a deck with the default `claude-editorial` theme:
 
 ```bash
 codex-slides init "AI Platform Architecture Review" --format html
+```
+
+Set generated document and presentation metadata with an Intl-compatible locale tag when needed:
+
+```bash
+codex-slides init "平台架構審查" --format html --lang zh-TW
 ```
 
 Create an editable PowerPoint deck with an explicit theme:
@@ -70,7 +81,11 @@ Validate a generated deck:
 
 ```bash
 codex-slides check slides/ai-platform-architecture-review
+codex-slides check slides/ai-platform-architecture-review --strict
 ```
+
+After replacing the starter copy, `--strict` treats any remaining warning as a failed check. Use `--format html|marp|pptx` when a directory
+contains more than one deck entry and has no `template.json` metadata to disambiguate it.
 
 `claude-slides` exposes the same CLI.
 
@@ -170,12 +185,12 @@ slides/<deck>/assets/<visual>.py
 slides/<deck>/assets/<visual>.svg
 ```
 
-Start from [the Python SVG authoring protocol](./references/python-svg-authoring.md) and [the visual-plan template](./templates/python-svg-plan.md). The plan records the communication job, source of truth, semantic model, geometry, eye path, labels, accessibility, editable slide content, and validation requirements before geometry is implemented.
+Start from [the Python SVG authoring protocol](./references/python-svg-authoring.md) and [the visual-plan template](./references/python-svg-plan.md). The plan records the communication job, source of truth, semantic model, geometry, eye path, labels, accessibility, editable slide content, and validation requirements before geometry is implemented.
 
 Example workflow:
 
 ```bash
-cp templates/python-svg-plan.md \
+cp references/python-svg-plan.md \
   slides/mstr/assets/capital-engine.visual.md
 
 python3 slides/mstr/assets/capital-engine.py \
@@ -214,6 +229,9 @@ codex plugin marketplace add \
 codex plugin add claude-code-slides@rufus-slides
 ```
 
+`main` is the preview channel. For a reproducible installation, replace it with a published
+`claude-code-slides--vX.Y.Z` tag.
+
 Start a new Codex session, then run:
 
 ```text
@@ -229,7 +247,10 @@ For an existing Git marketplace snapshot:
 
 ```bash
 codex plugin marketplace upgrade rufus-slides
+codex plugin add claude-code-slides@rufus-slides
 ```
+
+Start a new Codex thread after reinstalling so the updated skills are loaded.
 
 When Codex reports that the marketplace is not configured as Git, remove and re-add it with the full GitHub URL shown above.
 
@@ -249,7 +270,14 @@ Turn docs/architecture.md into a 12-minute architecture review.
 Use editable PPTX, the default claude-editorial theme, and a varied layout sequence.
 ```
 
-After updating the plugin, start a new session or run `/reload-plugins`.
+Update an existing Claude Code installation with:
+
+```bash
+claude plugin marketplace update rufus-slides
+claude plugin update claude-code-slides@rufus-slides
+```
+
+Then start a new session or run `/reload-plugins`.
 
 ## Output formats
 
@@ -268,9 +296,9 @@ codex-slides templates
 codex-slides templates --format pptx --json
 codex-slides layouts
 codex-slides layouts --family evidence --json
-codex-slides init "AI Platform" --format html
+codex-slides init "AI Platform" --format html --lang en-US
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
-codex-slides check slides/cloud-review
+codex-slides check slides/cloud-review --format pptx --strict
 codex-slides doctor
 ```
 
@@ -282,25 +310,30 @@ codex-slides doctor
 plugin.json                     Agent Plugins portable manifest
 skills/                         portable Agent Skills
 references/layout-system.md     semantic and geometry-aware layout rules
+references/python-svg-plan.md   canonical visual-plan template
 templates/catalog.json          visual theme catalog
 templates/layouts.json          28 layout archetypes and starter sequence
 scripts/generate-slide-art.py   deterministic SVG visual generator
 .codex-plugin/                  Codex adapter
 .agents/plugins/                Codex marketplace
-.agents/skills/                 repository-scoped Codex discovery
+.agents/skills/                 generated repository-scoped Codex discovery
 .claude-plugin/                 Claude Code manifest and marketplace
 agents/                         Claude Code subagents
-bin/ + lib/                     zero-dependency scaffolding and validation CLI
+bin/ + lib/                     neutral core and host CLI aliases
 templates/                      HTML, Marp, and PptxGenJS bases
 ```
 
 ## Development
+
+Development requires Node.js 18.3 or newer. Python 3.10 or newer is required for the optional
+agent-authored SVG generator and its test suite.
 
 ```bash
 git clone https://github.com/rufushsu9987/claude-code-slides.git
 cd claude-code-slides
 npm ci
 npm run sync:skills
+npm run sync:metadata
 npm run check
 ```
 
@@ -309,11 +342,11 @@ The test and smoke-test workflow:
 - scaffolds all 7 themes in HTML, Marp, and PPTX
 - validates the portable and native plugin manifests
 - verifies 28 layout archetypes and 20 distinct starter layouts/geometries
-- exercises all 9 SVG kinds in both `sketch` and `clean` modes
+- exercises all 10 SVG kinds in both `sketch` and `clean` modes
 - checks deterministic output, portable paths, accessibility metadata, and invalid input handling
-- checks skill-resource synchronization and the runnable example deck
+- checks exact skill-resource synchronization, isolated skill execution, and the runnable example deck
 
-Remaining metadata, validator, gallery, and visual-regression work is tracked in [issue #4](https://github.com/rufushsu9987/claude-code-slides/issues/4).
+Deeper render-pipeline, gallery, and visual-regression work is tracked in [issue #4](https://github.com/rufushsu9987/claude-code-slides/issues/4).
 
 ## Independence
 

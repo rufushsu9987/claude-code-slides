@@ -4,7 +4,7 @@
   --ink: #211f1b;
   --muted: #6f6962;
   --border: #d8d0c6;
-  --accent: #d97757;
+  --accent: #ad563a;
   --accent-soft: #f1d9cd;
   --code: #27241f;
   --code-text: #f8f3ea;
@@ -82,9 +82,9 @@ a {
   height: 540px;
   top: -300px;
   right: -220px;
-  border: 1px solid rgb(217 119 87 / 24%);
+  border: 1px solid rgb(173 86 58 / 24%);
   border-radius: 50%;
-  box-shadow: 0 0 0 100px rgb(217 119 87 / 3%), 0 0 0 200px rgb(217 119 87 / 2%);
+  box-shadow: 0 0 0 100px rgb(173 86 58 / 3%), 0 0 0 200px rgb(173 86 58 / 2%);
   pointer-events: none;
 }
 
@@ -441,7 +441,7 @@ a {
 }
 
 .slide--closing::before {
-  border-color: rgb(217 119 87 / 38%);
+  border-color: rgb(173 86 58 / 38%);
 }
 
 .slide--closing .topline {

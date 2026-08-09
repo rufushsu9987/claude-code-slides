@@ -16,10 +16,12 @@ import {
 test('doctor accepts Node.js 18+ and reports both agent CLIs', async () => {
   const result = doctor();
   const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
-  assert.equal(result.node.available, Number(process.versions.node.split('.')[0]) >= 18);
+  const [major, minor] = process.versions.node.split('.').map(Number);
+  assert.equal(result.node.available, major > 18 || (major === 18 && minor >= 3));
   assert.ok('codex' in result);
   assert.ok('claude' in result);
   assert.equal(VERSION, packageJson.version);
+  assert.equal(packageJson.engines.node, '>=18.3.0');
 });
 
 test('slugify creates stable portable identifiers', () => {

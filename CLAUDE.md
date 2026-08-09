@@ -29,17 +29,18 @@ After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the tem
 
 - `claude-editorial` is the default visual theme.
 - `terminal-editorial` remains a backward-compatible alias.
-- `templates/layouts.json` defines 16 semantic layout archetypes.
+- `templates/layouts.json` is the authoritative source for semantic layout archetypes and diversity rules.
 - A 10+ slide deck should normally use at least eight distinct archetypes, avoid consecutive repeats, limit card-based pages, and change rhythm every three to four slides.
 - HTML uses `data-layout`, Marp uses slide classes, and PPTX keeps `LAYOUT_SEQUENCE`.
 
 ## Portability rules
 
 - Root `skills/` are authoritative and must remain host-neutral.
-- Skill resources are local to each skill under `references/` and `scripts/`.
-- Root `references/` and `scripts/skill-cli-wrapper.mjs` are canonical; run `npm run sync:skills` after edits.
+- Skill resources are local to each skill under `references/`, `scripts/`, and (for CLI-using skills) `runtime/`.
+- Root `skills/`, `references/`, `scripts/generate-slide-art.py`, `scripts/skill-cli-wrapper.mjs`, `bin/`, `lib/`, and `templates/` are canonical; run `npm run sync:skills` after edits.
+- `.agents/skills/` forwarders and skill-local resources are generated; do not edit them without changing their canonical source.
 - Claude-specific behavior belongs in `.claude-plugin/`, `agents/`, or this guide.
 - Codex-specific behavior belongs in `.codex-plugin/` and `.agents/`.
-- Keep versions synchronized across `plugin.json`, both native manifests, both marketplaces, `package.json`, `package-lock.json`, and `lib/runtime.mjs`.
+- Keep `package.json` as the version source, then run `npm run sync:metadata` to update `plugin.json`, both native manifests, both marketplaces, `package-lock.json`, and `lib/runtime.mjs`.
 - Preserve HTML, Marp, and PPTX support.
 - Do not use official Anthropic or OpenAI marks or wording that implies endorsement.

@@ -12,22 +12,25 @@ Review the deck identified by the current user request. When the user asks for f
 Resolve these paths relative to this skill directory:
 
 - [Review checklist](references/review-checklist.md)
-- [Visual system](references/style-system.md)
+- [Brand-neutral visual quality](references/visual-quality.md) — read for every deck
+- [Claude Code-inspired visual system](references/style-system.md) — read only when the deck selects `claude-editorial` / `terminal-editorial`, or the user explicitly requests Claude styling
 - [Layout system](references/layout-system.md)
 - [Python SVG authoring protocol](references/python-svg-authoring.md)
+- [Python SVG plan template](references/python-svg-plan.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
+- `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
 
-Keep the user's project or workspace as the shell working directory. Resolve the script from the skill directory; do not `cd` into the installed skill before running it.
+Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. In commands below, replace `<absolute-skill-dir>` with that real absolute directory; never type the placeholder literally.
 
 ## Workflow
 
 1. Detect the format and locate source files, generated output, notes, local assets, and any `.visual.md` / `.py` / `.svg` visual source sets.
-2. Read the bundled references.
+2. Read the brand-neutral references. Load the Claude Code-inspired visual system only when the deck metadata selects `claude-editorial` / `terminal-editorial`, or the user explicitly requests that style.
 3. Run:
 
    ```bash
-   node scripts/slides-cli.mjs check <deck-path> --json
+   node "<absolute-skill-dir>/scripts/slides-cli.mjs" check <deck-path> --json
    ```
 
 4. Use the sibling `deck-reviewer` skill as an independent review pass when available.

@@ -1,6 +1,6 @@
 ---
 name: claude-code-style
-description: Apply a Claude Code-inspired warm terminal-editorial presentation system with warm neutrals, restrained terracotta, editorial typography, precise grids, and minimal developer-tool chrome. Use when designing or polishing a deck unless another brand system is specified.
+description: Apply a Claude Code-inspired warm terminal-editorial presentation system with warm neutrals, restrained terracotta, editorial typography, precise grids, and minimal developer-tool chrome. Use only when the user requests Claude or Claude Code styling, or selects the claude-editorial or terminal-editorial template.
 ---
 
 # Warm terminal-editorial presentation system

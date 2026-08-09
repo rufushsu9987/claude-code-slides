@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { access, readFile, readdir, stat } from 'node:fs/promises';
+import { access, lstat, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +23,9 @@ const expectedSkills = [
 ];
 
 const expectedClaudeAgents = ['deck-architect', 'deck-reviewer', 'visual-director'];
+const cliSkillNames = ['create-deck', 'review-deck', 'deck-reviewer'];
+const SEMVER_PATTERN =
+  /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 const portableManifestFields = new Set([
   '$schema',
@@ -41,21 +44,74 @@ const skillResources = {
   'claude-code-style': ['references/style-system.md'],
   'create-deck': [
     'references/storytelling.md',
+    'references/visual-quality.md',
     'references/style-system.md',
+    'references/layout-system.md',
+    'references/python-svg-authoring.md',
+    'references/python-svg-plan.md',
     'references/output-formats.md',
     'scripts/slides-cli.mjs',
+    'scripts/generate-slide-art.py',
   ],
   'deck-architect': ['references/storytelling.md'],
-  'deck-reviewer': ['references/review-checklist.md', 'scripts/slides-cli.mjs'],
+  'deck-reviewer': [
+    'references/review-checklist.md',
+    'references/visual-quality.md',
+    'references/layout-system.md',
+    'references/python-svg-authoring.md',
+    'references/python-svg-plan.md',
+    'scripts/slides-cli.mjs',
+    'scripts/generate-slide-art.py',
+  ],
   'review-deck': [
     'references/review-checklist.md',
+    'references/visual-quality.md',
     'references/style-system.md',
+    'references/layout-system.md',
+    'references/python-svg-authoring.md',
+    'references/python-svg-plan.md',
     'references/output-formats.md',
     'scripts/slides-cli.mjs',
+    'scripts/generate-slide-art.py',
   ],
   'speaker-notes': [],
-  'visual-director': ['references/style-system.md'],
+  'visual-director': [
+    'references/visual-quality.md',
+    'references/style-system.md',
+    'references/layout-system.md',
+    'references/python-svg-authoring.md',
+    'references/python-svg-plan.md',
+    'scripts/generate-slide-art.py',
+  ],
 };
+
+async function treeFiles(relativeRoot) {
+  const files = [];
+
+  async function visit(relativeDirectory) {
+    const entries = await readdir(path.join(root, relativeDirectory), { withFileTypes: true });
+    entries.sort((left, right) => left.name.localeCompare(right.name));
+    for (const entry of entries) {
+      const relativePath = path.posix.join(relativeDirectory, entry.name);
+      if (entry.isDirectory()) {
+        await visit(relativePath);
+      } else if (entry.isFile()) {
+        files.push(relativePath);
+      } else {
+        errors.push(`runtime source must be a regular file: ${relativePath}`);
+      }
+    }
+  }
+
+  await visit(relativeRoot);
+  return files;
+}
+
+const runtimeBundleFiles = [
+  'bin/slides.mjs',
+  ...(await treeFiles('lib')),
+  ...(await treeFiles('templates')),
+];
 
 async function readJson(relativePath) {
   try {
@@ -100,9 +156,13 @@ function validatePluginIdentity(plugin, label) {
     errors.push(`${label}.name must be kebab-case`);
   }
   if (!plugin.description) errors.push(`${label}.description is required`);
-  if (!/^\d+\.\d+\.\d+$/.test(plugin.version || '')) {
+  if (!SEMVER_PATTERN.test(plugin.version || '')) {
     errors.push(`${label}.version must use semantic versioning`);
   }
+}
+
+function isRecord(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 const portablePlugin = await readJson('plugin.json');
@@ -125,22 +185,25 @@ const required = [
   ...Object.entries(skillResources).flatMap(([name, resources]) =>
     resources.map((resource) => `skills/${name}/${resource}`),
   ),
+  ...runtimeBundleFiles,
+  ...cliSkillNames.flatMap((name) =>
+    runtimeBundleFiles.map((resource) => `skills/${name}/runtime/${resource}`),
+  ),
   'references/style-system.md',
+  'references/visual-quality.md',
   'references/storytelling.md',
+  'references/python-svg-plan.md',
   'references/output-formats.md',
   'references/review-checklist.md',
+  'templates/python-svg-plan.md',
+  'scripts/generate-slide-art.py',
   'scripts/skill-cli-wrapper.mjs',
   'scripts/sync-skill-resources.mjs',
+  'scripts/sync-release-metadata.mjs',
+  'scripts/validate-release.mjs',
+  '.github/workflows/release.yml',
   'bin/codex-slides.mjs',
   'bin/claude-slides.mjs',
-  'lib/cli.mjs',
-  'templates/html/index.html',
-  'templates/html/theme.css',
-  'templates/html/slides.js',
-  'templates/marp/deck.md',
-  'templates/marp/theme.css',
-  'templates/pptx/deck.mjs',
-  'templates/pptx/package.json',
   'examples/ai-platform/index.html',
   'docs/images/hero.svg',
   'AGENTS.md',
@@ -150,8 +213,18 @@ const required = [
   'LICENSE',
 ];
 
+const bundledRuntimePaths = cliSkillNames.flatMap((name) =>
+  runtimeBundleFiles.map((resource) => `skills/${name}/runtime/${resource}`),
+);
+
 for (const relativePath of required) {
   if (!(await fileExists(relativePath))) errors.push(`missing ${relativePath}`);
+}
+
+for (const relativePath of bundledRuntimePaths) {
+  if (!(await fileExists(relativePath))) continue;
+  const info = await lstat(path.join(root, relativePath));
+  if (!info.isFile()) errors.push(`${relativePath} must be a local regular file`);
 }
 
 validatePluginIdentity(portablePlugin, 'Agent Plugins manifest');
@@ -162,6 +235,34 @@ if (portablePlugin) {
   if (portablePlugin.$schema !== AGENT_PLUGINS_SCHEMA) {
     errors.push(`plugin.json.$schema must be ${AGENT_PLUGINS_SCHEMA}`);
   }
+  if (
+    typeof portablePlugin.description !== 'string' ||
+    portablePlugin.description.trim() === ''
+  ) {
+    errors.push('plugin.json.description must be a non-empty string');
+  }
+  if (!isRecord(portablePlugin.author) || typeof portablePlugin.author.name !== 'string') {
+    errors.push('plugin.json.author must be an object with a string name');
+  } else if (
+    portablePlugin.author.name.trim() === '' ||
+    typeof portablePlugin.author.url !== 'string' ||
+    portablePlugin.author.url.trim() === ''
+  ) {
+    errors.push('plugin.json.author must include non-empty string name and url fields');
+  }
+  for (const field of ['homepage', 'repository', 'license']) {
+    if (typeof portablePlugin[field] !== 'string' || portablePlugin[field].trim() === '') {
+      errors.push(`plugin.json.${field} must be a non-empty string`);
+    }
+  }
+  if (
+    !Array.isArray(portablePlugin.keywords) ||
+    portablePlugin.keywords.some(
+      (keyword) => typeof keyword !== 'string' || keyword.trim() === '',
+    )
+  ) {
+    errors.push('plugin.json.keywords must be an array of non-empty strings');
+  }
 
   for (const key of Object.keys(portablePlugin)) {
     if (!portableManifestFields.has(key)) {
@@ -169,22 +270,11 @@ if (portablePlugin) {
     }
   }
 
-  if (
-    portablePlugin.extensions === null ||
-    typeof portablePlugin.extensions !== 'object' ||
-    Array.isArray(portablePlugin.extensions)
-  ) {
+  if (portablePlugin.extensions !== undefined && !isRecord(portablePlugin.extensions)) {
     errors.push('plugin.json.extensions must be an object when present');
-  } else {
-    for (const namespace of [
-      'io.github.rufushsu9987.codex',
-      'io.github.rufushsu9987.claudecode',
-    ]) {
-      if (
-        portablePlugin.extensions[namespace] === null ||
-        typeof portablePlugin.extensions[namespace] !== 'object' ||
-        Array.isArray(portablePlugin.extensions[namespace])
-      ) {
+  } else if (portablePlugin.extensions !== undefined) {
+    for (const [namespace, extension] of Object.entries(portablePlugin.extensions)) {
+      if (!isRecord(extension)) {
         errors.push(`plugin.json.extensions must define object namespace ${namespace}`);
       }
     }
@@ -372,6 +462,10 @@ for (const name of expectedSkills) {
   if (!metadata.description) {
     errors.push(`${relativePath}: description is required`);
   }
+  const metadataFields = Object.keys(metadata).sort();
+  if (JSON.stringify(metadataFields) !== JSON.stringify(['description', 'name'])) {
+    errors.push(`${relativePath}: frontmatter must contain only name and description`);
+  }
 
   for (const forbidden of [
     '$ARGUMENTS',
@@ -404,6 +498,16 @@ for (const name of expectedSkills) {
     if (forwarderMetadata?.name !== name) {
       errors.push(`${forwarderPath}: name must match ${name}`);
     }
+    if (forwarderMetadata?.description !== metadata.description) {
+      errors.push(`${forwarderPath}: description must match ${relativePath}`);
+    }
+    if (
+      forwarderMetadata &&
+      JSON.stringify(Object.keys(forwarderMetadata).sort()) !==
+        JSON.stringify(['description', 'name'])
+    ) {
+      errors.push(`${forwarderPath}: frontmatter must contain only name and description`);
+    }
     if (!forwarder.includes(`../../../skills/${name}/SKILL.md`)) {
       errors.push(`${forwarderPath}: must point to the authoritative skill`);
     }
@@ -430,13 +534,33 @@ for (const name of expectedClaudeAgents) {
   }
 }
 
+if (await fileExists('scripts/skill-cli-wrapper.mjs')) {
+  const wrapper = await readFile(path.join(root, 'scripts/skill-cli-wrapper.mjs'), 'utf8');
+  if (!wrapper.includes("'runtime', 'bin', 'slides.mjs'")) {
+    errors.push('scripts/skill-cli-wrapper.mjs must resolve the skill-local neutral runtime');
+  }
+  if (/codex|claude|pluginRoot|\.\.\/\.\.\//i.test(wrapper)) {
+    errors.push('scripts/skill-cli-wrapper.mjs must not depend on a host or plugin root');
+  }
+}
+
 for (const executable of [
+  'bin/slides.mjs',
   'bin/codex-slides.mjs',
   'bin/claude-slides.mjs',
+  'scripts/generate-slide-art.py',
   'scripts/skill-cli-wrapper.mjs',
+  'scripts/sync-skill-resources.mjs',
+  'scripts/sync-release-metadata.mjs',
+  'scripts/validate-release.mjs',
   'skills/create-deck/scripts/slides-cli.mjs',
+  'skills/create-deck/scripts/generate-slide-art.py',
   'skills/review-deck/scripts/slides-cli.mjs',
+  'skills/review-deck/scripts/generate-slide-art.py',
   'skills/deck-reviewer/scripts/slides-cli.mjs',
+  'skills/deck-reviewer/scripts/generate-slide-art.py',
+  'skills/visual-director/scripts/generate-slide-art.py',
+  ...cliSkillNames.map((name) => `skills/${name}/runtime/bin/slides.mjs`),
 ]) {
   if (!(await fileExists(executable))) continue;
   const mode = (await stat(path.join(root, executable))).mode;

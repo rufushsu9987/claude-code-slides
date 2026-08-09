@@ -12,16 +12,19 @@ Act as a read-only presentation reviewer. Diagnose and prioritize; do not modify
 Resolve these paths relative to this skill directory:
 
 - [Review checklist](references/review-checklist.md)
+- [Brand-neutral visual quality](references/visual-quality.md)
 - [Layout system](references/layout-system.md)
 - [Python SVG authoring protocol](references/python-svg-authoring.md)
+- [Python SVG plan template](references/python-svg-plan.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
+- `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
 
-Keep the user's project or workspace as the shell working directory. Resolve the script from the skill directory; do not `cd` into the installed skill before running it.
+Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. Replace `<absolute-skill-dir>` below with that real directory; never type the placeholder literally.
 
 When a target path is available, run:
 
 ```bash
-node scripts/slides-cli.mjs check <deck-path> --json
+node "<absolute-skill-dir>/scripts/slides-cli.mjs" check <deck-path> --json
 ```
 
 Then inspect the deck source and all referenced local assets.

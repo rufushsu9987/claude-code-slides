@@ -1,11 +1,13 @@
 ---
 name: visual-director
-description: Create a coherent visual direction and page-by-page layout blueprint for presentation decks. Use when a deck needs visual hierarchy, layout diversity, diagrams, data storytelling, technical architecture visuals, or a polished Claude Code-inspired aesthetic.
+description: Create a coherent, brand-aware visual direction and page-by-page layout blueprint for presentation decks. Use when a deck needs visual hierarchy, layout diversity, diagrams, data storytelling, technical architecture visuals, accessibility planning, or a polished aesthetic.
 ---
 
 # Direct the presentation visually
 
-Read [the visual system](references/style-system.md), [the layout system](references/layout-system.md), and [the Python SVG authoring protocol](references/python-svg-authoring.md), resolved relative to this skill directory. Inspect existing brand assets, screenshots, charts, and deck files supplied by the task. Do not implement the full deck or rewrite its narrative.
+Read [brand-neutral visual quality](references/visual-quality.md), [the layout system](references/layout-system.md), and [the Python SVG authoring protocol](references/python-svg-authoring.md), resolved relative to this skill directory. Use the bundled [Python SVG plan template](references/python-svg-plan.md) and `scripts/generate-slide-art.py` only when the visual workflow needs them. Read [the Claude Code-inspired visual system](references/style-system.md) only when the selected template is `claude-editorial` / `terminal-editorial`, or the user explicitly requests Claude styling. Inspect existing brand assets, screenshots, charts, and deck files supplied by the task. Do not implement the full deck or rewrite its narrative.
+
+Resolve bundled scripts to absolute paths from the directory containing this `SKILL.md`, and execute them while keeping the user's project as the shell working directory. Do not change into the installed skill directory.
 
 Return:
 
@@ -27,7 +29,7 @@ Rules:
 - Never repeat the exact archetype consecutively.
 - Keep card-grid and node-card pages below roughly 20% of the deck.
 - Introduce a visible rhythm change every three to four slides.
-- Use terracotta sparingly; it is emphasis, not decoration.
+- When using the Claude Code-inspired system, use terracotta sparingly; it is emphasis, not decoration.
 - Prefer whitespace, hairlines, direct labels, and meaningful geometry over card grids.
 - On covers, default to a title-led composition and whitespace. The right half is optional.
 - Use a cover's right half only for one sourced artifact, compact proof rail, operational signal, or direct system cue that is understandable within two seconds.
@@ -37,6 +39,6 @@ Rules:
 - When the opening thesis is causal or cyclical, move the mechanism to the next page rather than overloading the cover.
 - Plan custom Python SVGs from the semantic model, not from a fixed drawing kind. Write `<visual>.visual.md` before implementation and treat built-in kinds as reference patterns or fallbacks only.
 - Specify why Python SVG is better than a screenshot, verified chart, native editable shapes, or whitespace for that page.
-- Terminal chrome is a supporting motif, not the entire layout.
+- When using the Claude Code-inspired system, terminal chrome is a supporting motif, not the entire layout.
 - Never request or fabricate an official Anthropic or Claude logo.
 - Avoid gratuitous gradients, glassmorphism, emoji, stock illustrations, and excessive rounded rectangles.

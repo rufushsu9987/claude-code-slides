@@ -176,14 +176,14 @@ Choose the medium before drawing:
 A typical workflow is:
 
 ```bash
-cp templates/python-svg-plan.md \
+cp "<absolute-skill-dir>/references/python-svg-plan.md" \
   slides/example/assets/capital-engine.visual.md
 
 python3 slides/example/assets/capital-engine.py \
   --output slides/example/assets/capital-engine.svg
 ```
 
-`scripts/generate-slide-art.py` remains a tested pattern library and fast fallback. Its built-in kinds demonstrate accessible metadata, deterministic sketch and clean strokes, arrows, loops, boundaries, paths, scenes, and layout-safe SVG output. They are examples, not an exhaustive catalog. Create a deck-local composition whenever the source material requires a different semantic model.
+Resolve `<absolute-skill-dir>` from the directory containing the active `SKILL.md`; do not type the placeholder literally or change away from the user's workspace. The bundled `scripts/generate-slide-art.py`, resolved the same way, remains a tested pattern library and fast fallback. Its built-in kinds demonstrate accessible metadata, deterministic sketch and clean strokes, arrows, loops, boundaries, paths, scenes, and layout-safe SVG output. They are examples, not an exhaustive catalog. Create a deck-local composition whenever the source material requires a different semantic model.
 
 Promote a custom visual into the shared generator only after the pattern proves reusable across multiple unrelated decks. Keep slide titles, explanation, source notes, layout markers, footers, and speaker notes editable in the target format; the SVG should remain the visual anchor rather than a flattened slide.
 

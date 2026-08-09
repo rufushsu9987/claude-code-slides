@@ -9,6 +9,7 @@ git clone https://github.com/rufushsu9987/claude-code-slides.git
 cd claude-code-slides
 npm ci
 npm run sync:skills
+npm run sync:metadata
 npm run check
 ```
 
@@ -16,7 +17,7 @@ npm run check
 
 The authoritative workflow files live under `skills/`.
 
-Shared reference sources live under root `references/`. The reusable CLI wrapper source lives at `scripts/skill-cli-wrapper.mjs`.
+Shared reference sources live under root `references/`. `references/python-svg-plan.md` is the canonical visual-plan template; `templates/python-svg-plan.md` remains a compatibility copy. The reusable SVG helper and CLI wrapper sources live at `scripts/generate-slide-art.py` and `scripts/skill-cli-wrapper.mjs`. CLI runtime bundles are generated from `bin/slides.mjs`, `lib/`, and `templates/`.
 
 After changing either source:
 
@@ -25,14 +26,14 @@ npm run sync:skills
 npm run check:skills
 ```
 
-Do not hand-edit generated copies under `skills/*/references/` or `skills/*/scripts/` without updating the canonical source.
+Do not hand-edit generated copies under `skills/*/references/`, `skills/*/scripts/`, `skills/*/runtime/`, or `.agents/skills/` without updating the canonical source.
 
 Portable skills must:
 
 - use only standard `name` and `description` frontmatter
 - reference files with `references/...` and `scripts/...` paths from the skill root
 - avoid Codex `$skill` syntax, Claude Code command namespaces, and host-specific environment variables
-- keep all package paths within the plugin root
+- keep all package paths within the installed skill root
 
 ## Host testing
 
@@ -58,4 +59,6 @@ claude --plugin-dir .
 - Keep HTML templates dependency-free.
 - Keep generated PPTX dependencies inside the generated deck.
 - Update `CHANGELOG.md` for user-visible changes.
+- Run `npm run sync:metadata` after changing package, plugin, or marketplace release metadata.
+- Keep `CHANGELOG.md` Unreleased entries until cutting a new version; tag releases require an empty Unreleased section and a dated version heading.
 - Avoid official Anthropic or OpenAI marks, copied UI, or wording that suggests endorsement.

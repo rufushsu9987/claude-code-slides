@@ -29,7 +29,7 @@ Claude Code Slides 不是一次性地把文件切成十頁，而是封裝一套�
 
 Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Codex 與 Claude Code 的原生安裝與呼叫體驗。
 
-## 7 種視覺主題，19 種內容導向版型
+## 7 種視覺主題，28 種內容導向版型
 
 **主題 Theme** 負責色彩、字體、背景與元件風格；**版型 Layout Archetype** 負責資訊架構、視線移動與主要視覺重心。
 
@@ -45,7 +45,7 @@ Portable Core 遵循 Agent Plugins 1.0.0 與 Agent Skills 慣例，並保留 Cod
 | `dark-terminal` | Live Demo、程式碼導讀、工程深度分享 |
 | `incident-review` | Postmortem、事件時間軸、根因與改善 |
 
-版型系統包含 19 種 Archetypes，例如：
+版型系統包含 28 種 Archetypes，例如：
 
 ```text
 editorial-cover
@@ -65,7 +65,7 @@ risk-matrix
 closing-manifesto
 ```
 
-新的 Starter Deck 會直接展示 **15 種不同版型**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
+新的 Starter Deck 會直接展示 **20 種不同版型與 geometry**，不再只用 3–4 種排版反覆換內容。10 頁以上的簡報預設遵循：
 
 - 至少使用 8 種不同版型。
 - 不連續重複相同版型。
@@ -105,7 +105,7 @@ python3 scripts/generate-slide-art.py \
   --output slides/example/assets/infographic-story.svg
 ```
 
-目前支援 `infographic`、`data-journey` 與 `decision-path`。輸出是固定 `viewBox` 的 deterministic SVG，可嵌入 HTML／Marp，也可以作為 PPTX 的圖形資產；投影片本身的標題、文案、講稿與 Layout marker 仍保持可編輯。
+目前提供 10 種經測試的 reference kinds，涵蓋 journey、boundary、path、loop、roadmap、swimlane 與 system map。它們是範例與快速 fallback，不是封閉目錄；內容需要不同語意模型時，Agent 應建立 deck-local plan、Python generator 與 SVG。輸出可嵌入 HTML／Marp，也可以作為 PPTX 的圖形資產；投影片本身的標題、文案、講稿與 Layout marker 仍保持可編輯。
 
 ## Skills
 
@@ -129,6 +129,8 @@ codex plugin marketplace add \
 codex plugin add claude-code-slides@rufus-slides
 ```
 
+`main` 是 Preview channel；需要可重現安裝時，請改用已發布的 `claude-code-slides--vX.Y.Z` tag。
+
 重新開啟 Codex Session 後：
 
 ```text
@@ -143,7 +145,10 @@ $create-deck
 
 ```bash
 codex plugin marketplace upgrade rufus-slides
+codex plugin add claude-code-slides@rufus-slides
 ```
+
+重新安裝後請開啟新的 Codex thread，讓新版 Skills 被載入。
 
 若 Codex 顯示 Marketplace 不是 Git 類型，請移除後使用上方完整 GitHub URL 重新加入。
 
@@ -161,6 +166,13 @@ claude plugin install claude-code-slides@rufus-slides
 
 請把 docs/architecture.md 製作成 12 分鐘架構審查簡報。
 使用可編輯 PPTX、預設 claude-editorial 主題與多樣化版型序列。
+```
+
+更新既有 Claude Code 安裝：
+
+```bash
+claude plugin marketplace update rufus-slides
+claude plugin update claude-code-slides@rufus-slides
 ```
 
 更新後請建立新 Session，或執行 `/reload-plugins`。
@@ -183,16 +195,22 @@ PPTX 使用可編輯文字與圖形，不會把每一頁壓成單張圖片。
 
 ## CLI
 
+以下命令假設 Repository checkout 已執行 `npm link`。一般 Plugin 使用不需要全域安裝 CLI；Skills 會透過 skill-local wrapper 呼叫內建工具。未 link 的開發 checkout 可將 `codex-slides` 改成 `node bin/codex-slides.mjs`。
+
 ```bash
 codex-slides templates
 codex-slides layouts
-codex-slides init "AI Platform" --format html
+codex-slides init "AI Platform" --format html --lang zh-TW
 codex-slides init "Cloud Review" --format pptx --template cloud-architecture
-codex-slides check slides/cloud-review
+codex-slides check slides/cloud-review --format pptx --strict
 codex-slides doctor
 ```
 
 `claude-slides` 提供相同介面。
+
+`--lang` 接受 Node.js `Intl` 可正規化的語言地區標籤，並寫入 HTML、Marp、PPTX 與 `template.json`。
+替換 Starter Copy 後，`--strict` 會把任何剩餘 Warning 視為檢查失敗；當同一目錄有多種 Deck 且缺少
+`template.json` 時，可用 `--format html|marp|pptx` 明確指定。
 
 ## 專案架構
 
@@ -200,28 +218,32 @@ codex-slides doctor
 plugin.json                 Agent Plugins portable manifest
 skills/                     Portable Agent Skills
 references/layout-system.md 版型設計與防重複規則
+references/python-svg-plan.md 視覺規劃 Canonical Template
 templates/catalog.json      視覺主題目錄
 templates/layouts.json      版型 Archetype 目錄
 .codex-plugin/              Codex Adapter
 .agents/plugins/            Codex Marketplace
-.agents/skills/             Repository-scoped Codex Discovery
+.agents/skills/             自動產生的 Repository-scoped Codex Discovery
 .claude-plugin/             Claude Code Manifest 與 Marketplace
 agents/                     Claude Code Subagents
-bin/ + lib/                 零依賴 Scaffold 與驗證 CLI
+bin/ + lib/                 中立核心與 Host CLI Alias
 templates/                  HTML、Marp、PptxGenJS Base
 ```
 
 ## 開發與驗證
+
+開發環境需要 Node.js 18.3 以上；選用 Agent-authored SVG generator 與執行其測試時，需要 Python 3.10 以上。
 
 ```bash
 git clone https://github.com/rufushsu9987/claude-code-slides.git
 cd claude-code-slides
 npm ci
 npm run sync:skills
+npm run sync:metadata
 npm run check
 ```
 
-測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 19 種版型目錄、15 種 Starter Layout、Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
+測試會建立每一種主題的 HTML、Marp 與 PPTX，驗證 28 種版型目錄、20 種 Starter Layout／geometry、10 種 SVG reference kinds、精確同步與可獨立執行的 Portable Skill Resources、兩個原生 Plugin Adapter 與範例簡報。
 
 ## 獨立性聲明
 

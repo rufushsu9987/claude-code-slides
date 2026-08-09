@@ -1,37 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
   <title id="title">Close the observe-decide-act-learn loop</title>
   <desc id="desc">A four-stage closed operating loop around a central outcome, with cadence and guardrail details in a side rail.</desc>
-  <defs><pattern id="paper-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#211F1B" stroke-width="0.7" opacity="0.035"/></pattern></defs>
-  <rect width="1200" height="700" fill="#F7F3EC"/>
+  <defs><pattern id="paper-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="{{INK}}" stroke-width="0.7" opacity="0.035"/></pattern></defs>
+  <rect width="1200" height="700" fill="{{CANVAS}}"/>
   <rect width="1200" height="700" fill="url(#paper-grid)"/>
 
-<ellipse cx="620.5019364744484" cy="155.2900387188016" rx="63.19010554612883" ry="63.00355865733576" fill="#FFFDF9" stroke="#211F1B" stroke-width="2.5" opacity="1"/><ellipse cx="620.8512963709904" cy="157.63611815472248" rx="65.41184644373745" ry="62.512979797465896" fill="none" stroke="#211F1B" stroke-width="1.05" opacity="0.42"/>
-<text x="620.0" y="155.0" fill="#211F1B" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">OBSERVE</text>
-<text x="620.0" y="182.0" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">signals</text>
-<ellipse cx="824.718918550867" cy="360.30726998997704" rx="62.98709670929297" ry="64.01927903717211" fill="#F1D9CD" stroke="#D97757" stroke-width="2.5" opacity="1"/><ellipse cx="823.2955294908619" cy="360.91581554247193" rx="64.53958397600628" ry="64.16178933017159" fill="none" stroke="#D97757" stroke-width="1.05" opacity="0.42"/>
-<text x="825.0" y="360.0" fill="#211F1B" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">DECIDE</text>
-<text x="825.0" y="387.0" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">policy</text>
-<ellipse cx="618.9935862393465" cy="567.3213564619533" rx="65.11394964404018" ry="62.22339553484102" fill="#FFFDF9" stroke="#211F1B" stroke-width="2.5" opacity="1"/><ellipse cx="621.1009493065981" cy="567.7133018219577" rx="63.42490185946477" ry="62.759726199322415" fill="none" stroke="#211F1B" stroke-width="1.05" opacity="0.42"/>
-<text x="620.0" y="565.0" fill="#211F1B" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">ACT</text>
-<text x="620.0" y="592.0" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">workflow</text>
-<ellipse cx="416.64596705994444" cy="361.41174036240545" rx="62.533885036168535" ry="62.548178956600474" fill="#F1D9CD" stroke="#D97757" stroke-width="2.5" opacity="1"/><ellipse cx="416.25097971885083" cy="362.3734137129208" rx="65.10566178378777" ry="64.82703443209775" fill="none" stroke="#D97757" stroke-width="1.05" opacity="0.42"/>
-<text x="415.0" y="360.0" fill="#211F1B" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">LEARN</text>
-<text x="415.0" y="387.0" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">feedback</text>
-<path d="M 620.0 157.0 Q 678.7 303.3 825.0 362.0" fill="none" stroke="#D97757" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 805.6 364.8 L 825.0 362.0 L 812.9 346.6" fill="none" stroke="#D97757" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 825.0 362.0 Q 678.7 420.7 620.0 567.0" fill="none" stroke="#6F6962" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 617.2 547.6 L 620.0 567.0 L 635.4 554.9" fill="none" stroke="#6F6962" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 620.0 567.0 Q 561.3 420.7 415.0 362.0" fill="none" stroke="#D97757" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 434.4 359.2 L 415.0 362.0 L 427.1 377.4" fill="none" stroke="#D97757" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 415.0 362.0 Q 561.3 303.3 620.0 157.0" fill="none" stroke="#6F6962" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 622.8 176.4 L 620.0 157.0 L 604.6 169.1" fill="none" stroke="#6F6962" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="620" cy="362" r="90" fill="#27241F" stroke="#27241F" stroke-width="0" opacity="1"/>
-<text x="620" y="344" fill="#F1D9CD" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="middle" letter-spacing="1.8" opacity="1">NORTH STAR</text>
-<text x="620" y="388" fill="#F8F3EA" font-size="30" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="middle" opacity="1">Outcome</text>
-<line x1="940.115929892655" y1="175.51397044473399" x2="939.6113100070668" y2="556.1665300200743" stroke="#D8D0C6" stroke-width="2.0" opacity="1" stroke-linecap="round"/><line x1="941.0540949256095" y1="174.3792632075656" x2="941.1574620809945" y2="556.2475268648217" stroke="#D8D0C6" stroke-width="0.9" opacity="0.54" stroke-linecap="round"/>
-<text x="972" y="205" fill="#D97757" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">01</text>
-<text x="1016" y="205" fill="#211F1B" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Metric</text>
-<text x="972" y="236" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">One measurable result</tspan></text>
-<text x="972" y="324" fill="#D97757" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">02</text>
-<text x="1016" y="324" fill="#211F1B" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Cadence</text>
-<text x="972" y="355" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">Daily signal · weekly</tspan><tspan x="972" dy="17.36">review</tspan></text>
-<text x="972" y="443" fill="#D97757" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">03</text>
-<text x="1016" y="443" fill="#211F1B" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Guardrail</text>
-<text x="972" y="474" fill="#6F6962" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">Stop conditions + owner</tspan></text>
+<ellipse cx="620.5019364744484" cy="155.2900387188016" rx="63.19010554612883" ry="63.00355865733576" fill="{{SURFACE}}" stroke="{{INK}}" stroke-width="2.5" opacity="1"/><ellipse cx="620.8512963709904" cy="157.63611815472248" rx="65.41184644373745" ry="62.512979797465896" fill="none" stroke="{{INK}}" stroke-width="1.05" opacity="0.42"/>
+<text x="620.0" y="155.0" fill="{{INK}}" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">OBSERVE</text>
+<text x="620.0" y="182.0" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">signals</text>
+<ellipse cx="824.718918550867" cy="360.30726998997704" rx="62.98709670929297" ry="64.01927903717211" fill="{{ACCENT_SOFT}}" stroke="{{ACCENT}}" stroke-width="2.5" opacity="1"/><ellipse cx="823.2955294908619" cy="360.91581554247193" rx="64.53958397600628" ry="64.16178933017159" fill="none" stroke="{{ACCENT}}" stroke-width="1.05" opacity="0.42"/>
+<text x="825.0" y="360.0" fill="{{INK}}" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">DECIDE</text>
+<text x="825.0" y="387.0" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">policy</text>
+<ellipse cx="618.9935862393465" cy="567.3213564619533" rx="65.11394964404018" ry="62.22339553484102" fill="{{SURFACE}}" stroke="{{INK}}" stroke-width="2.5" opacity="1"/><ellipse cx="621.1009493065981" cy="567.7133018219577" rx="63.42490185946477" ry="62.759726199322415" fill="none" stroke="{{INK}}" stroke-width="1.05" opacity="0.42"/>
+<text x="620.0" y="565.0" fill="{{INK}}" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">ACT</text>
+<text x="620.0" y="592.0" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">workflow</text>
+<ellipse cx="416.64596705994444" cy="361.41174036240545" rx="62.533885036168535" ry="62.548178956600474" fill="{{ACCENT_SOFT}}" stroke="{{ACCENT}}" stroke-width="2.5" opacity="1"/><ellipse cx="416.25097971885083" cy="362.3734137129208" rx="65.10566178378777" ry="64.82703443209775" fill="none" stroke="{{ACCENT}}" stroke-width="1.05" opacity="0.42"/>
+<text x="415.0" y="360.0" fill="{{INK}}" font-size="15" font-family="SFMono-Regular, Consolas, monospace" font-weight="800" text-anchor="middle" opacity="1">LEARN</text>
+<text x="415.0" y="387.0" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="middle" opacity="1">feedback</text>
+<path d="M 620.0 157.0 Q 678.7 303.3 825.0 362.0" fill="none" stroke="{{ACCENT}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 805.6 364.8 L 825.0 362.0 L 812.9 346.6" fill="none" stroke="{{ACCENT}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 825.0 362.0 Q 678.7 420.7 620.0 567.0" fill="none" stroke="{{MUTED}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 617.2 547.6 L 620.0 567.0 L 635.4 554.9" fill="none" stroke="{{MUTED}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 620.0 567.0 Q 561.3 420.7 415.0 362.0" fill="none" stroke="{{ACCENT}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 434.4 359.2 L 415.0 362.0 L 427.1 377.4" fill="none" stroke="{{ACCENT}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 415.0 362.0 Q 561.3 303.3 620.0 157.0" fill="none" stroke="{{MUTED}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M 622.8 176.4 L 620.0 157.0 L 604.6 169.1" fill="none" stroke="{{MUTED}}" opacity="1" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="620" cy="362" r="90" fill="{{CODE}}" stroke="{{CODE}}" stroke-width="0" opacity="1"/>
+<text x="620" y="344" fill="{{ACCENT_SOFT}}" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="middle" letter-spacing="1.8" opacity="1">NORTH STAR</text>
+<text x="620" y="388" fill="{{CODE_TEXT}}" font-size="30" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="middle" opacity="1">Outcome</text>
+<line x1="940.115929892655" y1="175.51397044473399" x2="939.6113100070668" y2="556.1665300200743" stroke="{{BORDER}}" stroke-width="2.0" opacity="1" stroke-linecap="round"/><line x1="941.0540949256095" y1="174.3792632075656" x2="941.1574620809945" y2="556.2475268648217" stroke="{{BORDER}}" stroke-width="0.9" opacity="0.54" stroke-linecap="round"/>
+<text x="972" y="205" fill="{{ACCENT}}" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">01</text>
+<text x="1016" y="205" fill="{{INK}}" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Metric</text>
+<text x="972" y="236" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">One measurable result</tspan></text>
+<text x="972" y="324" fill="{{ACCENT}}" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">02</text>
+<text x="1016" y="324" fill="{{INK}}" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Cadence</text>
+<text x="972" y="355" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">Daily signal · weekly</tspan><tspan x="972" dy="17.36">review</tspan></text>
+<text x="972" y="443" fill="{{ACCENT}}" font-size="14" font-family="SFMono-Regular, Consolas, monospace" font-weight="700" text-anchor="start" opacity="1">03</text>
+<text x="1016" y="443" fill="{{INK}}" font-size="20" font-family="Georgia, Iowan Old Style, serif" font-weight="700" text-anchor="start" opacity="1">Guardrail</text>
+<text x="972" y="474" fill="{{MUTED}}" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start"><tspan x="972" dy="0">Stop conditions + owner</tspan></text>
 </svg>

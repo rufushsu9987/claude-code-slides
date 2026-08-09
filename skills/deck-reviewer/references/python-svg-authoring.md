@@ -2,7 +2,9 @@
 
 Claude Code Slides is designed to run inside Codex, Claude Code, and other coding agents. Those agents can inspect the source material, design a content-specific visual, write Python, execute it, review the SVG, and revise it. The primary workflow is therefore **plan-backed custom generation**, not selecting from a closed catalog of drawing kinds.
 
-The built-in `scripts/generate-slide-art.py` kinds remain useful as examples, smoke-test fixtures, and fast fallbacks. They are not the limit of what a deck may draw, and an agent should not distort the story merely to fit one of them.
+The bundled `scripts/generate-slide-art.py` kinds remain useful as examples, smoke-test fixtures, and fast fallbacks. They are not the limit of what a deck may draw, and an agent should not distort the story merely to fit one of them.
+
+Resolve every bundled `references/...` or `scripts/...` path from the absolute directory containing the active `SKILL.md`. Keep the user's project as the shell working directory; do not change into the installed skill directory before copying a template or running a helper.
 
 ## Output contract
 
@@ -40,7 +42,14 @@ Read the documents, repository, data, screenshots, and citations that support th
 
 ### 2. Write the visual plan before code
 
-Copy `templates/python-svg-plan.md` to the deck asset directory and complete it. A useful plan answers:
+Copy the bundled [visual-plan template](python-svg-plan.md) to the deck asset directory and complete it. Substitute the actual absolute skill directory in this command; do not type the placeholder literally:
+
+```bash
+cp "<absolute-skill-dir>/references/python-svg-plan.md" \
+  slides/<deck>/assets/<visual>.visual.md
+```
+
+A useful plan answers:
 
 - What single sentence should the audience understand?
 - What evidence or mechanism makes that sentence true?
@@ -259,7 +268,16 @@ Custom Python SVG is usually more valuable on an explanatory page than on the co
 
 ## Built-in renderer as a pattern library
 
-`scripts/generate-slide-art.py` provides tested examples of deterministic strokes, accessible SVG metadata, arrows, labels, paths, loops, boundaries, and scenes. Agents may:
+The bundled `scripts/generate-slide-art.py` provides tested examples of deterministic strokes, accessible SVG metadata, arrows, labels, paths, loops, boundaries, and scenes. Resolve it to an absolute path from the skill directory while keeping the user's workspace as the current directory:
+
+```bash
+python3 "<absolute-skill-dir>/scripts/generate-slide-art.py" --list-kinds
+python3 "<absolute-skill-dir>/scripts/generate-slide-art.py" \
+  --kind architecture-boundary \
+  --output slides/<deck>/assets/architecture-boundary.svg
+```
+
+Agents may:
 
 - use a built-in kind when it already matches the communication job
 - inspect the implementation for reusable techniques

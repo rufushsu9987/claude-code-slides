@@ -130,7 +130,6 @@ assets/<visual>.py
 assets/<visual>.svg
 ```
 
-Copy [`templates/python-svg-plan.md`](../templates/python-svg-plan.md), complete the audience takeaway, source of truth, semantic model, composition, labels, accessibility, and validation sections, then write a dedicated Python generator. See [`references/python-svg-authoring.md`](../references/python-svg-authoring.md) for the full protocol.
+Copy [`references/python-svg-plan.md`](../references/python-svg-plan.md), complete the audience takeaway, source of truth, semantic model, composition, labels, accessibility, and validation sections, then write a dedicated Python generator. See [`references/python-svg-authoring.md`](../references/python-svg-authoring.md) for the full protocol.
 
 Use `scripts/generate-slide-art.py` when one of its 10 tested reference kinds already fits or when you need a fast starting point. The kinds are examples and fallbacks—not the boundary of the visual system. A content-specific architecture, mechanism, journey, or scene should normally remain a deck-local plan, script, and SVG until it proves broadly reusable.
-
