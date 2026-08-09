@@ -20,7 +20,7 @@ Visual Grammar v2 keeps one coherent design language while varying **composition
 - **7 visual themes:** one shared workflow for technical, executive, cloud, data, product, terminal, and incident presentations.
 - **28 semantic layout archetypes:** layouts are selected by the communication job of each slide.
 - **20 distinct starter layouts and geometries:** the starter decks demonstrate real composition changes rather than cosmetic card variations.
-- **9 deterministic SVG drawing kinds:** dependency-free Python visuals with `sketch` and `clean` styles.
+- **10 deterministic SVG drawing kinds:** dependency-free Python visuals with `sketch` and `clean` styles.
 - **Three output formats:** interactive HTML, reviewable Marp, and editable PPTX built with text and shapes.
 - **Portable plugin architecture:** shared Agent Skills with native Codex and Claude Code adapters.
 
@@ -178,13 +178,33 @@ architecture-boundary
 data-journey
 decision-path
 infographic
+mechanism-loop
 operating-loop
 roadmap-horizon
 swimlane-process
 system-map
 ```
 
-`infographic` remains a compatible entry point for the `agent-journey` visual story.
+`infographic` remains a compatible entry point for the `agent-journey` visual story. `mechanism-loop` is a configurable four-stage causal loop intended for an explanatory page after the cover—not as automatic cover decoration.
+
+Create a content-specific mechanism loop:
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind mechanism-loop \
+  --style clean \
+  --center-eyebrow "CAPITAL ENGINE" \
+  --center-label "BTC per share" \
+  --step "FINANCE|debt / equity" \
+  --step "BUY BTC|asset base" \
+  --step "RE-RATE|market access" \
+  --step "REFINANCE|repeat" \
+  --rail "Asset base|BTC holdings" \
+  --rail "Liquidity|cash reserve" \
+  --rail "Per-share effect|BTC yield" \
+  --takeaway "Capital access keeps the accumulation loop moving." \
+  --output slides/example/assets/capital-engine.svg
+```
 
 Create a hand-drawn visual inspired by whiteboard storytelling:
 

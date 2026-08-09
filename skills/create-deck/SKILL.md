@@ -84,6 +84,8 @@ Synthesize one concise outline. Every page must have one job, one memorable take
 
 For every `editorial-cover`, explicitly record `coverRight` as one of `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, plus the source or rationale. Choose `none` when no source-backed artifact, proof, or signal improves the opening.
 
+When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`. Use the Python `mechanism-loop` kind when four named stages revolve around one outcome. Do not make the cover proof rail carry both evidence and the full causal model.
+
 Before implementation, produce a layout sequence and check it against these rules:
 
 - Use at least eight distinct archetypes in a deck of 10 or more slides when the content supports them.
@@ -137,6 +139,8 @@ Cover rules:
 - Never invent a generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram merely to fill space.
 - A cover visual must be understandable within two seconds, remain secondary to the title, and be readable from the back of the room.
 - Prefer removing a weak visual over adding decorative complexity.
+- A proof rail must give every number a semantic role and explain the relationship between the signals; mixed dates must remain explicit.
+- For mechanism-led topics, hand off to a dedicated next-page diagram rather than expanding the cover rail into a dashboard.
 
 Technical-deck rules:
 

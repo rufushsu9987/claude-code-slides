@@ -66,6 +66,16 @@ Use `editorial-cover` to establish the promise of the talk, not to preview every
 - If the title is already visually dominant, keep the right module quieter than the left and smaller than one-third of the slide width.
 - The cover should still read well in thumbnail view and in print.
 
+### Cover-to-mechanism handoff
+
+A proof rail establishes stakes; it should not also carry the full causal model. When the title asks **how**, **why**, or **what keeps the system moving**, keep the cover concise and plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`.
+
+- Use `proof-rail` on the cover for two to four source-backed signals with explicit roles such as asset base, liquidity, or per-share effect.
+- State how the signals relate. If they use different disclosure dates, label that clearly and do not imply a single synchronized snapshot.
+- Use a content-specific Python SVG on the next page when a named four-stage mechanism explains the thesis faster than prose.
+- Use `--kind mechanism-loop` for a four-step cycle around one outcome. Keep the SVG off the cover unless the entire title is itself the mechanism and the diagram remains secondary.
+- Do not repeat the same proof rail on the mechanism page. The handoff should move from **evidence → causal model → implication**.
+
 ## Selection workflow
 
 1. Label each page by communication role.
@@ -157,8 +167,27 @@ Built-in kinds:
 
 ```text
 agent-journey · infographic · data-journey · decision-path
-system-map · architecture-boundary · operating-loop
+mechanism-loop · system-map · architecture-boundary · operating-loop
 swimlane-process · roadmap-horizon
+```
+
+Use a configurable mechanism loop when the story is domain-specific:
+
+```bash
+python3 scripts/generate-slide-art.py \
+  --kind mechanism-loop \
+  --style clean \
+  --center-eyebrow "CAPITAL ENGINE" \
+  --center-label "BTC per share" \
+  --step "FINANCE|debt / equity" \
+  --step "BUY BTC|asset base" \
+  --step "RE-RATE|market access" \
+  --step "REFINANCE|repeat" \
+  --rail "Asset base|BTC holdings" \
+  --rail "Liquidity|cash reserve" \
+  --rail "Per-share effect|BTC yield" \
+  --takeaway "Capital access keeps the accumulation loop moving." \
+  --output slides/example/assets/capital-engine.svg
 ```
 
 `sketch` uses deterministic double strokes for an editorial workshop feel. `clean` uses exact single strokes for formal architecture decks. Keep slide titles, source notes, layout markers, and speaker notes editable in the target format; the SVG should remain the visual anchor, not the entire slide flattened into an image.

@@ -38,6 +38,6 @@ Review:
 
 For decks of 10 or more slides, flag fewer than eight distinct archetypes as a Major finding unless the content clearly requires a repeated matched structure. Flag exact consecutive repeats, card-grid or node-card pages above roughly 20%, or more than four slides without a visible rhythm change.
 
-Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.
+Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead. Also flag proof rails that mix unrelated signals without roles, relationship, and visible disclosure dates. For mechanism-led openings, require a dedicated explanatory handoff page when the causal model cannot be understood from the cover alone.
 
 Return findings grouped by Critical, Major, Minor, and Suggestions. Include page or file references and a concrete recommended fix. Lead with the three changes that would most improve the audience outcome. Do not flood the report with cosmetic details.

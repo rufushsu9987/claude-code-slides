@@ -67,6 +67,8 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 - Is there one dominant element per page?
 - Does the cover's right half carry one meaningful artifact, proof, signal, or direct system cue—or remain empty when none exists?
 - Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?
+- Does every proof-rail number have a semantic role, source, date, and an explicit relationship to the other signals?
+- When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
 

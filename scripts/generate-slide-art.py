@@ -83,12 +83,13 @@ class Drawing:
     """Small SVG scene graph with deterministic rough-stroke helpers."""
 
     def __init__(self, *, style: str, seed: int, palette: Palette, transparent: bool = False,
-                 show_caption: bool = True) -> None:
+                 show_caption: bool = True, content: dict[str, object] | None = None) -> None:
         self.style = style
         self.rng = random.Random(seed)
         self.palette = palette
         self.transparent = transparent
         self.show_caption = show_caption
+        self.content = content or {}
         self.parts: list[str] = []
 
     def add(self, markup: str) -> None:
@@ -675,50 +676,102 @@ def system_map(d: Drawing, title: str, subtitle: str) -> tuple[str, str]:
 
 def operating_loop(d: Drawing, title: str, subtitle: str) -> tuple[str, str]:
     p = d.palette
-    d.add(_caption(d, title, subtitle, number="OPERATING MODEL / CLOSED LOOP"))
-    cx, cy, radius = 620, 362, 205
-    steps = [
-        (-90, "OBSERVE", "signals"),
-        (0, "DECIDE", "policy"),
-        (90, "ACT", "workflow"),
-        (180, "LEARN", "feedback"),
+    content = d.content
+    caption = str(content.get("caption") or "OPERATING MODEL / CLOSED LOOP")
+    d.add(_caption(d, title, subtitle, number=caption))
+
+    default_steps = [
+        ("OBSERVE", "signals"),
+        ("DECIDE", "policy"),
+        ("ACT", "workflow"),
+        ("LEARN", "feedback"),
     ]
+    raw_steps = content.get("steps")
+    if isinstance(raw_steps, list) and raw_steps:
+        step_pairs = [(str(item[0]), str(item[1])) for item in raw_steps]
+    else:
+        step_pairs = default_steps
+
+    raw_rail = content.get("rail")
+    if isinstance(raw_rail, list) and raw_rail:
+        rail_pairs = [(str(item[0]), str(item[1])) for item in raw_rail]
+    elif content.get("kind") == "operating-loop":
+        rail_pairs = [
+            ("Metric", "One measurable result"),
+            ("Cadence", "Daily signal · weekly review"),
+            ("Guardrail", "Stop conditions + owner"),
+        ]
+    else:
+        rail_pairs = []
+
+    has_rail = bool(rail_pairs)
+    cx, cy, radius = (570 if has_rail else 600), 350, 198
     positions: list[tuple[float, float]] = []
-    for angle_deg, label, detail in steps:
-        angle = math.radians(angle_deg)
+    for index, (label, detail) in enumerate(step_pairs):
+        angle = math.radians([-90, 0, 90, 180][index])
         x = cx + math.cos(angle) * radius
         y = cy + math.sin(angle) * radius
         positions.append((x, y))
-        accent = label in ("DECIDE", "LEARN")
+        accent = index in (1, 3)
         d.add(d.circle(x, y, 64, fill=p.accent_soft if accent else p.surface,
                        stroke=p.accent if accent else p.ink, width=2.5))
-        d.add(d.text(label, x, y - 2, size=15, color=p.ink, weight=800, anchor="middle",
-                     family="SFMono-Regular, Consolas, monospace"))
-        d.add(d.text(detail, x, y + 25, size=14, color=p.muted, anchor="middle"))
-    # Clockwise arrows between tangent points.
+        label_size = 15 if len(label) <= 10 else 12
+        d.add(d.text(label, x, y - 2, size=label_size, color=p.ink, weight=800,
+                     anchor="middle", family="SFMono-Regular, Consolas, monospace"))
+        d.add(d.multiline(detail, x, y + 24, width=108, size=13, color=p.muted,
+                          anchor="middle", max_lines=2))
+
+    # Connect tangent points so arrows do not cross node labels.
     for index, (x1, y1) in enumerate(positions):
         x2, y2 = positions[(index + 1) % len(positions)]
-        d.add(d.arrow(x1, y1, x2, y2, color=p.accent if index % 2 == 0 else p.muted,
-                      width=3.0, curve=62))
-    d.add(d.circle(cx, cy, 90, fill=p.code, stroke=p.code, width=0, roughness=0))
-    d.add(d.label("North star", cx, cy - 18, color=p.accent_soft, anchor="middle"))
-    d.add(d.text("Outcome", cx, cy + 26, size=30, color=p.code_text, weight=700, anchor="middle",
-                 family="Georgia, Iowan Old Style, serif"))
+        dx, dy = x2 - x1, y2 - y1
+        length = max(1.0, math.hypot(dx, dy))
+        ux, uy = dx / length, dy / length
+        d.add(d.arrow(
+            x1 + ux * 72,
+            y1 + uy * 72,
+            x2 - ux * 72,
+            y2 - uy * 72,
+            color=p.accent if index % 2 == 0 else p.muted,
+            width=3.0,
+            curve=52,
+        ))
 
-    # Side rail explains cadence and control without making another diagram.
-    d.add(d.line(940, 174, 940, 556, stroke=p.border, width=2.0))
-    rail = [
-        (205, "01", "Metric", "One measurable result"),
-        (324, "02", "Cadence", "Daily signal · weekly review"),
-        (443, "03", "Guardrail", "Stop conditions + owner"),
-    ]
-    for y, num, heading, detail in rail:
-        d.add(d.text(num, 972, y, size=14, color=p.accent, weight=700,
-                     family="SFMono-Regular, Consolas, monospace"))
-        d.add(d.text(heading, 1016, y, size=20, color=p.ink, weight=700,
-                     family="Georgia, Iowan Old Style, serif"))
-        d.add(d.multiline(detail, 972, y + 31, width=178, size=14, color=p.muted, max_lines=2))
-    return title, "A four-stage closed operating loop around a central outcome, with cadence and guardrail details in a side rail."
+    center_eyebrow = str(content.get("center_eyebrow") or "North star")
+    center_label = str(content.get("center_label") or "Outcome")
+    d.add(d.circle(cx, cy, 90, fill=p.code, stroke=p.code, width=0, roughness=0))
+    d.add(d.label(center_eyebrow, cx, cy - 24, color=p.accent_soft, anchor="middle"))
+    d.add(d.multiline(
+        center_label,
+        cx,
+        cy + 20,
+        width=150,
+        size=29 if len(center_label) <= 14 else 21,
+        color=p.code_text,
+        weight=700,
+        anchor="middle",
+        family="Georgia, Iowan Old Style, serif",
+        max_lines=2,
+    ))
+
+    if has_rail:
+        d.add(d.line(910, 170, 910, 552, stroke=p.border, width=2.0))
+        rail_y = {1: [310], 2: [250, 410]}.get(len(rail_pairs), [205, 324, 443])
+        for index, ((heading, detail), y) in enumerate(zip(rail_pairs, rail_y), start=1):
+            d.add(d.text(f"{index:02d}", 942, y, size=14, color=p.accent, weight=700,
+                         family="SFMono-Regular, Consolas, monospace"))
+            d.add(d.text(heading, 986, y, size=20, color=p.ink, weight=700,
+                         family="Georgia, Iowan Old Style, serif"))
+            d.add(d.multiline(detail, 942, y + 31, width=208, size=14,
+                              color=p.muted, max_lines=2))
+
+    takeaway = str(content.get("takeaway") or "").strip()
+    if takeaway:
+        d.add(d.label("Takeaway", 54, 614))
+        d.add(d.multiline(takeaway, 54, 650, width=1080, size=23, weight=700,
+                          family="Georgia, Iowan Old Style, serif", max_lines=2))
+
+    return title, "A configurable four-stage mechanism loop around a central outcome, with optional proof details and one takeaway."
 
 
 def swimlane_process(d: Drawing, title: str, subtitle: str) -> tuple[str, str]:
@@ -833,6 +886,7 @@ def architecture_boundary(d: Drawing, title: str, subtitle: str) -> tuple[str, s
 
 RENDERERS: dict[str, Callable[[Drawing, str, str], tuple[str, str]]] = {
     "infographic": infographic,
+    "mechanism-loop": operating_loop,
     "agent-journey": agent_journey,
     "data-journey": data_journey,
     "decision-path": decision_path,
@@ -850,12 +904,31 @@ def valid_hex(value: str) -> str:
     return value.upper()
 
 
+def parse_pairs(values: Sequence[str], option: str) -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
+    for raw in values:
+        label, separator, detail = raw.partition("|")
+        label = label.strip()
+        detail = detail.strip() if separator else ""
+        if not label:
+            raise ValueError(f"{option} requires a non-empty label")
+        pairs.append((label, detail))
+    return pairs
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--kind", choices=sorted(RENDERERS), help="Built-in visual story to render")
     parser.add_argument("--output", help="Output SVG path")
     parser.add_argument("--title", default="Presentation visual")
     parser.add_argument("--subtitle", default="A reusable vector asset for a content-aware slide layout.")
+    parser.add_argument("--center-eyebrow", help="Small label inside a mechanism or operating loop")
+    parser.add_argument("--center-label", help="Primary outcome inside a mechanism or operating loop")
+    parser.add_argument("--step", action="append", default=[], metavar="LABEL|DETAIL",
+                        help="Repeat exactly four times to define a mechanism loop")
+    parser.add_argument("--rail", action="append", default=[], metavar="HEADING|DETAIL",
+                        help="Optional proof rail item; repeat up to three times")
+    parser.add_argument("--takeaway", help="One sentence shown below a configurable loop")
     parser.add_argument("--style", choices=["sketch", "clean"], default="sketch")
     parser.add_argument("--seed", type=int, default=42, help="Deterministic rough-stroke seed")
     parser.add_argument("--accent", type=valid_hex, default=DEFAULT_COLORS["accent"],
@@ -878,6 +951,29 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not args.kind or not args.output:
         parser.error("--kind and --output are required unless --list-kinds is used")
 
+    try:
+        steps = parse_pairs(args.step, "--step")
+        rail = parse_pairs(args.rail, "--rail")
+    except ValueError as error:
+        parser.error(str(error))
+    if steps and len(steps) != 4:
+        parser.error("--step must be provided exactly four times")
+    if args.kind == "mechanism-loop" and len(steps) != 4:
+        parser.error("mechanism-loop requires exactly four --step LABEL|DETAIL values")
+    if args.kind == "mechanism-loop" and not args.center_label:
+        parser.error("mechanism-loop requires --center-label")
+    if len(rail) > 3:
+        parser.error("--rail may be provided at most three times")
+
+    content = {
+        "kind": args.kind,
+        "center_eyebrow": args.center_eyebrow,
+        "center_label": args.center_label,
+        "steps": steps,
+        "rail": rail,
+        "takeaway": args.takeaway,
+    }
+
     colors = dict(DEFAULT_COLORS)
     colors["accent"] = args.accent
     colors["canvas"] = args.canvas
@@ -892,6 +988,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         palette=Palette.from_mapping(colors),
         transparent=args.transparent,
         show_caption=not args.hide_caption,
+        content=content,
     )
     accessible_title, description = RENDERERS[args.kind](drawing, args.title, args.subtitle)
     content = drawing.render(accessible_title, description)

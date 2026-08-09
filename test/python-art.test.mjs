@@ -13,6 +13,7 @@ const builtInKinds = [
   'data-journey',
   'decision-path',
   'infographic',
+  'mechanism-loop',
   'operating-loop',
   'roadmap-horizon',
   'swimlane-process',
@@ -58,7 +59,18 @@ test('Python slide-art generator supports all Visual Grammar v2 kinds and styles
     const sketch = path.join(directory, `${kind}-sketch.svg`);
     const clean = path.join(directory, `${kind}-clean.svg`);
     for (const [style, output] of [['sketch', sketch], ['clean', clean]]) {
-      const result = runGenerator(['--kind', kind, '--style', style, '--seed', '7', '--output', output]);
+      const args = ['--kind', kind, '--style', style, '--seed', '7'];
+      if (kind === 'mechanism-loop') {
+        args.push(
+          '--center-label', 'Outcome',
+          '--step', 'INPUT|signal',
+          '--step', 'PROCESS|decision',
+          '--step', 'OUTPUT|result',
+          '--step', 'FEEDBACK|repeat',
+        );
+      }
+      args.push('--output', output);
+      const result = runGenerator(args);
       assert.equal(result.status, 0, `${kind}/${style}: ${result.stderr || result.stdout}`);
       const content = await readFile(output, 'utf8');
       assert.match(content, /^<svg\b/);
@@ -74,6 +86,49 @@ test('Python slide-art generator lists every built-in kind', () => {
   const result = runGenerator(['--list-kinds']);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.deepEqual(result.stdout.trim().split(/\r?\n/), builtInKinds);
+});
+
+test('Python slide-art generator creates a content-specific mechanism loop', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'claude-code-slides-mechanism-'));
+  const output = path.join(directory, 'capital-engine.svg');
+  const result = runGenerator([
+    '--kind', 'mechanism-loop',
+    '--style', 'clean',
+    '--center-eyebrow', 'CAPITAL ENGINE',
+    '--center-label', 'BTC per share',
+    '--step', 'FINANCE|debt / equity',
+    '--step', 'BUY BTC|asset base',
+    '--step', 'RE-RATE|market access',
+    '--step', 'REFINANCE|repeat',
+    '--rail', 'Asset base|BTC holdings',
+    '--rail', 'Liquidity|cash reserve',
+    '--rail', 'Per-share effect|BTC yield',
+    '--takeaway', 'Capital access keeps the accumulation loop moving.',
+    '--output', output,
+  ]);
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const content = await readFile(output, 'utf8');
+  for (const expected of ['CAPITAL ENGINE', 'BTC per', 'share', 'FINANCE', 'BUY BTC', 'RE-RATE', 'REFINANCE', 'Capital access keeps the accumulation loop moving.']) {
+    assert.ok(content.includes(expected), expected);
+  }
+  assert.doesNotMatch(content, />OBSERVE</);
+});
+
+test('Python slide-art generator validates mechanism-loop structure', () => {
+  const output = path.join(tmpdir(), 'invalid-mechanism.svg');
+  const missingSteps = runGenerator([
+    '--kind', 'mechanism-loop', '--center-label', 'Outcome', '--step', 'ONE|first', '--output', output,
+  ]);
+  assert.notEqual(missingSteps.status, 0);
+  assert.match(`${missingSteps.stderr}${missingSteps.stdout}`, /exactly four|requires exactly four/i);
+
+  const missingCenter = runGenerator([
+    '--kind', 'mechanism-loop',
+    '--step', 'ONE|first', '--step', 'TWO|second', '--step', 'THREE|third', '--step', 'FOUR|fourth',
+    '--output', output,
+  ]);
+  assert.notEqual(missingCenter.status, 0);
+  assert.match(`${missingCenter.stderr}${missingCenter.stdout}`, /center-label/i);
 });
 
 test('Python slide-art generator supports transparent caption-free assets and custom accent', async () => {

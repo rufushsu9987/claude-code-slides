@@ -31,6 +31,6 @@ Review:
 
 For decks of 10 or more slides, flag fewer than eight distinct archetypes as Major unless the content clearly requires a repeated matched structure. Flag exact consecutive repeats, excessive card grids, or more than four slides without a visible rhythm change.
 
-Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead.
+Flag a cover as Major when its right half is occupied by an unsourced generic orbit, hub-and-spoke, concentric-circle, logo-cloud, or micro-label diagram that does not directly prove the title. Recommend whitespace or one sourced artifact, compact proof rail, operational signal, or direct system cue instead. Flag proof rails that mix unrelated signals without semantic roles, relationship, and visible dates. When the opening thesis is mechanism-led, require a dedicated next-page causal model instead of a denser cover.
 
 Return findings grouped by Critical, Major, Minor, and Suggestions. Include page or file references and a concrete recommended fix. Lead with the three changes that would most improve the audience outcome. Do not modify files.
