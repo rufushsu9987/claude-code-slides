@@ -83,7 +83,7 @@ jobs:
               r'path = "agents/visual-director\.md"\n.*?write\(path, text\)\n\npath = "agents/deck-reviewer\.md"\n.*?write\(path, text\)',
               re.S,
           )
-          text, count = pattern.subn(agent_block, text, count=1)
+          text, count = pattern.subn(lambda _match: agent_block, text, count=1)
           if count != 1:
               raise SystemExit('unable to replace agent migration block')
 
