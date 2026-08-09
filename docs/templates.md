@@ -120,13 +120,23 @@ The smoke test scaffolds every theme in HTML, Marp, and PPTX, verifies layout me
 
 ## Python-assisted SVG assets
 
-The repository includes a standard-library-only generator for small vector illustrations used by the three new layouts:
+The repository includes a standard-library-only generator for ten deterministic vector visuals. Use `mechanism-loop` when the cover establishes evidence but the next page needs to explain a four-stage causal model:
 
 ```bash
 python3 scripts/generate-slide-art.py \
-  --kind data-journey \
-  --title "Make progress visible" \
-  --output slides/example/assets/data-journey.svg
+  --kind mechanism-loop \
+  --style clean \
+  --center-eyebrow "CAPITAL ENGINE" \
+  --center-label "BTC per share" \
+  --step "FINANCE|debt / equity" \
+  --step "BUY BTC|asset base" \
+  --step "RE-RATE|market access" \
+  --step "REFINANCE|repeat" \
+  --rail "Asset base|BTC holdings" \
+  --rail "Liquidity|cash reserve" \
+  --rail "Per-share effect|BTC yield" \
+  --takeaway "Capital access keeps the accumulation loop moving." \
+  --output slides/example/assets/capital-engine.svg
 ```
 
-The generator supports `infographic`, `data-journey`, and `decision-path`. It emits deterministic SVG with no local paths or external runtime dependencies. Keep the SVG as a visual asset and keep the slide's semantic title, copy, notes, and layout marker in the target format.
+The generator also supports `agent-journey`, `architecture-boundary`, `data-journey`, `decision-path`, `infographic`, `operating-loop`, `roadmap-horizon`, `swimlane-process`, and `system-map`. It emits deterministic SVG with no local paths or external runtime dependencies. Keep the SVG as a visual anchor on an explanatory slide; keep the semantic title, copy, sources, notes, and layout marker editable in the target format.

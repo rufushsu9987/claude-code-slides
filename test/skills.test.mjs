@@ -95,3 +95,19 @@ test('cover guidance prefers meaningful evidence or whitespace over decorative r
   assert.match(cover.avoid, /orbit|concentric/i);
 });
 
+
+
+test('cover proof and mechanism explanation remain separate', async () => {
+  const files = [
+    'skills/create-deck/SKILL.md',
+    'skills/visual-director/SKILL.md',
+    'skills/review-deck/SKILL.md',
+    'skills/deck-reviewer/SKILL.md',
+  ];
+  for (const file of files) {
+    const content = await readFile(file, 'utf8');
+    assert.match(content, /proof rail|proof-rail/i, file);
+    assert.match(content, /mechanism|causal/i, file);
+    assert.match(content, /next page|next-page|handoff/i, file);
+  }
+});

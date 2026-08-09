@@ -17,6 +17,9 @@
 - [ ] Generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label diagrams are not used as decorative filler.
 - [ ] The right-side module is secondary to the title and understandable within two seconds.
 - [ ] The cover remains clear at thumbnail scale, from presentation distance, and in print.
+- [ ] Proof-rail numbers have explicit roles, sources, dates, and one sentence explaining how they relate.
+- [ ] Mixed disclosure dates are visible and are not presented as a synchronized snapshot.
+- [ ] If the opening thesis is mechanism-led, the next page explains the causal model instead of forcing the proof rail to do both jobs.
 
 ## Content
 
