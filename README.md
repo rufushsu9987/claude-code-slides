@@ -20,7 +20,7 @@ Visual Grammar v2 keeps one coherent design language while varying **composition
 - **7 visual themes:** one shared workflow for technical, executive, cloud, data, product, terminal, and incident presentations.
 - **28 semantic layout archetypes:** layouts are selected by the communication job of each slide.
 - **20 distinct starter layouts and geometries:** the starter decks demonstrate real composition changes rather than cosmetic card variations.
-- **10 deterministic SVG drawing kinds:** dependency-free Python visuals with `sketch` and `clean` styles.
+- **Agent-authored Python SVG:** Codex and Claude Code can plan and generate a custom deterministic vector visual for each slide; 10 built-in kinds remain examples and fast fallbacks.
 - **Three output formats:** interactive HTML, reviewable Marp, and editable PPTX built with text and shapes.
 - **Portable plugin architecture:** shared Agent Skills with native Codex and Claude Code adapters.
 
@@ -83,7 +83,7 @@ Visual Grammar v2 separates four concerns that are often collapsed into a single
 | **Theme** | Color, typography, surface treatment, background pattern | `claude-editorial`, `cloud-architecture` |
 | **Layout archetype** | The communication job and information hierarchy | `system-map`, `decision-path`, `quote-evidence` |
 | **Geometry** | Composition, dominant element, density, and eye path | `hub-and-spoke`, `branch-path`, `quote-stage` |
-| **Visual asset** | Optional reusable SVG illustration or diagram | `agent-journey`, `operating-loop` |
+| **Visual asset** | Optional plan-backed custom SVG or reusable reference renderer | `<visual>.visual.md` + `<visual>.py` + `<visual>.svg` |
 
 This distinction prevents false variety: two slides may use different labels while still looking identical in the thumbnail view. The layout catalog therefore records fields such as `dominantElement`, `eyePath`, `density`, `geometry`, `variants`, and `avoid` in addition to the semantic family and recommended use cases.
 
@@ -160,88 +160,37 @@ Omitting `--template` uses `claude-editorial`.
 
 Each generated deck includes `template.json`, which records the selected theme, aliases, design tokens, layout-system rules, starter sequence, and output format.
 
-## Python-assisted SVG graphics
+## Agent-authored Python SVG
 
-Use the dependency-free Python generator when a slide needs a reusable vector illustration rather than a screenshot or a rasterized full-page image.
+Claude Code Slides runs inside coding agents, so SVG generation is not limited to a fixed set of templates. When a slide needs a content-specific mechanism, architecture, journey, boundary, or scene, the agent should first write a Markdown visual plan, then create a small deck-local Python generator and produce the SVG.
 
-List the built-in drawing kinds:
+```text
+slides/<deck>/assets/<visual>.visual.md
+slides/<deck>/assets/<visual>.py
+slides/<deck>/assets/<visual>.svg
+```
+
+Start from [the Python SVG authoring protocol](./references/python-svg-authoring.md) and [the visual-plan template](./templates/python-svg-plan.md). The plan records the communication job, source of truth, semantic model, geometry, eye path, labels, accessibility, editable slide content, and validation requirements before geometry is implemented.
+
+Example workflow:
+
+```bash
+cp templates/python-svg-plan.md \
+  slides/mstr/assets/capital-engine.visual.md
+
+python3 slides/mstr/assets/capital-engine.py \
+  --output slides/mstr/assets/capital-engine.svg
+```
+
+Use the built-in generator as a pattern library or fallback, not as a closed catalog:
 
 ```bash
 python3 scripts/generate-slide-art.py --list-kinds
 ```
 
-Available CLI kinds:
+The 10 reference kinds demonstrate deterministic `sketch` and `clean` strokes, accessible metadata, paths, loops, scenes, boundaries, and portable output. An agent may use one directly when it fits, inspect it for reusable techniques, or write a completely new composition when the content requires it. One-off visuals should remain deck-local; promote a pattern into the shared generator only after it proves reusable across unrelated decks.
 
-```text
-agent-journey
-architecture-boundary
-data-journey
-decision-path
-infographic
-mechanism-loop
-operating-loop
-roadmap-horizon
-swimlane-process
-system-map
-```
-
-`infographic` remains a compatible entry point for the `agent-journey` visual story. `mechanism-loop` is a configurable four-stage causal loop intended for an explanatory page after the cover—not as automatic cover decoration.
-
-Create a content-specific mechanism loop:
-
-```bash
-python3 scripts/generate-slide-art.py \
-  --kind mechanism-loop \
-  --style clean \
-  --center-eyebrow "CAPITAL ENGINE" \
-  --center-label "BTC per share" \
-  --step "FINANCE|debt / equity" \
-  --step "BUY BTC|asset base" \
-  --step "RE-RATE|market access" \
-  --step "REFINANCE|repeat" \
-  --rail "Asset base|BTC holdings" \
-  --rail "Liquidity|cash reserve" \
-  --rail "Per-share effect|BTC yield" \
-  --takeaway "Capital access keeps the accumulation loop moving." \
-  --output slides/example/assets/capital-engine.svg
-```
-
-Create a hand-drawn visual inspired by whiteboard storytelling:
-
-```bash
-python3 scripts/generate-slide-art.py \
-  --kind agent-journey \
-  --style sketch \
-  --seed 42 \
-  --title "From scattered context to visible progress" \
-  --output slides/example/assets/agent-journey.svg
-```
-
-Create a cleaner enterprise architecture visual without a visible caption rail:
-
-```bash
-python3 scripts/generate-slide-art.py \
-  --kind system-map \
-  --style clean \
-  --hide-caption \
-  --title "AI Agent Platform Architecture" \
-  --output slides/example/assets/system-map.svg
-```
-
-Customize the palette or produce a transparent asset:
-
-```bash
-python3 scripts/generate-slide-art.py \
-  --kind architecture-boundary \
-  --style clean \
-  --accent '#0078A8' \
-  --canvas '#EEF7FB' \
-  --transparent \
-  --hide-caption \
-  --output slides/example/assets/trust-boundary.svg
-```
-
-The generator uses only the Python standard library. It emits deterministic SVG with a stable `viewBox`, accessible `<title>` and `<desc>` metadata, no local file paths, and no external runtime dependency.
+Keep slide titles, explanatory copy, citations, footers, and speaker notes editable outside the SVG. Validate the Python, parse the generated XML, inspect thumbnail and presentation readability, and run the normal deck checks before delivery.
 
 ## Skills
 

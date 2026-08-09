@@ -14,6 +14,7 @@ Resolve these paths relative to this skill directory:
 - [Review checklist](references/review-checklist.md)
 - [Visual system](references/style-system.md)
 - [Layout system](references/layout-system.md)
+- [Python SVG authoring protocol](references/python-svg-authoring.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
 
@@ -21,7 +22,7 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 
 ## Workflow
 
-1. Detect the format and locate source files, generated output, notes, and local assets.
+1. Detect the format and locate source files, generated output, notes, local assets, and any `.visual.md` / `.py` / `.svg` visual source sets.
 2. Read the bundled references.
 3. Run:
 
@@ -69,6 +70,10 @@ Keep the user's project or workspace as the shell working directory. Resolve the
 - Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?
 - Does every proof-rail number have a semantic role, source, date, and an explicit relationship to the other signals?
 - When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?
+- Does every custom SVG have a current `.visual.md` plan and deck-local Python source, or a documented reason for using a shared built-in renderer?
+- Does the plan describe the source of truth and semantic model before shapes, and does the SVG actually follow that plan?
+- Would a screenshot, verified chart, native editable shapes, or whitespace communicate the page more honestly or efficiently?
+- Can the custom SVG be regenerated deterministically, parsed as XML, and read at presentation and thumbnail distance?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
 

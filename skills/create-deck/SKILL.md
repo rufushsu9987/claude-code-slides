@@ -14,6 +14,7 @@ Resolve these paths relative to this skill directory:
 - [Storytelling system](references/storytelling.md)
 - [Visual system](references/style-system.md)
 - [Layout system](references/layout-system.md)
+- [Python SVG authoring protocol](references/python-svg-authoring.md)
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for the bundled deck CLI
 
@@ -84,7 +85,7 @@ Synthesize one concise outline. Every page must have one job, one memorable take
 
 For every `editorial-cover`, explicitly record `coverRight` as one of `none`, `artifact-right`, `proof-rail`, `signal-stack`, or `direct-system-cue`, plus the source or rationale. Choose `none` when no source-backed artifact, proof, or signal improves the opening.
 
-When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan the next page as `operating-loop`, `infographic-story`, `flow-architecture`, or `system-map`. Use the Python `mechanism-loop` kind when four named stages revolve around one outcome. Do not make the cover proof rail carry both evidence and the full causal model.
+When an opening asks how a mechanism works, separate proof from explanation: use the cover for sourced signals, then plan a dedicated explanatory page. When a content-specific SVG is the best medium, create a deck-local `<visual>.visual.md` plan before writing `<visual>.py`, then generate `<visual>.svg`. Built-in drawing kinds are examples and fallbacks, not a closed catalog; use one only when it already matches the communication job.
 
 Before implementation, produce a layout sequence and check it against these rules:
 
@@ -117,6 +118,16 @@ The default destination is `slides/<slug>/`. Respect an explicit path or establi
 
 Keep assets inside the deck directory.
 
+For every custom Python SVG, keep the plan, generator, and output together:
+
+```text
+assets/<visual>.visual.md
+assets/<visual>.py
+assets/<visual>.svg
+```
+
+The Markdown plan records the source of truth, semantic model, composition, eye path, accessibility, editable slide content, and validation contract. Keep it synchronized with the Python and generated SVG.
+
 ## 7. Author the deck
 
 Use the selected template as a visual language, not as a fixed page structure. Preserve its color, typography, grid, spacing, and component behavior while changing the layout according to each page's communication role.
@@ -141,6 +152,15 @@ Cover rules:
 - Prefer removing a weak visual over adding decorative complexity.
 - A proof rail must give every number a semantic role and explain the relationship between the signals; mixed dates must remain explicit.
 - For mechanism-led topics, hand off to a dedicated next-page diagram rather than expanding the cover rail into a dashboard.
+
+Custom Python SVG rules:
+
+- Read the bundled Python SVG authoring protocol before implementing a content-specific visual.
+- Default to a custom deck-local Python script when the visual model is unique to the source material; do not force the story into a built-in `--kind`.
+- Write or update `<visual>.visual.md` before changing geometry in `<visual>.py`.
+- Keep the slide title, explanation, source note, footer, and speaker notes editable outside the SVG whenever possible.
+- Prefer standard-library, deterministic SVG with a stable `viewBox`, accessible `<title>` and `<desc>`, escaped text, and no external script or absolute local path.
+- Promote a one-off visual into the shared generator only after the pattern proves reusable across unrelated decks.
 
 Technical-deck rules:
 
@@ -171,6 +191,7 @@ Verify the format-specific output:
 - HTML: keyboard, click and swipe navigation; hash state; viewport scaling; notes; reduced motion; print-to-PDF; local assets; meaningful layout markers.
 - Marp: frontmatter; separators; theme loading; layout classes; asset paths; HTML/PDF export.
 - PPTX: generation succeeds; wide layout; editable elements; speaker notes; text bounds; portable fonts; deterministic filename; explicit layout sequence.
+- Custom Python SVG: the `.visual.md`, `.py`, and `.svg` agree; the Python compiles; the SVG parses; regeneration is deterministic; labels, sources, dates, and units match the source of truth.
 
 ## 9. Hand off
 
