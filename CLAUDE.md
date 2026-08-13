@@ -20,6 +20,7 @@ After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the tem
 - `/claude-code-slides:review-deck`
 - `/claude-code-slides:speaker-notes`
 - `/claude-code-slides:claude-code-style`
+- `/claude-code-slides:diagram-design`
 - subagents: `deck-architect`, `visual-director`, `deck-reviewer`
 - Bash CLI alias: `claude-slides`
 - theme discovery: `claude-slides templates`
@@ -37,6 +38,7 @@ After editing `skills/`, `agents/`, `.claude-plugin/`, `references/`, or the tem
 
 - Root `skills/` are authoritative and must remain host-neutral.
 - Skill resources are local to each skill under `references/`, `scripts/`, and (for CLI-using skills) `runtime/`.
+- `skills/diagram-design/` is a vendored self-contained skill pack with its own attribution and third-party license records.
 - Root `skills/`, `references/`, `scripts/generate-slide-art.py`, `scripts/skill-cli-wrapper.mjs`, `bin/`, `lib/`, and `templates/` are canonical; run `npm run sync:skills` after edits.
 - `.agents/skills/` forwarders and skill-local resources are generated; do not edit them without changing their canonical source.
 - Claude-specific behavior belongs in `.claude-plugin/`, `agents/`, or this guide.

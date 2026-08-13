@@ -23,6 +23,7 @@ Visual Grammar v2 keeps one coherent design language while varying **composition
 - **Agent-authored Python SVG:** Codex and Claude Code can plan and generate a custom deterministic vector visual for each slide; 10 built-in kinds remain examples and fast fallbacks.
 - **Three output formats:** interactive HTML, reviewable Marp, and editable PPTX built with text and shapes.
 - **Portable plugin architecture:** shared Agent Skills with native Codex and Claude Code adapters.
+- **Diagram Design skill:** 27 editorial diagram types, Mermaid/draw.io redraw workflows, icon primitives, and slide-ready SVG/PNG guidance.
 
 ## How it works
 
@@ -218,6 +219,7 @@ Keep slide titles, explanatory copy, citations, footers, and speaker notes edita
 | Plan the narrative | `$deck-architect` | Skill or `deck-architect` subagent |
 | Direct the visuals | `$visual-director` | Skill or `visual-director` subagent |
 | Run an independent audit | `$deck-reviewer` | Skill or `deck-reviewer` subagent |
+| Create diagrams | `$diagram-design` | `/claude-code-slides:diagram-design` |
 
 ## Install in Codex
 
@@ -278,6 +280,12 @@ claude plugin update claude-code-slides@rufus-slides
 ```
 
 Then start a new session or run `/reload-plugins`.
+
+## Diagram Design
+
+The bundled `diagram-design` skill adds 27 standalone editorial diagram types—including architecture, flowchart, sequence, state, ER, timeline, swimlane, quadrant, loop, charts, data flow, and security matrix—plus Mermaid and draw.io redraw workflows. Use it directly with `$diagram-design` or `/claude-code-slides:diagram-design`; for a presentation, ask for a `slide-16x9` diagram and keep the surrounding title, source note, and speaker notes editable.
+
+The skill's gallery and source references live under [`skills/diagram-design/`](./skills/diagram-design/). It is vendored from [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) under MIT; see its local [`ATTRIBUTION.md`](./skills/diagram-design/ATTRIBUTION.md) and [`THIRD_PARTY_LICENSES.md`](./skills/diagram-design/THIRD_PARTY_LICENSES.md).
 
 ## Output formats
 

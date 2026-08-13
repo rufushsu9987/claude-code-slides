@@ -8,6 +8,7 @@ Claude Code Slides ships one portable Agent Plugins core, two native host adapte
 portable core
 ├─ plugin.json
 ├─ skills/*/SKILL.md
+│  └─ diagram-design/             vendored diagram templates, references, and extractors
 ├─ references/                    canonical guidance
 └─ bin/ + lib/ + templates/       presentation runtime
 
@@ -32,6 +33,7 @@ Supporting skills provide design and independent planning passes:
 - `deck-architect`
 - `visual-director`
 - `deck-reviewer`
+- `diagram-design` — standalone editorial diagrams and slide-ready SVG/PNG assets
 
 Each portable skill resolves bundled resources from its own `SKILL.md` location. Skills that call the presentation CLI carry a synchronized local runtime, so a skill directory remains executable when installed without the repository root. No host environment variable or globally installed command is required.
 

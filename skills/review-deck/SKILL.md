@@ -20,6 +20,7 @@ Resolve these paths relative to this skill directory:
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
 - `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
+- `diagram-design` skill — when available, for auditing or improving architecture, flowchart, sequence, data, and security diagrams
 
 Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. In commands below, replace `<absolute-skill-dir>` with that real absolute directory; never type the placeholder literally.
 
@@ -79,6 +80,7 @@ Keep the user's project or workspace as the shell working directory. Resolve eac
 - Can the custom SVG be regenerated deterministically, parsed as XML, and read at presentation and thumbnail distance?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
+- When a diagram is a standalone architecture, flowchart, sequence, state, ER, timeline, swimlane, quadrant, loop, chart, data-flow, or security visual, was the `diagram-design` skill used or its type-specific grammar and self-check applied?
 
 ### Technical quality
 
