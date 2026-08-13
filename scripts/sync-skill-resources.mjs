@@ -25,8 +25,13 @@ const skillNames = [
   'review-deck',
   'speaker-notes',
   'visual-director',
+  'diagram-design',
 ];
 const cliSkillNames = ['create-deck', 'review-deck', 'deck-reviewer'];
+// Diagram Design is vendored as a complete, self-contained skill. Its
+// references, scripts, and gallery assets are authoritative in-place rather
+// than generated copies of the presentation core's shared resources.
+const resourceManagedSkillNames = skillNames.filter((name) => name !== 'diagram-design');
 
 const mappings = [
   {
@@ -160,7 +165,7 @@ for (const runtimeSource of runtimeSources) {
 }
 
 const managedRoots = new Map();
-for (const name of skillNames) {
+for (const name of resourceManagedSkillNames) {
   for (const directory of ['references', 'scripts', 'runtime']) {
     managedRoots.set(`skills/${name}/${directory}`, new Set());
   }

@@ -8,7 +8,7 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 
-const expected = ['claude-code-style','create-deck','deck-architect','deck-reviewer','review-deck','speaker-notes','visual-director'];
+const expected = ['claude-code-style','create-deck','deck-architect','deck-reviewer','diagram-design','review-deck','speaker-notes','visual-director'];
 const resources = {
   'claude-code-style': ['references/style-system.md'],
   'create-deck': ['references/storytelling.md','references/visual-quality.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/python-svg-plan.md','references/output-formats.md','scripts/slides-cli.mjs','scripts/generate-slide-art.py'],
@@ -17,6 +17,7 @@ const resources = {
   'review-deck': ['references/review-checklist.md','references/visual-quality.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/python-svg-plan.md','references/output-formats.md','scripts/slides-cli.mjs','scripts/generate-slide-art.py'],
   'speaker-notes': [],
   'visual-director': ['references/visual-quality.md','references/style-system.md','references/layout-system.md','references/python-svg-authoring.md','references/python-svg-plan.md','scripts/generate-slide-art.py'],
+  'diagram-design': ['references/animation.md','references/export.md','references/import-drawio.md','references/import-mermaid.md','references/onboarding.md','references/output-spec.md','references/primitive-annotation.md','references/primitive-icons.md','references/primitive-sketchy.md','references/primitive-terminal.md','references/semantic-patterns.md','references/style-guide.md','references/type-architecture.md','references/type-bar.md','references/type-data-flow.md','references/type-dp-integration.md','references/type-dp-security-matrix.md','references/type-er.md','references/type-flowchart.md','references/type-gantt.md','references/type-high-level.md','references/type-it-state.md','references/type-layers.md','references/type-line.md','references/type-loop.md','references/type-medallion.md','references/type-nested.md','references/type-org-chart.md','references/type-process.md','references/type-pyramid.md','references/type-quadrant.md','references/type-radar.md','references/type-scatter.md','references/type-sequence.md','references/type-state.md','references/type-swimlane.md','references/type-timeline.md','references/type-tree.md','references/type-venn.md','scripts/drawio_extract.py','scripts/mermaid_extract.py','scripts/self_check.py'],
 };
 function frontmatter(content) {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);

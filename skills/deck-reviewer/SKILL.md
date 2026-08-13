@@ -18,6 +18,7 @@ Resolve these paths relative to this skill directory:
 - [Python SVG plan template](references/python-svg-plan.md)
 - `scripts/slides-cli.mjs` — portable wrapper for deterministic validation
 - `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
+- `diagram-design` skill — when available, for auditing standalone diagrams and redraw assets
 
 Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. Replace `<absolute-skill-dir>` below with that real directory; never type the placeholder literally.
 
@@ -35,7 +36,7 @@ Review:
 - Cover: title and promise dominance, right-side information value, source quality, two-second comprehension, thumbnail readability, and whether whitespace would be stronger.
 - Content: claim quality, density, evidence, sourcing, assumptions, terminology.
 - Layout sequence: page roles, archetype fit, unique count, consecutive repeats, visual-family rhythm, card share, and rhythm changes.
-- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity, and agreement between custom `.visual.md`, `.py`, and `.svg` files.
+- Visuals: hierarchy, alignment, spacing, consistency, meaningful diagrams, chart integrity, agreement between custom `.visual.md`, `.py`, and `.svg` files, and use of the `diagram-design` type grammar/self-check where applicable.
 - Accessibility: contrast, type size, alt text, keyboard use, language clarity.
 - Format quality: HTML behavior and layout markers, Marp classes and exportability, or PPTX generation, layout sequence, and editability.
 - Delivery: notes, timing, demo risk, unresolved placeholders, missing assets.

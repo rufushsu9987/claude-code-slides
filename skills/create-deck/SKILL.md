@@ -20,6 +20,7 @@ Resolve these paths relative to this skill directory:
 - [Output format guidance](references/output-formats.md)
 - `scripts/slides-cli.mjs` — portable wrapper for the bundled deck CLI
 - `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
+- `diagram-design` skill — when available, for editorial architecture, flowchart, sequence, data, and security diagrams plus Mermaid/draw.io redraws
 
 Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. In commands below, replace `<absolute-skill-dir>` with that real absolute directory; never type the placeholder literally.
 
@@ -157,6 +158,12 @@ Cover rules:
 - Prefer removing a weak visual over adding decorative complexity.
 - A proof rail must give every number a semantic role and explain the relationship between the signals; mixed dates must remain explicit.
 - For mechanism-led topics, hand off to a dedicated next-page diagram rather than expanding the cover rail into a dashboard.
+
+Diagram Design integration:
+
+- When a slide needs a standalone architecture, flowchart, sequence, state, ER, timeline, swimlane, quadrant, loop, chart, data-flow, or security diagram, prefer the `diagram-design` skill rather than rebuilding generic boxes in the deck template.
+- For a presentation, set the diagram's size to `slide-16x9` when the content fits; otherwise use the smallest readable preset and split the visual. Keep the slide title, explanation, source note, and speaker notes editable outside the SVG.
+- Follow the diagram skill's type reference and self-check. Use its Mermaid/draw.io extractors for redraws; do not render source layouts unchanged.
 
 Custom Python SVG rules:
 

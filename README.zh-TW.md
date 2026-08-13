@@ -118,6 +118,7 @@ python3 scripts/generate-slide-art.py \
 | 規劃故事線 | `$deck-architect` | Skill 或 `deck-architect` Subagent |
 | 規劃視覺 | `$visual-director` | Skill 或 `visual-director` Subagent |
 | 獨立審查 | `$deck-reviewer` | Skill 或 `deck-reviewer` Subagent |
+| 建立繪圖 | `$diagram-design` | `/claude-code-slides:diagram-design` |
 
 ## 安裝到 Codex
 
@@ -176,6 +177,12 @@ claude plugin update claude-code-slides@rufus-slides
 ```
 
 更新後請建立新 Session，或執行 `/reload-plugins`。
+
+## Diagram Design 繪圖模板
+
+內建的 `diagram-design` Skill 提供 27 種可獨立使用的 editorial diagram，包括架構圖、流程圖、序列圖、狀態圖、ER、時間軸、泳道、象限、迴圈、圖表、資料流與資安矩陣，也支援 Mermaid 與 draw.io 重繪。可用 `$diagram-design` 或 `/claude-code-slides:diagram-design` 呼叫；要放進簡報時，指定 `slide-16x9`，並把投影片標題、來源註記與講稿保留在 SVG 外部以維持可編輯性。
+
+模板與參考資料位於 [`skills/diagram-design/`](./skills/diagram-design/)，以 MIT 授權 vendored 自 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)；請參考 [`ATTRIBUTION.md`](./skills/diagram-design/ATTRIBUTION.md) 與 [`THIRD_PARTY_LICENSES.md`](./skills/diagram-design/THIRD_PARTY_LICENSES.md)。
 
 ## 輸出格式
 
