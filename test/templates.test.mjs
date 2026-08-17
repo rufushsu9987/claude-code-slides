@@ -135,3 +135,19 @@ test('starter decks demonstrate twenty distinct archetypes and geometries', asyn
   assert.deepEqual(pptxGeometries, starterGeometries);
   assert.equal((pptx.match(/\.addSlide\s*\(/g) || []).length, starterSequence.length);
 });
+
+test('HTML flow starter scales by node count and anchors one label to each transition', async () => {
+  const [html, css] = await Promise.all([
+    readFile(new URL('../templates/html/index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../templates/html/theme.css', import.meta.url), 'utf8'),
+  ]);
+  const flowSlide = html.match(/<section\b[^>]*data-layout="flow-architecture"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(flowSlide);
+  assert.equal((flowSlide.match(/class="[^"]*\bflow-stop\b[^"]*"/g) || []).length, 4);
+  assert.equal((flowSlide.match(/class="[^"]*\bflow-transition\b[^"]*"/g) || []).length, 3);
+  assert.doesNotMatch(flowSlide, /flow-spine|flow-stop--low|flow-label--/);
+  assert.match(css, /\.flow-path\s*\{[^}]*grid-auto-flow:\s*column/i);
+  assert.match(css, /\.flow-path\s*\{[^}]*grid-auto-columns:\s*minmax\(0,\s*1fr\)/i);
+  assert.match(css, /\.flow-stop:not\(:last-child\)::after/);
+  assert.doesNotMatch(css, /\.flow-path\s*\{[^}]*grid-template-columns:\s*repeat\(4/i);
+});
