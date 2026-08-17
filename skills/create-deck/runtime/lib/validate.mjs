@@ -23,6 +23,91 @@ function stripHtmlComments(content) {
   return content.replace(/<!--[\s\S]*?-->/g, '');
 }
 
+function htmlTagsWithAnyClass(content, classNames) {
+  const wanted = new Set(classNames);
+  const tags = [];
+  for (const match of content.matchAll(/<[a-z][^>]*>/gi)) {
+    const classAttribute = match[0].match(/\bclass\s*=\s*(["'])(.*?)\1/i)?.[2];
+    if (!classAttribute) continue;
+    const classes = classAttribute.trim().split(/\s+/);
+    if (classes.some((className) => wanted.has(className))) tags.push(match[0]);
+  }
+  return tags;
+}
+
+function declaredFlowColumnCount(pathTag, cssContent) {
+  const inlineStyle = pathTag.match(/\bstyle\s*=\s*(["'])(.*?)\1/i)?.[2] || '';
+  const inlineCount = inlineStyle.match(/--flow-count\s*:\s*(\d+)/i)?.[1];
+  if (inlineCount) return Number.parseInt(inlineCount, 10);
+
+  for (const match of cssContent.matchAll(/\.flow-path\s*\{([^}]*)\}/gi)) {
+    const body = match[1];
+    const fixedCount = body.match(/grid-template-columns\s*:\s*repeat\(\s*(\d+)/i)?.[1];
+    if (fixedCount) return Number.parseInt(fixedCount, 10);
+
+    if (/grid-template-columns\s*:\s*repeat\(\s*var\(\s*--flow-count\s*\)/i.test(body)) {
+      const variableCount = (body.match(/--flow-count\s*:\s*(\d+)/i)
+        || cssContent.match(/--flow-count\s*:\s*(\d+)/i))?.[1];
+      if (variableCount) return Number.parseInt(variableCount, 10);
+    }
+  }
+
+  return undefined;
+}
+
+function flowStructureIssues(slideSections, cssContent, file) {
+  const warnings = [];
+
+  slideSections.forEach((section, index) => {
+    const pathTags = htmlTagsWithAnyClass(section, ['flow-path']);
+    if (pathTags.length === 0) return;
+
+    const nodeCount = htmlTagsWithAnyClass(section, ['flow-stop']).length;
+    const transitionCount = htmlTagsWithAnyClass(section, ['flow-transition', 'flow-label']).length;
+    const columnCount = declaredFlowColumnCount(pathTags[0], cssContent);
+    const slide = index + 1;
+
+    if (Number.isFinite(columnCount) && columnCount !== nodeCount) {
+      warnings.push(
+        issue(
+          'warning',
+          'flow-column-count',
+          `Slide ${slide} flow declares ${columnCount} column(s) for ${nodeCount} node(s).`,
+          file,
+          { slide, columns: columnCount, nodes: nodeCount },
+        ),
+      );
+    }
+
+    const expectedTransitions = Math.max(nodeCount - 1, 0);
+    if (transitionCount !== expectedTransitions) {
+      warnings.push(
+        issue(
+          'warning',
+          'flow-transition-count',
+          `Slide ${slide} flow has ${transitionCount} transition label(s); ${nodeCount} nodes require ${expectedTransitions}.`,
+          file,
+          { slide, nodes: nodeCount, transitions: transitionCount },
+        ),
+      );
+    }
+
+    if (nodeCount > 6) {
+      warnings.push(
+        issue(
+          'warning',
+          'flow-density',
+          `Slide ${slide} flow has ${nodeCount} nodes; split flows longer than six steps across slides.`,
+          file,
+          { slide, nodes: nodeCount },
+        ),
+      );
+    }
+  });
+
+  return warnings;
+}
+
 function stripJavaScriptComments(content) {
   let output = '';
   let state = 'code';
@@ -488,6 +573,7 @@ async function inspectHtml(file) {
     if (/@media\s+print/i.test(css)) hasPrintCss = true;
     warnings.push(...findPlaceholderIssues(css, record.path));
   }
+  warnings.push(...flowStructureIssues(slideSections, `${structureContent}\n${cssContent}`, file));
   if (!hasPrintCss) {
     warnings.push(issue('warning', 'print-css', 'No print stylesheet found for PDF export.', file));
   }

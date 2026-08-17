@@ -51,6 +51,15 @@ A deck can technically use twenty different class names and still feel repetitiv
 | `risk-matrix` | Security or readiness | Priority risk plus mitigation and owner |
 | `closing-manifesto` | Final action or memorable conclusion | One final line and one concrete next step |
 
+## Flow architecture rules
+
+Keep a `flow-architecture` page to three through six nodes on one horizontal track. Split longer processes across slides or switch to a more suitable sequence archetype.
+
+- In HTML, let `.flow-path` create one automatic column per `.flow-stop`; do not restore a fixed `repeat(4, ...)` grid or use vertical node offsets.
+- Put one `.flow-transition` inside every non-final `.flow-stop`. The label belongs to that node's outgoing connection, so a flow with `n` nodes has exactly `n - 1` transition labels.
+- Keep connectors between the node markers. They must not cross headings, descriptions, or labels.
+- Render or preview every customized flow after changing its node count. Confirm that all nodes remain on one row, labels sit between adjacent markers, and the entire path stays inside the slide safe area.
+
 ## Cover execution rules
 
 Use `editorial-cover` to establish the promise of the talk, not to preview every topic.

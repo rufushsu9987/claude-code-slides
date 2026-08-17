@@ -77,6 +77,7 @@
 - [ ] The deck previews with the documented command.
 - [ ] HTML slide position survives refresh, print produces one page per slide, and notes work.
 - [ ] HTML slides use meaningful `data-layout` markers when the workflow supports them.
+- [ ] HTML flows keep three to six nodes on one row, use exactly one fewer transition label than nodes, and keep connectors clear of copy.
 - [ ] Marp frontmatter, separators, theme, layout classes, and export commands are valid.
 - [ ] PPTX uses 16:9, generates deterministically, remains editable, records its layout sequence, and avoids clipped text.
 - [ ] No placeholder copy, TODO markers, or unresolved template tokens remain.

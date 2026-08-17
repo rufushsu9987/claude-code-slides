@@ -20,6 +20,12 @@ function htmlDeck(layouts) {
 </html>`;
 }
 
+function flowMarkup(nodes, transitions = nodes - 1) {
+  return `<div class="flow-path">${Array.from({ length: nodes }, (_, index) =>
+    `<article class="flow-stop"><span class="flow-index">${index + 1}</span><h3>Step ${index + 1}</h3>${index < transitions ? `<span class="flow-transition">move ${index + 1}</span>` : ''}</article>`
+  ).join('')}</div>`;
+}
+
 test('fresh scaffolds use only catalog layout archetypes and complete marker sequences', async (t) => {
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'slides-validator-scaffold-'));
   t.after(() => rm(temporary, { recursive: true, force: true }));
@@ -131,6 +137,62 @@ test('missing HTML geometry falls back to the layout catalog for a 10-slide deck
 
   const result = await checkDeck(file);
   assert.ok(result.warnings.some((finding) => finding.code === 'layout-geometry-run'));
+});
+
+test('HTML flow checks catch fixed columns, missing transitions, and excessive density', async (t) => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'slides-validator-flow-'));
+  t.after(() => rm(temporary, { recursive: true, force: true }));
+  const file = path.join(temporary, 'index.html');
+  const stylesheet = path.join(temporary, 'theme.css');
+  const writeDeck = (flow) => writeFile(
+    file,
+    `<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="theme.css"></head><body><section class="slide" data-layout="flow-architecture"><h2>Flow</h2>${flow}</section></body></html>`,
+  );
+
+  await writeFile(
+    stylesheet,
+    '.flow-path { display: grid; grid-template-columns: repeat(4, 1fr); } @media print {} @media (prefers-reduced-motion: reduce) {}',
+  );
+  await writeDeck(flowMarkup(5, 3));
+
+  const broken = await checkDeck(file);
+  const findings = new Map(
+    broken.warnings
+      .filter((finding) => finding.code.startsWith('flow-'))
+      .map((finding) => [finding.code, finding]),
+  );
+  assert.deepEqual([...findings.keys()].sort(), [
+    'flow-column-count',
+    'flow-transition-count',
+  ]);
+  assert.deepEqual(
+    { columns: findings.get('flow-column-count').columns, nodes: findings.get('flow-column-count').nodes },
+    { columns: 4, nodes: 5 },
+  );
+  assert.equal(findings.get('flow-transition-count').transitions, 3);
+  const strictBroken = await checkDeck(file, { strict: true });
+  assert.equal(strictBroken.ok, false);
+  assert.equal(strictBroken.errors.length, 0);
+
+  await writeFile(
+    stylesheet,
+    '.flow-path { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); } @media print {} @media (prefers-reduced-motion: reduce) {}',
+  );
+  await writeDeck(flowMarkup(7));
+  const dense = await checkDeck(file);
+  assert.deepEqual(
+    dense.warnings
+      .filter((finding) => finding.code.startsWith('flow-'))
+      .map((finding) => finding.code),
+    ['flow-density'],
+  );
+
+  await writeDeck(flowMarkup(6));
+  const valid = await checkDeck(file);
+  assert.deepEqual(
+    valid.warnings.filter((finding) => finding.code.startsWith('flow-')),
+    [],
+  );
 });
 
 test('missing layout markers preserve slide adjacency instead of collapsing the sequence', async (t) => {
