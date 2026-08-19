@@ -3,7 +3,7 @@ name: review-deck
 description: Review and improve an existing HTML, Marp, PptxGenJS, Slidev, Reveal.js, React, or PowerPoint presentation. Use to critique, polish, simplify, validate, fix layout repetition, improve storytelling, check accessibility, or prepare a deck for delivery.
 ---
 
-# Review a presentation deck
+# Review and improve a presentation deck
 
 Review the deck identified by the current user request. When the user asks for fixes, implement high-confidence improvements after diagnosis.
 
@@ -22,12 +22,12 @@ Resolve these paths relative to this skill directory:
 - `scripts/generate-slide-art.py` — optional pattern library and fallback renderer
 - `diagram-design` skill — when available, for auditing or improving architecture, flowchart, sequence, data, and security diagrams
 
-Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill before running it. In commands below, replace `<absolute-skill-dir>` with that real absolute directory; never type the placeholder literally.
+Keep the user's project or workspace as the shell working directory. Resolve each helper from the directory containing this `SKILL.md`, convert it to an absolute path, and do not `cd` into the installed skill directory. In commands below, replace `<absolute-skill-dir>` with that real directory; never type the placeholder literally.
 
 ## Workflow
 
-1. Detect the format and locate source files, generated output, notes, local assets, and any `.visual.md` / `.py` / `.svg` visual source sets.
-2. Read the brand-neutral references. Load the Claude Code-inspired visual system only when the deck metadata selects `claude-editorial` / `terminal-editorial`, or the user explicitly requests that style.
+1. Detect the format and locate source files, generated output, notes, `deck-plan.md`, local assets, and any `.visual.md` / `.py` / `.svg` visual source sets.
+2. Read the brand-neutral references. Load the Claude Code-inspired visual system only when metadata selects `claude-editorial` / `terminal-editorial`, or the user explicitly requests that style.
 3. Run:
 
    ```bash
@@ -35,72 +35,113 @@ Keep the user's project or workspace as the shell working directory. Resolve eac
    ```
 
 4. Use the sibling `deck-reviewer` skill as an independent review pass when available.
-5. Inspect every page and synthesize findings without repeating automated warnings.
-6. Audit the cover separately: title and promise dominance, whether the right half has a clear information job, source quality, two-second comprehension, and thumbnail readability.
-7. Audit the layout sequence: unique archetypes, consecutive repeats, visual-family repetition, card share, and rhythm changes.
-8. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
-9. Re-run validation and preview or generate the deliverable when possible.
+5. Compare the implementation with `deck-plan.md`. If a non-trivial deck has no plan, reconstruct a compact one before making structural changes.
+6. Inspect every page and synthesize findings without repeating automated warnings.
+7. Audit the cover separately.
+8. Audit semantic layout fit and the complete layout sequence.
+9. Apply authorized, high-confidence fixes while preserving the user's brand and source of truth.
+10. Update `deck-plan.md` whenever a fix changes thesis, evidence, page role, information shape, visual form, section order, or decision.
+11. Re-run validation and preview or generate the deliverable when possible.
 
 ## Review dimensions
 
-### Audience and narrative
+### Plan fidelity and narrative
 
-- Is the audience, promise, and desired decision clear?
-- Does each page advance the argument?
-- Are transitions logical and is evidence close to the claim it supports?
+- Are audience, desired outcome, thesis, and Direction Lock clear?
+- Does the deck's page order match the intended story spine?
+- Does each page have one unique role, claim, and internal audience takeaway?
+- Does every page advance the argument and create a reason for the next?
+- Are same-section transitions logical, with evidence close to the claim it supports?
+- Does the sequence jump from symptom to solution without root cause or mechanism?
 - Is the strongest point early enough?
 - Does the close request a specific action rather than merely recap?
+- Are visible takeaway callouts omitted when they merely repeat the title?
 
 ### Content integrity
 
-- Do headlines state conclusions?
-- Is visible text appropriate for live delivery?
-- Are facts, numbers, quotations, and images sourced?
-- Are assumptions separated from verified facts?
+- Do headlines state defensible conclusions?
+- Are facts, numbers, quotations, images, and system components sourced?
+- Are Verified, Derived, Assumption, and Proposal claims separated?
+- Are dates, units, definitions, and comparison contexts visible where needed?
 - Are risks and tradeoffs represented honestly?
 - Are terminology and tense consistent?
+- Is visible text appropriate for live delivery?
+- Is nuance moved into speaker notes rather than compressed into small type?
 
-### Layout and visual design
+### Semantic layout fit
 
-- Does every page's layout match its communication role?
+- Is each page's information shape explicit?
+- Does the visual form explain that shape faster than bullets or generic cards?
+- Does the selected layout archetype support the page's evidence-to-claim relationship?
+- Are protocol interactions shown with actors, message order, and labeled request/response arrows?
+- Are cross-team handoffs shown with owners, triggers, approvals, and failure paths?
+- Are causal chains, timelines, hierarchies, boundaries, loops, and decisions represented according to their actual semantics?
+- Are screenshots annotated with what they prove?
+- Is code paired with a visible result?
+- Are aligned records implemented as a native table rather than a text-box grid?
+- Would a screenshot, verified chart, native editable shapes, or whitespace communicate more honestly?
+
+### Layout sequence and visual design
+
 - Does a 10+ slide deck use at least eight distinct archetypes when appropriate?
-- Are exact consecutive repeats eliminated?
+- Are exact consecutive archetype repeats eliminated?
 - Does the same visual family dominate more than two of any three consecutive pages?
 - Are card-grid and node-card pages limited to roughly 20%?
+- Are generic split-screen pages limited to roughly 35%?
+- Is the same underlying geometry repeated for no more than two consecutive pages?
 - Is there a visible rhythm change every three to four pages?
 - Is hierarchy obvious within two seconds?
 - Is there one dominant element per page?
-- Does the cover's right half carry one meaningful artifact, proof, signal, or direct system cue—or remain empty when none exists?
-- Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label cover diagrams removed unless they directly prove the thesis?
-- Does every proof-rail number have a semantic role, source, date, and an explicit relationship to the other signals?
-- When the opening is mechanism-led, does the next page explain the causal model instead of expanding the cover rail into a dense dashboard?
-- Does every custom SVG have a current `.visual.md` plan and deck-local Python source, or a documented reason for using a shared built-in renderer?
-- Does the plan describe the source of truth and semantic model before shapes, and does the SVG actually follow that plan?
-- Would a screenshot, verified chart, native editable shapes, or whitespace communicate the page more honestly or efficiently?
-- Can the custom SVG be regenerated deterministically, parsed as XML, and read at presentation and thumbnail distance?
+- Do layout changes follow meaning rather than random variety?
+- Does the deck read clearly at thumbnail scale?
 - Are alignment, spacing, typography, and color consistent?
 - Are diagrams simpler than the prose they replace?
-- When a diagram is a standalone architecture, flowchart, sequence, state, ER, timeline, swimlane, quadrant, loop, chart, data-flow, or security visual, was the `diagram-design` skill used or its type-specific grammar and self-check applied?
+
+### Cover
+
+- Are title and audience promise dominant?
+- Does the right half carry exactly one meaningful artifact, proof, signal, or direct system cue—or remain empty when none exists?
+- Are generic orbit, hub-and-spoke, concentric-circle, logo-cloud, and micro-label diagrams removed unless they directly prove the thesis?
+- Is any decorative or meaningless cover visual replaced with evidence or whitespace?
+- Does every proof-rail signal have a role, source, date, and explicit relationship to the others?
+- When the opening is causal or mechanism-led, does the next page explain the mechanism rather than expanding the cover into a dashboard?
+- Is the proof-to-mechanism handoff clear?
+
+### Custom Python SVG and diagrams
+
+- Does every custom SVG have a current `.visual.md`, `.py`, and `.svg` source set?
+- Does the plan define source of truth, semantic model, geometry, eye path, accessibility, editable outside content, and validation?
+- Does the generated SVG agree with the plan and source facts?
+- Can it be regenerated deterministically and parsed as XML?
+- Are labels readable at presentation and thumbnail scale?
+- Was Python SVG chosen for a real communication advantage?
+- When a diagram is a standalone architecture, flowchart, sequence, state, ER, timeline, swimlane, quadrant, loop, chart, data-flow, or security visual, was `diagram-design` used or its type-specific grammar and self-check applied?
 
 ### Technical quality
 
 - HTML: navigation, hash state, responsive scaling, printing, accessibility, asset paths, layout markers, and console errors.
 - Marp: frontmatter, theme, separators, layout classes, overflow risk, assets, and exportability.
-- PPTX: wide layout, output generation, explicit layout sequence, safe APIs, font portability, editability, notes, and text bounds.
-- Other frameworks: preserve their component model and build workflow; verify the actual production command.
+- PPTX: wide layout, generation, explicit layout and geometry sequences, native tables, safe APIs, font portability, editability, notes, and text bounds.
+- Other frameworks: preserve the component model and build workflow; verify the real production command.
 
 ### Delivery readiness
 
-- Speaker notes where nuance or transitions are required.
-- Legible type, diagrams, and code at projected distance.
-- No unresolved tokens, TODOs, lorem ipsum, broken links, or missing assets.
-- A clear README with preview and export commands.
-- Demo fallbacks for network, authentication, or live-service risk.
+- Speaker notes contain nuance, caveats, and transitions that should not crowd the canvas.
+- Type, diagrams, tables, and code remain legible at projected distance.
+- No unresolved tokens, TODOs, lorem ipsum, broken links, or missing assets remain.
+- README contains preview and export commands.
+- Demo fallbacks exist for network, authentication, or live-service risk.
+
+## Applying fixes
+
+Preserve plan and source truth. Fit, spacing, alignment, accessibility, and equivalent-medium fixes may be applied directly. Update `deck-plan.md` before changing a claim, evidence interpretation, slide role, order, information shape, visual form, or decision.
+
+Do not redesign an entire deck merely because one page is weak. Prefer the smallest coherent fix, then re-run deterministic checks and inspect the affected pages in context.
 
 ## Severity
 
 - **Critical**: broken output, missing content or assets, unreadable page, false claim, security or confidentiality issue.
-- **Major**: narrative gap, severe density, repetitive layout sequence, decorative or meaningless cover visual, accessibility failure, likely overflow, unreliable demo.
+- **Major**: plan drift, narrative gap, severe density, semantic-layout mismatch, repetitive layout sequence, decorative or meaningless cover visual, accessibility failure, likely overflow, unreliable demo.
 - **Minor**: polish issue that does not block delivery.
 - **Suggestion**: optional enhancement with a clear audience benefit.
 
